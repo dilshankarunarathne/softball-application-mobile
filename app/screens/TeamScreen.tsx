@@ -4,14 +4,14 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 type RootStackParamList = {
-  HomeScreen: undefined;
-  TeamScreen: { team: Team };
-  MatchScreen: undefined;
-  NewsScreen: undefined;
-  SettingsScreen: undefined;
+  'screens/HomeScreen': undefined;
+  'screens/TeamScreen': { team: Team };
+  'screens/MatchScreen': undefined;
+  'screens/NewsScreen': undefined;
+  'screens/SettingsScreen': undefined;
 };
 
-type TeamScreenRouteProp = RouteProp<RootStackParamList, 'TeamScreen'>;
+type TeamScreenRouteProp = RouteProp<RootStackParamList, 'screens/TeamScreen'>;
 
 interface Team {
   name: string;
