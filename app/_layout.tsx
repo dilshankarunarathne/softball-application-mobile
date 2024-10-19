@@ -18,23 +18,23 @@ type Team = {
 };
 
 type RootStackParamList = {
-  HomeScreen: undefined;
-  TeamScreen: { team: Team };
-  MatchScreen: undefined;
-  NewsScreen: undefined;
-  SettingsScreen: undefined;
+  'screens/HomeScreen': undefined;
+  'screens/TeamScreen': { team: Team };
+  'screens/MatchScreen': undefined;
+  'screens/NewsScreen': undefined;
+  'screens/SettingsScreen': undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootLayout() {
   return (
-    <Stack.Navigator initialRouteName="HomeScreen">
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="TeamScreen" component={TeamScreen} />
-      <Stack.Screen name="MatchScreen" component={MatchScreen} />
-      <Stack.Screen name="NewsScreen" component={NewsScreen} />
-      <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+    <Stack.Navigator initialRouteName="screens/HomeScreen">
+      <Stack.Screen name="screens/HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="screens/TeamScreen" component={TeamScreen} />
+      <Stack.Screen name="screens/MatchScreen" component={MatchScreen} />
+      <Stack.Screen name="screens/NewsScreen" component={NewsScreen} />
+      <Stack.Screen name="screens/SettingsScreen" component={SettingsScreen} />
     </Stack.Navigator>
   );
 }
