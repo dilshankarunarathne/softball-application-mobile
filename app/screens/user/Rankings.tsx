@@ -46,7 +46,81 @@ const RankingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... styles for each element
+    container: {
+      flex: 1,
+      backgroundColor: '#f0f0f0',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      backgroundColor: '#202020',
+    },
+    headerText: {
+      color: 'white',
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    headerIcons: {
+      flexDirection: 'row',
+    },
+    icon: {
+      width: 24,
+      height: 24,
+      marginLeft: 10,
+    },
+    tabs: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginBottom: 20,
+    },
+    tabText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      borderBottomWidth: 2,
+      borderBottomColor: 'blue',
+      paddingBottom: 5,
+    },
+    rankingTable: {
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+      padding: 10,
+    },
+    tableHeader: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      padding: 5,
+    },
+    tableRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      borderBottomWidth: 1,
+      borderBottomColor: 'gray',
+      padding: 5,
+    },
+    tableCell: {
+      fontSize: 14,
+      textAlign: 'center',
+    },
+    navigation: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      backgroundColor: '#f0f0f0',
+    },
+    navIcon: {
+      width: 24,
+      height: 24,
+    },
+    navText: {
+      fontSize: 16,
+      marginTop: 5,
+    },
 });
 
 export default RankingsScreen;
