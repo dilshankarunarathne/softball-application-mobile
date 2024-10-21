@@ -1,23 +1,56 @@
-# Defect Mango Identification and Classification
-
-This is a project to identify and classify mango defects using machine learning. This project is a part of the 
-final year project of the Department of Computer Science, Eastern University of Sri Lanka.
+# Softball Cricket App
 
 [![Version](https://img.shields.io/badge/version-1.0-brightgreen.svg)](https://pypi.org/project/ad-topic-recommender/)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-blue.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-### Prerequisites
+This React Native app is designed to provide a comprehensive platform for Sri Lankan softball cricket enthusiasts. It offers features such as:
 
-- Python 3.11
-- fastapi
-- uvicorn
-- tensorflow
-- PIL
-- numpy
+- Team Profiles: Detailed information about teams, players, and statistics.
+- Match Schedules and Results: Upcoming and past match fixtures, scores, and highlights.
+- News and Updates: Cricket news, articles, and updates from various sources.
+- User Authentication: Personalized features for registered users.
+- Push Notifications: Real-time updates on matches, news, and events.
+- Social Media Integration: Share content on popular platforms.
+
+## Installation
+
+Clone the repository:
+```bash
+git clone https://github.com/your-username/softball-cricket-app.git
+```
+
+Install dependencies:
+```bash
+cd softball-cricket-app
+npm install
+```
+
+Run the app:
+```bash
+npx react-native run-android
+```
+
+or
+```bash
+npx react-native run-ios
+```
+
+## Development
+
+- Project Structure: The project follows a standard React Native structure with components, screens, and navigation.
+- State Management: Consider using a state management library like Redux or Context API for managing app state.
+- Data Fetching: Use fetch or axios to fetch data from your backend API.
+- Styling: Utilize stylesheets or a CSS-in-JS library to style your components.
+- Testing: Write unit and integration tests to ensure code quality and reliability.
 
 ## Contributing
 
-If you'd like to contribute to this project, please check the contribution guidelines for more information.
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository.   
+2. Create a new branch for your feature or bug fix.   
+3. Make your changes and commit them.
+4. Submit a pull request to the main branch.
 
 ## License
 
@@ -28,7 +61,19 @@ This work is licensed under a
 
 [cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
+[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg   
+
+## Acknowledgements
+
+Thank you to the React Native community for providing the tools and resources to build this app.
+Special thanks to [contributors and collaborators] for their contributions.
+
+## Future Plans
+
+1. Add more features and enhancements based on user feedback.
+2. Improve performance and optimize the app for different devices.
+3. Explore integrating with other cricket data sources.
+4. Enjoy the app!
 
 ## Contact Information
 
@@ -37,4 +82,3 @@ For questions or feedback, please contact the author:
 - Author: Dilshan M. Karunarathne
 - Email: ceo@altier.tech
 - Website: [http://altier.tech](http://altier.tech)
-
