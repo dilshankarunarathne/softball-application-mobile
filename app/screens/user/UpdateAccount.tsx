@@ -11,7 +11,7 @@ const MyAccountScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleUpdateProfile = () => {
-    // Handle update profile logic here
+    // TODO Handle update profile logic here
     console.log('Updated profile:', { firstName, lastName, email, phoneNumber });
   };
 
@@ -111,11 +111,9 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal:   
-   20,
+      paddingHorizontal: 20,
       paddingVertical: 10,
-      backgroundColor:   
-   '#202020',
+      backgroundColor: '#202020',
     },
     headerText: {
       color: 'white',
