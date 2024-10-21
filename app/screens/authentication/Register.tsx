@@ -7,7 +7,7 @@ const RegistrationScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegistration = () => {
-    // Handle registration logic here
+    // TODO Handle registration logic here
     console.log('Email:', email);
     console.log('Password:', password);
     console.log('Confirm Password:', confirmPassword);
