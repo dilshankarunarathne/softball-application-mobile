@@ -16,7 +16,7 @@ const MyAccountScreen = () => {
   };
 
   const handleResetPassword = () => {
-    // Handle reset password logic here
+    // TODO Handle reset password logic here
     console.log('Current Password:', currentPassword);
     console.log('New Password:', newPassword);
     console.log('Confirm Password:', confirmPassword);
