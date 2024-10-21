@@ -103,7 +103,88 @@ const MyAccountScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... styles for each element
+    container: {
+      flex: 1,
+      backgroundColor: '#f0f0f0',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal:   
+   20,
+      paddingVertical: 10,
+      backgroundColor:   
+   '#202020',
+    },
+    headerText: {
+      color: 'white',
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    headerIcons: {
+      flexDirection: 'row',
+    },
+    icon: {
+      width: 24,
+      height: 24,
+      marginLeft: 10,
+    },
+    profileContainer: {
+      alignItems: 'center',
+      padding: 20,
+    },
+    profileImage: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 20,
+    },
+    profileTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    personalInfoContainer: {
+      paddingHorizontal: 20,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 10,
+    },
+    input: {
+      height: 40,
+      borderColor: 'gray',
+      borderWidth: 1,
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 15,
+    },
+    updateButton: {
+      backgroundColor: 'blue',
+      padding: 10,
+      borderRadius: 5,
+      marginTop: 20,
+    },
+    resetPasswordContainer: {
+      paddingHorizontal: 20,
+      marginTop: 20,
+    },
+    navigation: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      backgroundColor: '#f0f0f0',
+    },
+    navIcon: {
+      width: 24,
+      height: 24,
+    },
+    navText: {
+      fontSize: 16,
+      marginTop: 5,
+    },
 });
 
 export default MyAccountScreen;
