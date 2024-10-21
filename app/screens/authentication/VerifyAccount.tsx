@@ -5,7 +5,7 @@ const VerifyAccountScreen = () => {
   const [verificationCode, setVerificationCode] = useState('');
 
   const handleVerifyAccount = () => {
-    // Handle verify account logic here
+    // TODO Handle verify account logic here
     console.log('Verification Code:', verificationCode);
   };
 
