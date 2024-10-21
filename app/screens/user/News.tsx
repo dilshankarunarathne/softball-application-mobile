@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
 const NewsScreen = () => {
   return (
@@ -47,11 +47,9 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal:   
-   20,
+      paddingHorizontal: 20,
       paddingVertical: 10,
-      backgroundColor:   
-   '#202020',
+      backgroundColor: '#202020',
     },
     headerText: {
       color: 'white',
@@ -105,6 +103,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginTop: 5,
     },
-  });
+});
 
 export default NewsScreen;
