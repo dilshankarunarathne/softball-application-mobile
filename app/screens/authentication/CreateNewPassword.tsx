@@ -6,7 +6,7 @@ const CreateNewPasswordScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleCreateNewPassword = () => {
-    // Handle create new password logic here
+    // TODO Handle create new password logic here
     console.log('New Password:', newPassword);
     console.log('Confirm Password:', confirmPassword);
   };
