@@ -39,7 +39,72 @@ const NewsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... styles for each element
-});
+    container: {
+      flex: 1,
+      backgroundColor: '#f0f0f0',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal:   
+   20,
+      paddingVertical: 10,
+      backgroundColor:   
+   '#202020',
+    },
+    headerText: {
+      color: 'white',
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    headerIcons: {
+      flexDirection: 'row',
+    },
+    icon: {
+      width: 24,
+      height: 24,
+      marginLeft: 10,
+    },
+    newsItem: {
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: '#ccc',
+    },
+    newsImage: {
+      width: '100%',
+      height: 200,
+      marginBottom: 10,
+    },
+    newsTitle: {
+      fontSize: 18,
+      marginBottom: 5,
+    },
+    newsDate: {
+      fontSize: 14,
+      color: 'gray',
+    },
+    seeMoreButton: {
+      backgroundColor: 'blue',
+      padding: 5,
+      borderRadius: 5,
+    },
+    navigation: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      backgroundColor: '#f0f0f0',
+    },
+    navIcon: {
+      width: 24,
+      height: 24,
+    },
+    navText: {
+      fontSize: 16,
+      marginTop: 5,
+    },
+  });
 
 export default NewsScreen;
