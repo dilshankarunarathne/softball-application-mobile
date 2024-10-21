@@ -1,10 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './screens/HomeScreen';
-import TeamScreen from './screens/TeamScreen';
-import MatchScreen from './screens/MatchScreen';
-import NewsScreen from './screens/NewsScreen';
-import SettingsScreen from './screens/SettingsScreen';
 
 type Team = {
   name: string;
