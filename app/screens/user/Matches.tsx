@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
 const LiveMatchesScreen = () => {
   return (
@@ -86,7 +86,96 @@ const LiveMatchesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... styles for each element
+    container: {
+      flex: 1,
+      backgroundColor: '#f0f0f0',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      backgroundColor: '#202020',
+    },
+    headerText: {
+      color: 'white',
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    headerIcons: {
+      flexDirection: 'row',
+    },
+    icon: {
+      width: 24,
+      height: 24,
+      marginLeft: 10,
+    },
+    section: {
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 10,
+    },
+    seeAllButton: {
+      backgroundColor: 'blue',
+      padding: 5,
+      borderRadius: 5,
+    },
+    matchContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 15,
+    },
+    tournamentName: {
+      fontSize: 16,
+      marginBottom: 5,
+    },
+    matchDate: {
+      fontSize: 14,
+      color: 'gray',
+    },
+    teamInfo: {
+      alignItems: 'center',
+    },
+    teamLogo: {
+      width: 40,
+      height: 40,
+      marginBottom: 5,
+    },
+    teamName: {
+      fontSize: 14,
+    },
+    vsContainer: {
+      alignItems: 'center',
+    },
+    vsText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    starIcon: {
+      width: 20,
+      height: 20,
+    },
+    navigation: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      backgroundColor: '#f0f0f0',
+    },
+    navIcon: {
+      width: 24,
+      height: 24,
+    },
+    navText: {
+      fontSize: 16,
+      marginTop: 5,
+    },
 });
 
 export default LiveMatchesScreen;
