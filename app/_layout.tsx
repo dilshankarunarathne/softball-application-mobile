@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import UserHomeScreen from './screens/user/UserHome';
 
 type Team = {
   name: string;
@@ -13,23 +14,15 @@ type Team = {
 };
 
 type RootStackParamList = {
-  'screens/HomeScreen': undefined;
-  'screens/TeamScreen': { team: Team };
-  'screens/MatchScreen': undefined;
-  'screens/NewsScreen': undefined;
-  'screens/SettingsScreen': undefined;
+  'screens/UserHomeScreen': undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootLayout() {
   return (
-    <Stack.Navigator initialRouteName="screens/HomeScreen">
-      <Stack.Screen name="screens/HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="screens/TeamScreen" component={TeamScreen} />
-      <Stack.Screen name="screens/MatchScreen" component={MatchScreen} />
-      <Stack.Screen name="screens/NewsScreen" component={NewsScreen} />
-      <Stack.Screen name="screens/SettingsScreen" component={SettingsScreen} />
+    <Stack.Navigator initialRouteName="screens/UserHomeScreen">
+      <Stack.Screen name="screens/UserHomeScreen" component={UserHomeScreen} />
     </Stack.Navigator>
   );
 }
