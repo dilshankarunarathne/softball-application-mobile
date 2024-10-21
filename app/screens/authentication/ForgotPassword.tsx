@@ -5,7 +5,7 @@ const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
 
   const handleForgotPassword = () => {
-    // Handle forgot password logic here
+    // TODO Handle forgot password logic here
     console.log('Email:', email);
   };
 
