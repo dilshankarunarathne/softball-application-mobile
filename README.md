@@ -16,7 +16,7 @@ This React Native app is designed to provide a comprehensive platform for Sri La
 
 Clone the repository:
 ```bash
-git clone https://github.com/your-username/softball-cricket-app.git
+git clone https://github.com/dilshankarunarathne/softball-application-mobile.git
 ```
 
 Install dependencies:
@@ -27,12 +27,7 @@ npm install
 
 Run the app:
 ```bash
-npx react-native run-android
-```
-
-or
-```bash
-npx react-native run-ios
+npx expo start -a
 ```
 
 ## Development
@@ -62,11 +57,6 @@ This work is licensed under a
 [cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
 [cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg   
-
-## Acknowledgements
-
-Thank you to the React Native community for providing the tools and resources to build this app.
-Special thanks to [contributors and collaborators] for their contributions.
 
 ## Future Plans
 
