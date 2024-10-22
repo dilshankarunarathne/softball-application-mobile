@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import { Image as RNImage } from 'react-native';
 
 const NewsScreen = () => {
-  const newsImageUri = './newsImage.png';
-  const newsImage2Uri = RNImage.resolveAssetSource(require('./newsImage2.png')).uri;
-  const newsImage3Uri = RNImage.resolveAssetSource(require('./newsImage3.png')).uri;
-  const homeUri = RNImage.resolveAssetSource(require('./home.png')).uri;
-  const matchesUri = RNImage.resolveAssetSource(require('./matches.png')).uri;
-  const rankingsUri = RNImage.resolveAssetSource(require('./rankings.png')).uri;
-  const accountUri = RNImage.resolveAssetSource(require('./account.png')).uri;
+  const newsImageUri = './../images/newsImage.png';
+  const newsImage2Uri = RNImage.resolveAssetSource(require('./../images/newsImage2.png')).uri;
+  const newsImage3Uri = RNImage.resolveAssetSource(require('./../images/newsImage3.png')).uri;
+  const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
+  const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
+  const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
+  const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
   return (
     <View style={styles.container}>

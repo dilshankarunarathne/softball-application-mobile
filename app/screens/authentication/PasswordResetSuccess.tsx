@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import { Image as RNImage } from 'react-native';
 
 const PasswordResetSuccessScreen = () => {
-  const successIconUri = RNImage.resolveAssetSource(require('./success.png')).uri;
+  const successIconUri = RNImage.resolveAssetSource(require('./../images/success.png')).uri;
 
   return (
     <View style={styles.container}>

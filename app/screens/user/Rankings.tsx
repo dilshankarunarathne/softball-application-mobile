@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { Image as RNImage } from 'react-native';
 
 const RankingsScreen = () => {
-  const notificationUri = RNImage.resolveAssetSource(require('./notification.png')).uri;
-  const documentUri = RNImage.resolveAssetSource(require('./document.png')).uri;
-  const homeUri = RNImage.resolveAssetSource(require('./home.png')).uri;
-  const matchesUri = RNImage.resolveAssetSource(require('./matches.png')).uri;
-  const rankingsUri = RNImage.resolveAssetSource(require('./rankings.png')).uri;
-  const accountUri = RNImage.resolveAssetSource(require('./account.png')).uri;
+  const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
+  const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
+  const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
+  const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
+  const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
+  const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
   const rankingData = [
     { name: 'Team A', matches: 10, points: 20, rating: 200 },

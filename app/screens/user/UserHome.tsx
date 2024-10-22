@@ -6,16 +6,16 @@ import { Image as RNImage } from 'react-native';
 const UserHomeScreen = () => {
   const navigation = useNavigation();
 
-  const notificationUri = RNImage.resolveAssetSource(require('./notification.png')).uri;
-  const documentUri = RNImage.resolveAssetSource(require('./document.png')).uri;
-  const team1LogoUri = RNImage.resolveAssetSource(require('./team1logo.png')).uri;
-  const team2LogoUri = RNImage.resolveAssetSource(require('./team2logo.png')).uri;
-  const team3LogoUri = RNImage.resolveAssetSource(require('./team3logo.png')).uri;
-  const team4LogoUri = RNImage.resolveAssetSource(require('./team4logo.png')).uri;
-  const homeUri = RNImage.resolveAssetSource(require('./home.png')).uri;
-  const matchesUri = RNImage.resolveAssetSource(require('./matches.png')).uri;
-  const rankingsUri = RNImage.resolveAssetSource(require('./rankings.png')).uri;
-  const accountUri = RNImage.resolveAssetSource(require('./account.png')).uri;
+  const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
+  const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
+  const team1LogoUri = RNImage.resolveAssetSource(require('./../images/team1logo.png')).uri;
+  const team2LogoUri = RNImage.resolveAssetSource(require('./../images/team2logo.png')).uri;
+  const team3LogoUri = RNImage.resolveAssetSource(require('./../images/team3logo.png')).uri;
+  const team4LogoUri = RNImage.resolveAssetSource(require('./../images/team4logo.png')).uri;
+  const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
+  const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
+  const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
+  const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
   return (
     <View style={styles.container}>
