@@ -21,8 +21,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootLayout() {
   return (
-    <Stack.Navigator initialRouteName="screens/UserHomeScreen">
-      <Stack.Screen name="screens/UserHomeScreen" component={UserHomeScreen} />
+    <Stack.Navigator initialRouteName="screens/user/UserHome">
+      <Stack.Screen name="screens/user/UserHome" component={UserHomeScreen} />
     </Stack.Navigator>
   );
 }
