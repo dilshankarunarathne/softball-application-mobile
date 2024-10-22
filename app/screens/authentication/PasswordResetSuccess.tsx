@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import { Image as RNImage } from 'react-native';
 
 const PasswordResetSuccessScreen = () => {
+  const successIconUri = RNImage.resolveAssetSource(require('./success.png')).uri;
+
   return (
     <View style={styles.container}>
-      <Image source={require('./success.png')} style={styles.successIcon} />
+      <Image source={{ uri: successIconUri }} style={styles.successIcon} />
       <Text style={styles.title}>Success!</Text>
       <Text style={styles.message}>You have successfully reset your password.</Text>
       <Button title="Back to Login" onPress={() => navigation.navigate('Login')} style={styles.loginButton} />

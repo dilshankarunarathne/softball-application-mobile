@@ -1,14 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { Image as RNImage } from 'react-native';
 
 const LiveMatchesScreen = () => {
+  const notificationUri = RNImage.resolveAssetSource(require('./notification.png')).uri;
+  const documentUri = RNImage.resolveAssetSource(require('./document.png')).uri;
+  const team1LogoUri = RNImage.resolveAssetSource(require('./team1logo.png')).uri;
+  const team2LogoUri = RNImage.resolveAssetSource(require('./team2logo.png')).uri;
+  const starUri = RNImage.resolveAssetSource(require('./star.png')).uri;
+  const homeUri = RNImage.resolveAssetSource(require('./home.png')).uri;
+  const matchesUri = RNImage.resolveAssetSource(require('./matches.png')).uri;
+  const rankingsUri = RNImage.resolveAssetSource(require('./rankings.png')).uri;
+  const accountUri = RNImage.resolveAssetSource(require('./account.png')).uri;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={require('./notification.png')} style={styles.icon} />
-          <Image source={require('./document.png')} style={styles.icon} />
+          <Image source={{ uri: notificationUri }} style={styles.icon} />
+          <Image source={{ uri: documentUri }} style={styles.icon} />
         </View>
       </View>
       <View style={styles.section}>
@@ -18,17 +29,17 @@ const LiveMatchesScreen = () => {
           <Text style={styles.tournamentName}>ABC Tournament</Text>
           <Text style={styles.matchDate}>14/11/2024</Text>
           <View style={styles.teamInfo}>
-            <Image source={require('./team1logo.png')} style={styles.teamLogo} />
+            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
             <Text style={styles.teamName}>Team ABC</Text>
           </View>
           <View style={styles.vsContainer}>
             <Text style={styles.vsText}>VS</Text>
           </View>
           <View style={styles.teamInfo}>
-            <Image source={require('./team2logo.png')} style={styles.teamLogo} />
+            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
             <Text style={styles.teamName}>Team XYZ</Text>
           </View>
-          <Image source={require('./star.png')} style={styles.starIcon} />
+          <Image source={{ uri: starUri }} style={styles.starIcon} />
         </View>
       </View>
       <View style={styles.section}>
@@ -38,17 +49,16 @@ const LiveMatchesScreen = () => {
           <Text style={styles.tournamentName}>ABC Tournament</Text>
           <Text style={styles.matchDate}>14/11/2024</Text>
           <View style={styles.teamInfo}>
-            <Image source={require('./team1logo.png')} style={styles.teamLogo} />
+            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
             <Text style={styles.teamName}>Team ABC</Text>
           </View>
           <View style={styles.vsContainer}>
             <Text style={styles.vsText}>VS</Text>
           </View>
           <View style={styles.teamInfo}>
-            <Image source={require('./team2logo.png')} style={styles.teamLogo} />
+            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
             <Text style={styles.teamName}>Team XYZ</Text>
           </View>
-          <Image source={require('./star.png')} style={styles.starIcon} />
         </View>
       </View>
       <View style={styles.section}>
@@ -58,27 +68,27 @@ const LiveMatchesScreen = () => {
           <Text style={styles.tournamentName}>ABC Tournament</Text>
           <Text style={styles.matchDate}>14/11/2024</Text>
           <View style={styles.teamInfo}>
-            <Image source={require('./team1logo.png')} style={styles.teamLogo} />
+            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
             <Text style={styles.teamName}>Team ABC</Text>
           </View>
           <View style={styles.vsContainer}>
             <Text style={styles.vsText}>VS</Text>
           </View>
           <View style={styles.teamInfo}>
-            <Image source={require('./team2logo.png')} style={styles.teamLogo} />
+            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
             <Text style={styles.teamName}>Team XYZ</Text>
           </View>
-          <Image source={require('./star.png')} style={styles.starIcon} />
+          <Image source={{ uri: starUri }} style={styles.starIcon} />
         </View>
       </View>
       <View style={styles.navigation}>
-        <Image source={require('./home.png')} style={styles.navIcon} />
+        <Image source={{ uri: homeUri }} style={styles.navIcon} />
         <Text style={styles.navText}>Home</Text>
-        <Image source={require('./matches.png')} style={styles.navIcon} />
+        <Image source={{ uri: matchesUri }} style={styles.navIcon} />
         <Text style={styles.navText}>Matches</Text>
-        <Image source={require('./rankings.png')} style={styles.navIcon} />
+        <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
         <Text style={styles.navText}>Rankings</Text>
-        <Image source={require('./account.png')} style={styles.navIcon} />
+        <Image source={{ uri: accountUri }} style={styles.navIcon} />
         <Text style={styles.navText}>Account</Text>
       </View>
     </View>
@@ -86,96 +96,96 @@ const LiveMatchesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#f0f0f0',
-    },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      backgroundColor: '#202020',
-    },
-    headerText: {
-      color: 'white',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    headerIcons: {
-      flexDirection: 'row',
-    },
-    icon: {
-      width: 24,
-      height: 24,
-      marginLeft: 10,
-    },
-    section: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-    },
-    sectionTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 10,
-    },
-    seeAllButton: {
-      backgroundColor: 'blue',
-      padding: 5,
-      borderRadius: 5,
-    },
-    matchContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 15,
-    },
-    tournamentName: {
-      fontSize: 16,
-      marginBottom: 5,
-    },
-    matchDate: {
-      fontSize: 14,
-      color: 'gray',
-    },
-    teamInfo: {
-      alignItems: 'center',
-    },
-    teamLogo: {
-      width: 40,
-      height: 40,
-      marginBottom: 5,
-    },
-    teamName: {
-      fontSize: 14,
-    },
-    vsContainer: {
-      alignItems: 'center',
-    },
-    vsText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-    starIcon: {
-      width: 20,
-      height: 20,
-    },
-    navigation: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      backgroundColor: '#f0f0f0',
-    },
-    navIcon: {
-      width: 24,
-      height: 24,
-    },
-    navText: {
-      fontSize: 16,
-      marginTop: 5,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#202020',
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginLeft: 10,
+  },
+  section: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  seeAllButton: {
+    backgroundColor: 'blue',
+    padding: 5,
+    borderRadius: 5,
+  },
+  matchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  tournamentName: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  matchDate: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  teamInfo: {
+    alignItems: 'center',
+  },
+  teamLogo: {
+    width: 40,
+    height: 40,
+    marginBottom: 5,
+  },
+  teamName: {
+    fontSize: 14,
+  },
+  vsContainer: {
+    alignItems: 'center',
+  },
+  vsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  starIcon: {
+    width: 20,
+    height: 20,
+  },
+  navigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#f0f0f0',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+  },
+  navText: {
+    fontSize: 16,
+    marginTop: 5,
+  },
 });
 
 export default LiveMatchesScreen;
