@@ -12,6 +12,7 @@ const RankingsScreen = () => {
 
   // TODO: add navigation to other screens in bottom navigation bar
   // TODO: table titles are vertically aligned to the top, fix that
+  // TODO: team rankings and player rankings tabs not implemented yet
 
   const rankingData = [
     { name: 'Team A', matches: 10, points: 20, rating: 200 },
