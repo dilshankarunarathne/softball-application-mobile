@@ -31,6 +31,9 @@ const MyAccountScreen = () => {
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
+  // TODO: scrollable view
+  // TODO: add navigation to other screens in bottom navigation bar
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

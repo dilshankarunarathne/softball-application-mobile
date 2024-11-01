@@ -10,6 +10,9 @@ const RankingsScreen = () => {
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
+  // TODO: add navigation to other screens in bottom navigation bar
+  // TODO: table titles are vertically aligned to the top, fix that
+
   const rankingData = [
     { name: 'Team A', matches: 10, points: 20, rating: 200 },
     { name: 'Team B', matches: 12, points: 18, rating: 180 },

@@ -12,6 +12,8 @@ const LiveMatchesScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
+  
+  // TODO: add navigation to other screens in bottom navigation bar
 
   return (
     <View style={styles.container}>
