@@ -1,7 +1,26 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
+import { RadioButton } from 'react-native-paper';
 
-const UpdateMatchScreen = ({ route }) => {
+import { RouteProp } from '@react-navigation/native';
+
+type RouteParams = {
+  params: {
+    matchData: {
+      id: string;
+      tournamentName: string;
+      team1Name: string;
+      team2Name: string;
+      matchDate: string;
+      matchTime: string;
+      groundName: string;
+      tossWinner: string;
+      batFirst: string;
+    };
+  };
+};
+
+const UpdateMatchScreen = ({ route }: { route: RouteProp<RouteParams, 'params'> }) => {
   const { matchData } = route.params;
 
   const [matchId, setMatchId] = useState(matchData.id);
@@ -37,7 +56,7 @@ const UpdateMatchScreen = ({ route }) => {
         placeholder="Match ID"
         value={matchId}
         onChangeText={setMatchId}
-        editable={false} // Make the Match ID field read-only
+        editable={false} 
       />
       <TextInput
         style={styles.input}
@@ -98,7 +117,60 @@ const UpdateMatchScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  // ... styles for each element
+    container: {
+      flex: 1,
+      padding: 20,
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      marginBottom: 10,
+    },
+    input: {
+      height: 40,
+      borderColor: 'gray',
+      borderWidth:   
+   1,
+      borderRadius: 5,
+      padding: 10,
+      marginBottom:   
+   15,
+    },
+    teamContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 15,
+    },
+    teamInput: {
+      flex: 1,
+      marginRight: 10,
+    },
+    vsText: {
+      fontSize: 16,
+    },
+    tossContainer: {
+      marginBottom: 15,
+    },
+    tossTitle: {
+      fontSize: 16,
+      marginBottom: 5,
+    },
+    radioGroup: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    batFirstContainer: {
+      marginBottom: 15,
+    },
+    batFirstTitle: {
+      fontSize: 16,
+      marginBottom: 5,
+    },
+    updateButton: {
+      backgroundColor: 'blue',
+      padding: 10,
+      borderRadius: 5,
+    },
 });
 
 export default UpdateMatchScreen;
