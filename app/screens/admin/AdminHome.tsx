@@ -7,8 +7,8 @@ const AdminHomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={require('./notification.png')} style={styles.icon} />
-          <Image source={require('./document.png')} style={styles.icon} />
+          <Image source={require('./../images/notification.png')} style={styles.icon} />
+          <Image source={require('./../images/document.png')} style={styles.icon} />
         </View>
       </View>
       <View style={styles.dateContainer}>
@@ -29,15 +29,15 @@ const AdminHomeScreen = () => {
         {/* ... more table rows */}
       </View>
       <View style={styles.navigation}>
-        <Image source={require('./home.png')} style={styles.navIcon} />
+        <Image source={require('./../images/home.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Home</Text>
-        <Image source={require('./matches.png')} style={styles.navIcon} />
+        <Image source={require('./../images/matches.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Matches</Text>
-        <Image source={require('./rankings.png')} style={styles.navIcon} />
+        <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Rankings</Text>
-        <Image source={require('./users.png')} style={styles.navIcon} />
+        <Image source={require('./../images/users.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Users</Text>
-        <Image source={require('./admin.png')} style={styles.navIcon} />
+        <Image source={require('./../images/admin.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Admin</Text>
       </View>
     </View>
