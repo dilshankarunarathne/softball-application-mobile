@@ -33,6 +33,18 @@ const UpdateMatchScreen = ({ route }: { route: RouteProp<RouteParams, 'params'> 
   const [tossWinner, setTossWinner] = useState(matchData.tossWinner);
   const [batFirst, setBatFirst] = useState(matchData.batFirst);
 
+  const [scoreboardData, setScoreboardData] = useState({
+    over: 1,
+    runs: 0,
+    wickets: 0,
+    extras: 0,
+  });
+
+  const handleUpdateScoreboard = (updatedScoreboardData) => {
+    // Handle updating the scoreboard data and sending it to the backend
+    setScoreboardData(updatedScoreboardData);
+  };
+
   const handleUpdateMatch = () => {
     // Handle update match logic here
     console.log('Updated match data:', {
@@ -111,6 +123,24 @@ const UpdateMatchScreen = ({ route }: { route: RouteProp<RouteParams, 'params'> 
           <RadioButton value="Team 2" label="Team 2" selected={batFirst === 'Team 2'} onPress={() => setBatFirst('Team 2')} />
         </View>
       </View>
+      <ScrollView style={styles.scoreboardContainer}>
+        <Text style={styles.scoreboardTitle}>Scoreboard</Text>
+        <View style={styles.scoreboardHeader}>
+          <Text style={styles.scoreboardHeaderCell}>Over</Text>
+          <Text style={styles.scoreboardHeaderCell}>Runs</Text>
+          <Text style={styles.scoreboardHeaderCell}>Wickets</Text>
+          <Text style={styles.scoreboardHeaderCell}>Extras</Text>
+        </View>
+        {scoreboardData.map((overData, index) => (
+          <View key={index} style={styles.scoreboardRow}>
+            <Text style={styles.scoreboardCell}>{overData.over}</Text>
+            <Text style={styles.scoreboardCell}>{overData.runs}</Text>
+            <Text style={styles.scoreboardCell}>{overData.wickets}</Text>
+            <Text style={styles.scoreboardCell}>{overData.extras}</Text>
+          </View>
+        ))}
+        {/* ... (add more rows for additional overs) */}
+      </ScrollView>
       <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
     </View>
   );
@@ -170,6 +200,34 @@ const styles = StyleSheet.create({
       backgroundColor: 'blue',
       padding: 10,
       borderRadius: 5,
+    },
+    scoreboardContainer: {
+      flex: 1,
+      maxHeight: 300,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 15,
+    },
+    scoreboardHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 5,
+    },
+    scoreboardHeaderCell: {
+      flex: 1,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    scoreboardRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 5,
+    },
+    scoreboardCell: {
+      flex: 1,
+      textAlign: 'center',
     },
 });
 
