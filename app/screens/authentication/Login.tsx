@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import axios from 'axios';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // TODO Handle login logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:3000/auth/login', {
+        username: email,
+        password: password,
+      });
+
+      if (response.status === 200) {
+        const { token } = response.data;
+        // Save the token (e.g., in AsyncStorage or Context)
+        console.log('Token:', token);
+        Alert.alert('Login Successful', 'You have successfully logged in.');
+      } else {
+        Alert.alert('Login Failed', 'Invalid email or password.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Login Failed', 'An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -53,6 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
+    width: '100%',
   },
   forgotPassword: {
     marginBottom: 15,
