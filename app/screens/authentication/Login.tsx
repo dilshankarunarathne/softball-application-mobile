@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -17,9 +18,27 @@ const LoginScreen = () => {
 
       if (response.status === 200) {
         const { token } = response.data;
-        // Save the token (e.g., in AsyncStorage or Context)
-        console.log('Token:', token);
-        Alert.alert('Login Successful', 'You have successfully logged in.');
+        await AsyncStorage.setItem('authToken', token);
+
+        // Fetch user profile
+        const profileResponse = await axios.get('http://127.0.0.1:3000/auth/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (profileResponse.status === 200) {
+          const { _id, user_type } = profileResponse.data;
+          await AsyncStorage.setItem('userId', _id);
+          await AsyncStorage.setItem('userType', user_type);
+
+          // Navigate based on user type
+          if (user_type === 'admin') {
+            navigation.navigate('screens/admin/AdminHome');
+          } else {
+            navigation.navigate('screens/user/UserHome');
+          }
+        } else {
+          Alert.alert('Profile Fetch Failed', 'Unable to fetch user profile.');
+        }
       } else {
         Alert.alert('Login Failed', 'Invalid email or password.');
       }
