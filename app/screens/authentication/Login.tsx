@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigation = useNavigation();
 
   const handleLogin = async () => {
     try {
@@ -45,7 +47,9 @@ const LoginScreen = () => {
       />
       <Text style={styles.forgotPassword}>Forgot password?</Text>
       <Button title="Login" onPress={handleLogin} style={styles.loginButton} />
-      <Text style={styles.registerText}>Don't have an account? Register</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('screens/authentication/Register')}>
+        <Text style={styles.registerText}>Don't have an account? Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
