@@ -28,7 +28,7 @@ const RegistrationScreen = () => {
 
       if (response.status === 201) {
         Alert.alert('Registration Successful', 'You have successfully registered.');
-        navigation.navigate('Login');
+        navigation.navigate('screens/authentication/Login');
       } else {
         Alert.alert('Registration Failed', 'An error occurred. Please try again.');
       }
