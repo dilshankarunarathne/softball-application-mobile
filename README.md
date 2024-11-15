@@ -30,6 +30,8 @@ Run the app:
 npx expo start -a
 ```
 
+adb reverse tcp:3000 tcp:3000
+
 ## Development
 
 - Project Structure: The project follows a standard React Native structure with components, screens, and navigation.
