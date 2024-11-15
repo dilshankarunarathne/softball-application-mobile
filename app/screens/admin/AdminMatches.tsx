@@ -36,12 +36,12 @@ const AdminMatchesScreen = () => {
         <Text style={styles.matchDate}>{item.date}</Text>
         <View style={styles.teamContainer}>
           <View style={styles.teamInfo}>
-            <Image source={require('./team1logo.png')} style={styles.teamLogo} />
+            <Image source={require('./../images/team1logo.png')} style={styles.teamLogo} />
             <Text style={styles.teamName}>{item.team1}</Text>
           </View>
           <Text style={styles.vsText}>VS</Text>
           <View style={styles.teamInfo}>
-            <Image source={require('./team2logo.png')} style={styles.teamLogo} />
+            <Image source={require('./../images/team2logo.png')} style={styles.teamLogo} />
             <Text style={styles.teamName}>{item.team2}</Text>
           </View>
         </View>
@@ -57,8 +57,8 @@ const AdminMatchesScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={require('./notification.png')} style={styles.icon} />
-          <Image source={require('./document.png')} style={styles.icon} />
+          <Image source={require('./../images/notification.png')} style={styles.icon} />
+          <Image source={require('./../images/document.png')} style={styles.icon} />
         </View>
       </View>
       <View style={styles.section}>

@@ -13,8 +13,8 @@ const AdminRankingsScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={require('./notification.png')} style={styles.icon} />
-          <Image source={require('./document.png')} style={styles.icon} />
+          <Image source={require('./../images/notification.png')} style={styles.icon} />
+          <Image source={require('./../images/document.png')} style={styles.icon} />
         </View>
       </View>
 

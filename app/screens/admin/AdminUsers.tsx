@@ -57,8 +57,8 @@ const AdminUsersScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={require('./notification.png')} style={styles.icon} />
-          <Image source={require('./document.png')} style={styles.icon} />
+          <Image source={require('./../images/notification.png')} style={styles.icon} />
+          <Image source={require('./../images/document.png')} style={styles.icon} />
         </View>
       </View>
 
@@ -84,7 +84,7 @@ const AdminUsersScreen = () => {
                 <Text style={styles.userName}>{item.name}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
                 <TouchableOpacity onPress={() => handleDeleteUser(item.id)}>
-                  <Image source={require('./delete_icon.png')} style={styles.deleteIcon} />
+                  {/* <Image source={require('./../images/delete_icon.png')} style={styles.deleteIcon} /> */}
                 </TouchableOpacity>
               </View>
             )}
@@ -103,7 +103,7 @@ const AdminUsersScreen = () => {
                 <Text style={styles.userName}>{item.name}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
                 <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.id, 'user')}>
-                  <Image source={require('./remove_admin_icon.png')} style={styles.actionIcon} />
+                  {/* <Image source={require('./../images/remove_admin_icon.png')} style={styles.actionIcon} /> */}
                 </TouchableOpacity>
               </View>
             )}
@@ -122,10 +122,10 @@ const AdminUsersScreen = () => {
                 <Text style={styles.userName}>{item.name}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
                 <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.id, 'admin')}>
-                  <Image source={require('./accept_icon.png')} style={styles.actionIcon} />
+                  {/* <Image source={require('./../images/accept_icon.png')} style={styles.actionIcon} /> */}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.id, 'rejected')}>
-                  <Image source={require('./reject_icon.png')} style={styles.actionIcon} />
+                  {/* <Image source={require('./../images/reject_icon.png')} style={styles.actionIcon} /> */}
                 </TouchableOpacity>
               </View>
             )}
