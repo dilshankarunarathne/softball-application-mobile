@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Image as RNImage } from 'react-native';
 
 const LiveMatchesScreen = () => {
   const navigation = useNavigation();
+  const [matches, setMatches] = useState({ live: [], upcoming: [], past: [] });
+
+  useEffect(() => {
+    fetch('http://localhost:3000/matches')
+      .then(response => response.json())
+      .then(data => {
+        const live = data.filter(match => match.status === 'live');
+        const upcoming = data.filter(match => match.status === 'pending');
+        const past = data.filter(match => match.status === 'ended');
+        setMatches({ live, upcoming, past });
+      })
+      .catch(error => console.error('Error fetching matches:', error));
+  }, []);
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
@@ -16,6 +29,27 @@ const LiveMatchesScreen = () => {
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
+  const renderMatches = (matches) => {
+    return matches.map(match => (
+      <View key={match._id} style={styles.matchContainer}>
+        <Text style={styles.tournamentName}>{match.location}</Text>
+        <Text style={styles.matchDate}>{new Date(match.date).toLocaleDateString()}</Text>
+        <View style={styles.teamInfo}>
+          <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
+          <Text style={styles.teamName}>{match.team1}</Text>
+        </View>
+        <View style={styles.vsContainer}>
+          <Text style={styles.vsText}>VS</Text>
+        </View>
+        <View style={styles.teamInfo}>
+          <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
+          <Text style={styles.teamName}>{match.team2}</Text>
+        </View>
+        {match.status === 'live' && <Image source={{ uri: starUri }} style={styles.starIcon} />}
+      </View>
+    ));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -26,63 +60,19 @@ const LiveMatchesScreen = () => {
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Live Matches (20)</Text>
+        <Text style={styles.sectionTitle}>Live Matches ({matches.live.length})</Text>
         <Button title="See all" style={styles.seeAllButton} />
-        <View style={styles.matchContainer}>
-          <Text style={styles.tournamentName}>ABC Tournament</Text>
-          <Text style={styles.matchDate}>14/11/2024</Text>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team ABC</Text>
-          </View>
-          <View style={styles.vsContainer}>
-            <Text style={styles.vsText}>VS</Text>
-          </View>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team XYZ</Text>
-          </View>
-          <Image source={{ uri: starUri }} style={styles.starIcon} />
-        </View>
+        {renderMatches(matches.live)}
       </View>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Upcoming Matches (250)</Text>
+        <Text style={styles.sectionTitle}>Upcoming Matches ({matches.upcoming.length})</Text>
         <Button title="See all" style={styles.seeAllButton} />
-        <View style={styles.matchContainer}>
-          <Text style={styles.tournamentName}>ABC Tournament</Text>
-          <Text style={styles.matchDate}>14/11/2024</Text>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team ABC</Text>
-          </View>
-          <View style={styles.vsContainer}>
-            <Text style={styles.vsText}>VS</Text>
-          </View>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team XYZ</Text>
-          </View>
-        </View>
+        {renderMatches(matches.upcoming)}
       </View>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Past Matches (1500)</Text>
+        <Text style={styles.sectionTitle}>Past Matches ({matches.past.length})</Text>
         <Button title="See all" style={styles.seeAllButton} />
-        <View style={styles.matchContainer}>
-          <Text style={styles.tournamentName}>ABC Tournament</Text>
-          <Text style={styles.matchDate}>14/11/2024</Text>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team ABC</Text>
-          </View>
-          <View style={styles.vsContainer}>
-            <Text style={styles.vsText}>VS</Text>
-          </View>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team XYZ</Text>
-          </View>
-          <Image source={{ uri: starUri }} style={styles.starIcon} />
-        </View>
+        {renderMatches(matches.past)}
       </View>
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
