@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Image as RNImage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserHomeScreen = () => {
   const navigation = useNavigation();
@@ -16,6 +17,32 @@ const UserHomeScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
+
+  const handleAdminRequest = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      if (!token) {
+        Alert.alert('Error', 'No token found');
+        return;
+      }
+
+      const response = await fetch('http://localhost:3000/admin/request-user-type-change', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        Alert.alert('Success', 'User type change request submitted successfully');
+      } else {
+        Alert.alert('Error', 'Failed to submit request');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -64,7 +91,7 @@ const UserHomeScreen = () => {
       </View>
       <View style={styles.adminRequest}>
         <Text style={styles.adminRequestText}>Are you a cricket match organizer?</Text>
-        <Button title="Become a temporary admin" style={styles.adminButton} />
+        <Button title="Become a temporary admin" style={styles.adminButton} onPress={handleAdminRequest} />
       </View>
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
