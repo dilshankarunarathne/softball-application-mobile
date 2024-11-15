@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Image as RNImage } from 'react-native';
 
 const LiveMatchesScreen = () => {
+  const navigation = useNavigation();
+
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
   const team1LogoUri = RNImage.resolveAssetSource(require('./../images/team1logo.png')).uri;
@@ -12,8 +15,6 @@ const LiveMatchesScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
-  
-  // TODO: add navigation to other screens in bottom navigation bar
 
   return (
     <View style={styles.container}>
@@ -84,14 +85,22 @@ const LiveMatchesScreen = () => {
         </View>
       </View>
       <View style={styles.navigation}>
-        <Image source={{ uri: homeUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Home</Text>
-        <Image source={{ uri: matchesUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Matches</Text>
-        <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Rankings</Text>
-        <Image source={{ uri: accountUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Account</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
+          <Image source={{ uri: homeUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
+          <Image source={{ uri: matchesUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Matches</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
+          <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Rankings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={{ uri: accountUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Account</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
