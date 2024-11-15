@@ -1,8 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Image as RNImage } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const RankingsScreen = () => {
+  const navigation = useNavigation();
+  const [selectedTab, setSelectedTab] = useState('Teams');
+
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
   const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
@@ -10,15 +14,19 @@ const RankingsScreen = () => {
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
-  // TODO: add navigation to other screens in bottom navigation bar
-  // TODO: table titles are vertically aligned to the top, fix that
-  // TODO: team rankings and player rankings tabs not implemented yet
-
-  const rankingData = [
+  const teamRankingData = [
     { name: 'Team A', matches: 10, points: 20, rating: 200 },
     { name: 'Team B', matches: 12, points: 18, rating: 180 },
     // Add more teams as needed
   ];
+
+  const playerRankingData = [
+    { name: 'Player A', matches: 10, points: 20, rating: 200 },
+    { name: 'Player B', matches: 12, points: 18, rating: 180 },
+    // Add more players as needed
+  ];
+
+  const rankingData = selectedTab === 'Teams' ? teamRankingData : playerRankingData;
 
   return (
     <View style={styles.container}>
@@ -30,34 +38,48 @@ const RankingsScreen = () => {
         </View>
       </View>
       <View style={styles.tabs}>
-        <Text style={styles.tabText}>Teams</Text>
-        <Text style={styles.tabText}>Players</Text>
+        <TouchableOpacity onPress={() => setSelectedTab('Teams')}>
+          <Text style={[styles.tabText, selectedTab === 'Teams' && styles.activeTab]}>Teams</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelectedTab('Players')}>
+          <Text style={[styles.tabText, selectedTab === 'Players' && styles.activeTab]}>Players</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.rankingTable}>
-        <Text style={styles.tableHeader}>Pos</Text>
-        <Text style={styles.tableHeader}>Team</Text>
-        <Text style={styles.tableHeader}>Matches</Text>
-        <Text style={styles.tableHeader}>Pts</Text>
-        <Text style={styles.tableHeader}>Rating</Text>
-        {rankingData.map((team, index) => (
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Pos</Text>
+          <Text style={styles.tableHeader}>Name</Text>
+          <Text style={styles.tableHeader}>Matches</Text>
+          <Text style={styles.tableHeader}>Pts</Text>
+          <Text style={styles.tableHeader}>Rating</Text>
+        </View>
+        {rankingData.map((item, index) => (
           <View key={index} style={styles.tableRow}>
             <Text style={styles.tableCell}>{index + 1}</Text>
-            <Text style={styles.tableCell}>{team.name}</Text>
-            <Text style={styles.tableCell}>{team.matches}</Text>
-            <Text style={styles.tableCell}>{team.points}</Text>
-            <Text style={styles.tableCell}>{team.rating}</Text>
+            <Text style={styles.tableCell}>{item.name}</Text>
+            <Text style={styles.tableCell}>{item.matches}</Text>
+            <Text style={styles.tableCell}>{item.points}</Text>
+            <Text style={styles.tableCell}>{item.rating}</Text>
           </View>
         ))}
       </View>
       <View style={styles.navigation}>
-        <Image source={{ uri: homeUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Home</Text>
-        <Image source={{ uri: matchesUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Matches</Text>
-        <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Rankings</Text>
-        <Image source={{ uri: accountUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Account</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
+          <Image source={{ uri: homeUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
+          <Image source={{ uri: matchesUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Matches</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
+          <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Rankings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={{ uri: accountUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Account</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -98,8 +120,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     borderBottomWidth: 2,
-    borderBottomColor: 'blue',
+    borderBottomColor: 'transparent',
     paddingBottom: 5,
+  },
+  activeTab: {
+    borderBottomColor: 'blue',
   },
   rankingTable: {
     borderWidth: 1,
@@ -112,6 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     padding: 5,
+    flex: 1,
   },
   tableRow: {
     flexDirection: 'row',
@@ -123,6 +149,7 @@ const styles = StyleSheet.create({
   tableCell: {
     fontSize: 14,
     textAlign: 'center',
+    flex: 1,
   },
   navigation: {
     flexDirection: 'row',
