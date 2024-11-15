@@ -1,16 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const RegistrationScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigation = useNavigation();
 
-  const handleRegistration = () => {
-    // TODO Handle registration logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
+  const handleRegistration = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Registration Failed', 'Passwords do not match.');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('username', email);
+      formData.append('password', password);
+
+      const response = await axios.post('http://127.0.0.1:3000/auth/signup', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 201) {
+        Alert.alert('Registration Successful', 'You have successfully registered.');
+        navigation.navigate('Login');
+      } else {
+        Alert.alert('Registration Failed', 'An error occurred. Please try again.');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      Alert.alert('Registration Failed', 'An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -38,7 +63,9 @@ const RegistrationScreen = () => {
       />
       <Text style={styles.passwordRequirement}>*Must be at least 8 characters</Text>
       <Button title="Sign up" onPress={handleRegistration} style={styles.signUpButton} />
-      <Text style={styles.loginText}>Already have an account? Login</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.loginText}>Already have an account? Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
