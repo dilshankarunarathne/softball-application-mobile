@@ -1,7 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const AdminHomeScreen = () => {
+  const navigation = useNavigation();
+  const [matches, setMatches] = useState([]);
+  const currentDate = new Date().toLocaleDateString();
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/matches');
+        const data = await response.json();
+        setMatches(data);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to fetch matches');
+      }
+    };
+
+    fetchMatches();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -13,7 +32,7 @@ const AdminHomeScreen = () => {
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.dateText}>Today</Text>
-        <Text style={styles.dateText}>25/10/2024</Text>
+        <Text style={styles.dateText}>{currentDate}</Text>
       </View>
       <View style={styles.matchTable}>
         <View style={styles.tableHeader}>
@@ -21,24 +40,35 @@ const AdminHomeScreen = () => {
           <Text style={styles.tableHeaderText}>Match</Text>
           <Text style={styles.tableHeaderText}>Action</Text>
         </View>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableCell}>25</Text>
-          <Text style={styles.tableCell}>ABC vs XYZ</Text>
-          <Text style={styles.tableCell}>Update</Text>
-        </View>
-        {/* ... more table rows */}
+        {matches.map(match => (
+          <View key={match._id} style={styles.tableRow}>
+            <Text style={styles.tableCell}>{match._id}</Text>
+            <Text style={styles.tableCell}>{`${match.team1} vs ${match.team2}`}</Text>
+            <Text style={styles.tableCell}>Update</Text>
+          </View>
+        ))}
       </View>
       <View style={styles.navigation}>
-        <Image source={require('./../images/home.png')} style={styles.navIcon} />
-        <Text style={styles.navText}>Home</Text>
-        <Image source={require('./../images/matches.png')} style={styles.navIcon} />
-        <Text style={styles.navText}>Matches</Text>
-        <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
-        <Text style={styles.navText}>Rankings</Text>
-        <Image source={require('./../images/users.png')} style={styles.navIcon} />
-        <Text style={styles.navText}>Users</Text>
-        <Image source={require('./../images/admin.png')} style={styles.navIcon} />
-        <Text style={styles.navText}>Admin</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Matches</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Rankings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={require('./../images/users.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Users</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+          <Text style={styles.navText}>Admin</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

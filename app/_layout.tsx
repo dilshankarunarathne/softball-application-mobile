@@ -14,17 +14,6 @@ import VerifyAccountScreen from './screens/authentication/VerifyAccount';
 import AdminHomeScreen from './screens/admin/AdminHome';
 import NotificationsScreen from './screens/user/Notifications';
 
-type Team = {
-  name: string;
-  logo: string;
-  players: string[];
-  stats: {
-    wins: number;
-    losses: number;
-    ties: number;
-  };
-};
-
 type RootStackParamList = {
   'screens/user/UserHome': undefined;
   'screens/user/Matches': undefined;
