@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,9 +19,18 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
   const [team2Name, setTeam2Name] = useState('');
   const [matchDate, setMatchDate] = useState('');
   const [matchTime, setMatchTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [groundName, setGroundName] = useState('');
   const [tossWinner, setTossWinner] = useState('');
   const [batFirst, setBatFirst] = useState('');
+  const [team1Score, setTeam1Score] = useState('');
+  const [team2Score, setTeam2Score] = useState('');
+  const [team1Wickets, setTeam1Wickets] = useState('');
+  const [team2Wickets, setTeam2Wickets] = useState('');
+  const [team1OversPlayed, setTeam1OversPlayed] = useState('');
+  const [team2OversPlayed, setTeam2OversPlayed] = useState('');
+  const [winner, setWinner] = useState('');
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
     const fetchMatchDetails = async () => {
@@ -47,9 +56,18 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
         setTeam2Name(data.team2);
         setMatchDate(data.date);
         setMatchTime(data.start_time);
+        setEndTime(data.end_time);
         setGroundName(data.location);
         setTossWinner(data.toss_winner);
         setBatFirst(data.bat_first);
+        setTeam1Score(data.team1_score);
+        setTeam2Score(data.team2_score);
+        setTeam1Wickets(data.team1_wickets);
+        setTeam2Wickets(data.team2_wickets);
+        setTeam1OversPlayed(data.team1_overs_played);
+        setTeam2OversPlayed(data.team2_overs_played);
+        setWinner(data.winner);
+        setStatus(data.status);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching match details:', error);
@@ -74,9 +92,18 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
       formData.append('team2', team2Name);
       formData.append('date', matchDate);
       formData.append('start_time', matchTime);
+      formData.append('end_time', endTime);
       formData.append('location', groundName);
       formData.append('toss_winner', tossWinner);
       formData.append('bat_first', batFirst);
+      formData.append('team1_score', team1Score);
+      formData.append('team2_score', team2Score);
+      formData.append('team1_wickets', team1Wickets);
+      formData.append('team2_wickets', team2Wickets);
+      formData.append('team1_overs_played', team1OversPlayed);
+      formData.append('team2_overs_played', team2OversPlayed);
+      formData.append('winner', winner);
+      formData.append('status', status);
       // Add other match details as needed
 
       const response = await fetch(`http://localhost:3000/matches/${matchId}`, {
@@ -107,7 +134,7 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>Update Match</Text>
       <View style={styles.teamContainer}>
         <TextInput
@@ -138,25 +165,79 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
       />
       <TextInput
         style={styles.input}
+        placeholder="End Time"
+        value={endTime}
+        onChangeText={setEndTime}
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Ground Name"
         value={groundName}
         onChangeText={setGroundName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Team 1 Score"
+        value={team1Score}
+        onChangeText={setTeam1Score}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Team 2 Score"
+        value={team2Score}
+        onChangeText={setTeam2Score}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Team 1 Wickets"
+        value={team1Wickets}
+        onChangeText={setTeam1Wickets}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Team 2 Wickets"
+        value={team2Wickets}
+        onChangeText={setTeam2Wickets}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Team 1 Overs Played"
+        value={team1OversPlayed}
+        onChangeText={setTeam1OversPlayed}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Team 2 Overs Played"
+        value={team2OversPlayed}
+        onChangeText={setTeam2OversPlayed}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Winner"
+        value={winner}
+        onChangeText={setWinner}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Status"
+        value={status}
+        onChangeText={setStatus}
       />
       <View style={styles.tossContainer}>
         <Text style={styles.tossTitle}>Coin Toss Winner:</Text>
         <View style={styles.radioGroup}>
           <RadioButton
             value="Team 1"
-            status={tossWinner === 'Team 1' ? 'checked' : 'unchecked'}
-            onPress={() => setTossWinner('Team 1')}
+            status={tossWinner === team1Name ? 'checked' : 'unchecked'}
+            onPress={() => setTossWinner(team1Name)}
           />
-          <Text>Team 1</Text>
+          <Text>{team1Name}</Text>
           <RadioButton
             value="Team 2"
-            status={tossWinner === 'Team 2' ? 'checked' : 'unchecked'}
-            onPress={() => setTossWinner('Team 2')}
+            status={tossWinner === team2Name ? 'checked' : 'unchecked'}
+            onPress={() => setTossWinner(team2Name)}
           />
-          <Text>Team 2</Text>
+          <Text>{team2Name}</Text>
         </View>
       </View>
       <View style={styles.batFirstContainer}>
@@ -164,20 +245,20 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
         <View style={styles.radioGroup}>
           <RadioButton
             value="Team 1"
-            status={batFirst === 'Team 1' ? 'checked' : 'unchecked'}
-            onPress={() => setBatFirst('Team 1')}
+            status={batFirst === team1Name ? 'checked' : 'unchecked'}
+            onPress={() => setBatFirst(team1Name)}
           />
-          <Text>Team 1</Text>
+          <Text>{team1Name}</Text>
           <RadioButton
             value="Team 2"
-            status={batFirst === 'Team 2' ? 'checked' : 'unchecked'}
-            onPress={() => setBatFirst('Team 2')}
+            status={batFirst === team2Name ? 'checked' : 'unchecked'}
+            onPress={() => setBatFirst(team2Name)}
           />
-          <Text>Team 2</Text>
+          <Text>{team2Name}</Text>
         </View>
       </View>
       <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
-    </View>
+    </ScrollView>
   );
 };
 
