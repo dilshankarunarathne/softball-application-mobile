@@ -38,7 +38,7 @@ const AdminMatchesScreen = () => {
           <Text style={styles.teamName}>{item.team2}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.updateButton} onPress={() => navigation.navigate('screens/admin/UpdateMatch', { matchId: item.id })}>
+      <TouchableOpacity style={styles.updateButton} onPress={() => navigation.navigate('screens/admin/UpdateMatch', { matchId: item._id })}>
         <Text style={styles.updateButtonText}>Update</Text>
       </TouchableOpacity>
     </View>
@@ -67,7 +67,7 @@ const AdminMatchesScreen = () => {
             <Text style={styles.sectionTitle}>{title}</Text>
           </View>
         )}
-        keyExtractor={(item) => item.id ? item.id.toString() : item._id.toString()} // Ensure unique key
+        keyExtractor={(item) => item._id.toString()} // Ensure unique key
       />
       <View style={styles.scheduleMatchButton}>
         <Button title="Schedule a Match" onPress={() => navigation.navigate('screens/admin/ScheduleMatch')} />
