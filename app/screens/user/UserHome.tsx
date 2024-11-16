@@ -18,7 +18,7 @@ const UserHomeScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
-  const newsUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri; // todo: replace with news icon
+  const newsUri = RNImage.resolveAssetSource(require('./../images/news.png')).uri; 
 
   useEffect(() => {
     const fetchMatches = async () => {
