@@ -12,6 +12,7 @@ import PasswordResetSuccessScreen from './screens/authentication/PasswordResetSu
 import RegisterScreen from './screens/authentication/Register';
 import VerifyAccountScreen from './screens/authentication/VerifyAccount';
 import AdminHomeScreen from './screens/admin/AdminHome';
+import NotificationsScreen from './screens/user/Notifications';
 
 type Team = {
   name: string;
@@ -37,6 +38,7 @@ type RootStackParamList = {
   'screens/authentication/Register': undefined;
   'screens/authentication/VerifyAccount': undefined;
   'screens/admin/AdminHome': undefined;
+  'screens/user/Notifications': undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -56,6 +58,7 @@ export default function RootLayout() {
       <Stack.Screen name="screens/authentication/Register" component={RegisterScreen} />
       <Stack.Screen name="screens/authentication/VerifyAccount" component={VerifyAccountScreen} />
       <Stack.Screen name="screens/admin/AdminHome" component={AdminHomeScreen} />
+      <Stack.Screen name="screens/user/Notifications" component={NotificationsScreen} />
     </Stack.Navigator>
   );
 }

@@ -120,6 +120,10 @@ const UserHomeScreen = () => {
           <Image source={{ uri: newsUri }} style={styles.navIcon} />
           <Text style={styles.navText}>News</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+          <Image source={{ uri: notificationUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Notifications</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
