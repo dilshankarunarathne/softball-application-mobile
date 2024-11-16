@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-
 import { RouteProp } from '@react-navigation/native';
 
 type RouteParams = {
   params: {
-    matchData: {
+    matchData?: {
       id: string;
       tournamentName: string;
       team1Name: string;
@@ -23,6 +22,14 @@ type RouteParams = {
 const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) => {
   const { route } = props;
   const { matchData } = route.params;
+
+  if (!matchData) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>No match data available</Text>
+      </View>
+    );
+  }
 
   const [matchId, setMatchId] = useState(matchData.id);
   const [tournamentName, setTournamentName] = useState(matchData.tournamentName);
@@ -160,12 +167,10 @@ const styles = StyleSheet.create({
     input: {
       height: 40,
       borderColor: 'gray',
-      borderWidth:   
-   1,
+      borderWidth: 1,
       borderRadius: 5,
       padding: 10,
-      marginBottom:   
-   15,
+      marginBottom: 15,
     },
     teamContainer: {
       flexDirection: 'row',
