@@ -53,11 +53,11 @@ const AdminHomeScreen = () => {
           <Image source={require('./../images/home.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
           <Image source={require('./../images/matches.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Matches</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
           <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Rankings</Text>
         </TouchableOpacity>
@@ -65,7 +65,7 @@ const AdminHomeScreen = () => {
           <Image source={require('./../images/users.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Users</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
           <Image source={require('./../images/admin.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Admin</Text>
         </TouchableOpacity>

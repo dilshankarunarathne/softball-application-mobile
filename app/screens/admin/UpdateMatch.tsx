@@ -20,7 +20,8 @@ type RouteParams = {
   };
 };
 
-const UpdateMatchScreen = ({ route }: { route: RouteProp<RouteParams, 'params'> }) => {
+const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) => {
+  const { route } = props;
   const { matchData } = route.params;
 
   const [matchId, setMatchId] = useState(matchData.id);
