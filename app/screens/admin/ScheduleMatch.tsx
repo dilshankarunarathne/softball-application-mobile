@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Picker, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { Picker } from '@react-native-picker/picker';
 
 const ScheduleMatchScreen = () => {
   const [selectedTeam, setSelectedTeam] = useState('');
@@ -13,32 +16,45 @@ const ScheduleMatchScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [teams, setTeams] = useState([]);
 
-  const handleScheduleMatch = () => {
-    // Handle match scheduling logic here
-    console.log('Scheduled match:', {
-      selectedTeam,
-      selectedOpponent,
-      scheduledDate,
-      startTime,
-      endTime,
-      location,
-    });
-  };
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      try {
+        const response = await axios.get('http://localhost:3000/teams', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setTeams(response.data);
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+    fetchTeams();
+  }, []);
 
-  const handleDateChange = (event, selectedDate) => {
-    setScheduledDate(selectedDate || scheduledDate);
-    setShowDatePicker(false);
-  };
-
-  const handleStartTimeChange = (event, selectedTime) => {
-    setStartTime(selectedTime || startTime);
-    setShowStartTimePicker(false);
-  };
-
-  const handleEndTimeChange = (event, selectedTime) => {
-    setEndTime(selectedTime || endTime);
-    setShowEndTimePicker(false);
+  const handleScheduleMatch = async () => {
+    const token = await AsyncStorage.getItem('authToken');
+    try {
+      await axios.post(
+        'http://localhost:3000/matches',
+        {
+          team1: selectedTeam,
+          team2: selectedOpponent,
+          date: scheduledDate,
+          start_time: startTime,
+          end_time: endTime,
+          location,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      Alert.alert('Success', 'Match scheduled successfully');
+    } catch (error) {
+      console.error('Error scheduling match:', error);
+      Alert.alert('Error', 'Failed to schedule match');
+    }
   };
 
   return (
@@ -47,15 +63,25 @@ const ScheduleMatchScreen = () => {
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Select a team</Text>
-        <TouchableOpacity style={styles.inputField}>
-          <Text style={styles.inputText}>{selectedTeam}</Text>
-          <MaterialIcons name="arrow-drop-down" size={24} color="gray" />
-        </TouchableOpacity>
+        <Picker
+          selectedValue={selectedTeam}
+          onValueChange={(itemValue) => setSelectedTeam(itemValue)}
+          style={styles.inputField}
+        >
+          {teams.map((team) => (
+            <Picker.Item key={team.id} label={team.name} value={team.name} />
+          ))}
+        </Picker>
         <Text style={styles.label}>Select an opponent</Text>
-        <TouchableOpacity style={styles.inputField}>
-          <Text style={styles.inputText}>{selectedOpponent}</Text>
-          <MaterialIcons name="arrow-drop-down" size={24} color="gray" />
-        </TouchableOpacity>
+        <Picker
+          selectedValue={selectedOpponent}
+          onValueChange={(itemValue) => setSelectedOpponent(itemValue)}
+          style={styles.inputField}
+        >
+          {teams.map((team) => (
+            <Picker.Item key={team.id} label={team.name} value={team.name} />
+          ))}
+        </Picker>
       </View>
 
       <Text style={styles.label}>Scheduled date</Text>
@@ -111,37 +137,37 @@ const ScheduleMatchScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 20,
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 20,
-    },
-    label: {
-      fontSize: 16,
-      marginBottom: 5,
-    },
-    inputField: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: 'gray',
-      borderRadius: 5,
-      padding: 10,
-      marginBottom: 15,
-    },
-    inputText: {
-      flex: 1,
-    },
-    submitButton: {
-      backgroundColor: 'blue',
-      padding: 10,
-      borderRadius: 5,
-      marginTop: 20,
-    },
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  inputField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 15,
+  },
+  inputText: {
+    flex: 1,
+  },
+  submitButton: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
 });
 
 export default ScheduleMatchScreen;
