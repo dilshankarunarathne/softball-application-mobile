@@ -1,11 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Image as RNImage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const RankingsScreen = () => {
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState('Teams');
+  const [teamRankingData, setTeamRankingData] = useState([]);
+  const [playerRankingData, setPlayerRankingData] = useState([]);
+
+  useEffect(() => {
+    const fetchTeamRankings = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/teams');
+        setTeamRankingData(response.data);
+      } catch (error) {
+        console.error('Error fetching team rankings:', error);
+      }
+    };
+
+    const fetchPlayerRankings = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/player/all');
+        setPlayerRankingData(response.data);
+      } catch (error) {
+        console.error('Error fetching player rankings:', error);
+      }
+    };
+
+    fetchTeamRankings();
+    fetchPlayerRankings();
+  }, []);
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
@@ -13,18 +39,6 @@ const RankingsScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
-
-  const teamRankingData = [
-    { name: 'Team A', matches: 10, points: 20, rating: 200 },
-    { name: 'Team B', matches: 12, points: 18, rating: 180 },
-    // Add more teams as needed
-  ];
-
-  const playerRankingData = [
-    { name: 'Player A', matches: 10, points: 20, rating: 200 },
-    { name: 'Player B', matches: 12, points: 18, rating: 180 },
-    // Add more players as needed
-  ];
 
   const rankingData = selectedTab === 'Teams' ? teamRankingData : playerRankingData;
 
@@ -57,7 +71,7 @@ const RankingsScreen = () => {
           <View key={index} style={styles.tableRow}>
             <Text style={styles.tableCell}>{index + 1}</Text>
             <Text style={styles.tableCell}>{item.name}</Text>
-            <Text style={styles.tableCell}>{item.matches}</Text>
+            <Text style={styles.tableCell}>{item.matches || item.matches_played}</Text>
             <Text style={styles.tableCell}>{item.points}</Text>
             <Text style={styles.tableCell}>{item.rating}</Text>
           </View>
