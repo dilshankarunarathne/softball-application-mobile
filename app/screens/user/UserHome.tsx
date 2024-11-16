@@ -18,6 +18,7 @@ const UserHomeScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
+  const newsUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri; // todo: replace with news icon
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -114,6 +115,10 @@ const UserHomeScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
           <Image source={{ uri: accountUri }} style={styles.navIcon} />
           <Text style={styles.navText}>Account</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+          <Image source={{ uri: newsUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>News</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

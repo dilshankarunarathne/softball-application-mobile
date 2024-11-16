@@ -1,11 +1,36 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { Image as RNImage } from 'react-native';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NewsScreen = () => {
-  const newsImageUri = './../images/newsImage.png';
-  const newsImage2Uri = RNImage.resolveAssetSource(require('./../images/newsImage2.png')).uri;
-  const newsImage3Uri = RNImage.resolveAssetSource(require('./../images/newsImage3.png')).uri;
+  const [news, setNews] = useState([]);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        const response = await axios.get('http://localhost:3000/news', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const newsData = response.data.map(item => ({
+          ...item,
+          image: `http://localhost:3000${item.image}`
+        }));
+        setNews(newsData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
@@ -16,32 +41,33 @@ const NewsScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>NEWS</Text>
       </View>
-      <View style={styles.newsItem}>
-        <Image source={{ uri: newsImageUri }} style={styles.newsImage} />
-        <Text style={styles.newsTitle}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Text>
-        <Text style={styles.newsDate}>15 minutes ago</Text>
-      </View>
-      <View style={styles.newsItem}>
-        <Image source={{ uri: newsImage2Uri }} style={styles.newsImage} />
-        <Text style={styles.newsTitle}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Text>
-        <Text style={styles.newsDate}>1 day ago</Text>
-        <Button title="See more" style={styles.seeMoreButton} />
-      </View>
-      <View style={styles.newsItem}>
-        <Image source={{ uri: newsImage3Uri }} style={styles.newsImage} />
-        <Text style={styles.newsTitle}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Text>
-        <Text style={styles.newsDate}>1 day ago</Text>
-        <Button title="See more" style={styles.seeMoreButton} />
-      </View>
+      <ScrollView>
+        {news.map((item) => (
+          <View key={item._id} style={styles.newsItem}>
+            <Image source={{ uri: item.image }} style={styles.newsImage} />
+            <Text style={styles.newsTitle}>{item.description}</Text>
+            <Text style={styles.newsDate}>{new Date(item.created_time).toLocaleString()}</Text>
+            <Button title="See more" style={styles.seeMoreButton} />
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.navigation}>
-        <Image source={{ uri: homeUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Home</Text>
-        <Image source={{ uri: matchesUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Matches</Text>
-        <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Rankings</Text>
-        <Image source={{ uri: accountUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Account</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Image source={{ uri: homeUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Matches')}>
+          <Image source={{ uri: matchesUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Matches</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Rankings')}>
+          <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Rankings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+          <Image source={{ uri: accountUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Account</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
