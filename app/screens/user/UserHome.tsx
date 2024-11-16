@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Image as RNImage } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserHomeScreen = () => {
   const navigation = useNavigation();
+  const [matches, setMatches] = useState([]);
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
@@ -17,6 +18,20 @@ const UserHomeScreen = () => {
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/matches');
+        const data = await response.json();
+        setMatches(data);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to fetch matches');
+      }
+    };
+
+    fetchMatches();
+  }, []);
 
   const handleAdminRequest = async () => {
     try {
@@ -44,8 +59,33 @@ const UserHomeScreen = () => {
     }
   };
 
+  const renderMatch = (match) => (
+    <View key={match._id} style={styles.matchContainer}>
+      <Text style={styles.date}>{new Date(match.date).toDateString()}</Text>
+      {match.status === 'live' && <Text style={styles.liveText}>LIVE</Text>}
+      <View style={styles.matchDetails}>
+        <View style={styles.teamInfo}>
+          <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
+          <Text style={styles.teamName}>{match.team1}</Text>
+          <Text style={styles.score}>{`${match.team1_score}/${match.team1_wickets} (${match.team1_overs_played} overs)`}</Text>
+        </View>
+        <View style={styles.vsContainer}>
+          <Text style={styles.vsText}>VS</Text>
+        </View>
+        <View style={styles.teamInfo}>
+          <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
+          <Text style={styles.teamName}>{match.team2}</Text>
+          <Text style={styles.score}>{`${match.team2_score}/${match.team2_wickets} (${match.team2_overs_played} overs)`}</Text>
+        </View>
+      </View>
+      <Text style={styles.tournamentName}>{match.location}</Text>
+    </View>
+  );
+
+  const liveMatch = matches.find(match => match.status === 'live');
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
@@ -53,42 +93,7 @@ const UserHomeScreen = () => {
           <Image source={{ uri: documentUri }} style={styles.icon} />
         </View>
       </View>
-      <View style={styles.matchContainer}>
-        <Text style={styles.date}>Today</Text>
-        <Text style={styles.liveText}>LIVE</Text>
-        <View style={styles.matchDetails}>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team XYZ</Text>
-            <Text style={styles.score}>260/6 (50 overs)</Text>
-          </View>
-          <View style={styles.vsContainer}>
-            <Text style={styles.vsText}>VS</Text>
-          </View>
-          <View style={styles.teamInfo}>
-            <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
-            <Text style={styles.teamName}>Team XYZ</Text>
-            <Text style={styles.score}>260/6 (50 overs)</Text>
-          </View>
-        </View>
-        <Text style={styles.tournamentName}>ABC TOURNAMENT</Text>
-      </View>
-      <View style={styles.matchContainer}>
-        <View style={styles.teamInfo}>
-          <Image source={{ uri: team3LogoUri }} style={styles.teamLogo} />
-          <Text style={styles.teamName}>Team XYZ</Text>
-          <Text style={styles.score}>260/6 (50 overs)</Text>
-        </View>
-        <View style={styles.vsContainer}>
-          <Text style={styles.vsText}>VS</Text>
-        </View>
-        <View style={styles.teamInfo}>
-          <Image source={{ uri: team4LogoUri }} style={styles.teamLogo} />
-          <Text style={styles.teamName}>Team XYZ</Text>
-          <Text style={styles.score}>260/6 (50 overs)</Text>
-        </View>
-        <Text style={styles.tournamentName}>ABC TOURNAMENT</Text>
-      </View>
+      {liveMatch && renderMatch(liveMatch)}
       <View style={styles.adminRequest}>
         <Text style={styles.adminRequestText}>Are you a cricket match organizer?</Text>
         <Button title="Become a temporary admin" style={styles.adminButton} onPress={handleAdminRequest} />
@@ -111,7 +116,7 @@ const UserHomeScreen = () => {
           <Text style={styles.navText}>Account</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
