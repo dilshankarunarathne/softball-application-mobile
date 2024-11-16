@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Image as RNImage } from 'react-native';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyAccountScreen = () => {
+  const navigation = useNavigation();
   const [firstName, setFirstName] = useState('John');
   const [lastName, setLastName] = useState('Doe');
   const [email, setEmail] = useState('abc@gmail.com');
@@ -11,16 +15,43 @@ const MyAccountScreen = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleUpdateProfile = () => {
-    // TODO Handle update profile logic here
-    console.log('Updated profile:', { firstName, lastName, email, phoneNumber });
+  const handleUpdateProfile = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      await axios.put('http://localhost:3000/auth/profile', {
+        firstName,
+        lastName,
+        email,
+        phoneNumber
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('Profile updated successfully');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
-  const handleResetPassword = () => {
-    // TODO Handle reset password logic here
-    console.log('Current Password:', currentPassword);
-    console.log('New Password:', newPassword);
-    console.log('Confirm Password:', confirmPassword);
+  const handleResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      console.error('Passwords do not match');
+      return;
+    }
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      await axios.post('http://localhost:3000/auth/reset-password', {
+        newPassword
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('Password reset successfully');
+    } catch (error) {
+      console.error('Error resetting password:', error);
+    }
   };
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
@@ -31,11 +62,8 @@ const MyAccountScreen = () => {
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
-  // TODO: scrollable view
-  // TODO: add navigation to other screens in bottom navigation bar
-
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
@@ -101,16 +129,24 @@ const MyAccountScreen = () => {
         <Button title="Reset Password" onPress={handleResetPassword} style={styles.updateButton} />
       </View>
       <View style={styles.navigation}>
-        <Image source={{ uri: homeUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Home</Text>
-        <Image source={{ uri: matchesUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Matches</Text>
-        <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Rankings</Text>
-        <Image source={{ uri: accountUri }} style={styles.navIcon} />
-        <Text style={styles.navText}>Account</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
+          <Image source={{ uri: homeUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
+          <Image source={{ uri: matchesUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Matches</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
+          <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Rankings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={{ uri: accountUri }} style={styles.navIcon} />
+          <Text style={styles.navText}>Account</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
