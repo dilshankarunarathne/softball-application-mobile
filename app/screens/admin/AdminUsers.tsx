@@ -1,23 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AdminUsersScreen = () => {
   const [activeTab, setActiveTab] = useState('All Users');
   const [users, setUsers] = useState([]);
+  const [tempAdmins, setTempAdmins] = useState([]);
+  const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    // Fetch user data from your backend API
-    const fetchUsers = async () => {
+    const fetchData = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      if (!token) return;
+
       try {
-        const response = await fetch('your_api_endpoint');
-        const data = await response.json();
-        setUsers(data);
+        const [usersResponse, tempAdminsResponse, requestsResponse] = await Promise.all([
+          fetch('http://localhost:3000/admin/view-all-users', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch('http://localhost:3000/admin/view-temp-admins', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch('http://localhost:3000/admin/view-user-type-change-requests', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        const usersData = await usersResponse.json();
+        const tempAdminsData = await tempAdminsResponse.json();
+        const requestsData = await requestsResponse.json();
+
+        setUsers(usersData);
+        setTempAdmins(tempAdminsData);
+        setRequests(requestsData);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchUsers();
+    fetchData();
   }, []);
 
   const handleTabPress = (tabName) => {
@@ -32,7 +53,7 @@ const AdminUsersScreen = () => {
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', style: 'destructive', onPress: () => {
           // Implement the logic to delete the user from the backend
-          setUsers(users.filter(user => user.id !== userId));
+          setUsers(users.filter(user => user._id !== userId));
         }},
       ]
     );
@@ -46,7 +67,7 @@ const AdminUsersScreen = () => {
         { text: 'Cancel', style: 'cancel' },
         { text: 'Confirm', style: 'destructive', onPress: () => {
           // Implement the logic to update the user's status on the backend
-          setUsers(users.map(user => user.id === userId ? { ...user, is_admin: newStatus === 'admin' } : user));
+          setUsers(users.map(user => user._id === userId ? { ...user, user_type: newStatus } : user));
         }},
       ]
     );
@@ -77,18 +98,18 @@ const AdminUsersScreen = () => {
       {activeTab === 'All Users' && (
         <View style={styles.userList}>
           <FlatList
-            data={users.filter(user => !user.is_admin)}
+            data={users.filter(user => user.user_type === 'user')}
             renderItem={({ item }) => (
               <View style={styles.userItem}>
-                <Text style={styles.userId}>{item.id}</Text>
-                <Text style={styles.userName}>{item.name}</Text>
+                {/* <Text style={styles.userId}>{item._id}</Text> */}
+                <Text style={styles.userName}>{item.username}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
-                <TouchableOpacity onPress={() => handleDeleteUser(item.id)}>
-                  {/* <Image source={require('./../images/delete_icon.png')} style={styles.deleteIcon} /> */}
+                <TouchableOpacity onPress={() => handleDeleteUser(item._id)}>
+                  <Image source={require('./../images/delete.png')} style={styles.deleteIcon} />
                 </TouchableOpacity>
               </View>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
           />
         </View>
       )}
@@ -96,18 +117,18 @@ const AdminUsersScreen = () => {
       {activeTab === 'Temporary Admins' && (
         <View style={styles.userList}>
           <FlatList
-            data={users.filter(user => user.is_admin)}
+            data={tempAdmins}
             renderItem={({ item }) => (
               <View style={styles.userItem}>
-                <Text style={styles.userId}>{item.id}</Text>
-                <Text style={styles.userName}>{item.name}</Text>
+                {/* <Text style={styles.userId}>{item._id}</Text> */}
+                <Text style={styles.userName}>{item.username}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
-                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.id, 'user')}>
-                  {/* <Image source={require('./../images/remove_admin_icon.png')} style={styles.actionIcon} /> */}
+                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item._id, 'user')}>
+                  <Image source={require('./../images/delete.png')} style={styles.actionIcon} />
                 </TouchableOpacity>
               </View>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
           />
         </View>
       )}
@@ -115,21 +136,21 @@ const AdminUsersScreen = () => {
       {activeTab === 'Requests' && (
         <View style={styles.userList}>
           <FlatList
-            data={users.filter(user => user.request_status === 'pending')}
+            data={requests}
             renderItem={({ item }) => (
               <View style={styles.userItem}>
-                <Text style={styles.userId}>{item.id}</Text>
-                <Text style={styles.userName}>{item.name}</Text>
+                {/* <Text style={styles.userId}>{item._id}</Text> */}
+                <Text style={styles.userName}>{item.username}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
-                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.id, 'admin')}>
-                  {/* <Image source={require('./../images/accept_icon.png')} style={styles.actionIcon} /> */}
+                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.user_id, 'admin')}>
+                  <Image source={require('./../images/accept.png')} style={styles.actionIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.id, 'rejected')}>
-                  {/* <Image source={require('./../images/reject_icon.png')} style={styles.actionIcon} /> */}
+                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.user_id, 'rejected')}>
+                  <Image source={require('./../images/delete.png')} style={styles.actionIcon} />
                 </TouchableOpacity>
               </View>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
           />
         </View>
       )}
