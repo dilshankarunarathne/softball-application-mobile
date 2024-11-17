@@ -45,29 +45,66 @@ const AdminUsersScreen = () => {
     setActiveTab(tabName);
   };
 
-  const handleDeleteUser = (userId) => {
+  const handleDeleteUser = async (userId) => {
     Alert.alert(
       'Delete User',
       'Are you sure you want to delete this user?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => {
-          // Implement the logic to delete the user from the backend
-          setUsers(users.filter(user => user._id !== userId));
+        { text: 'Delete', style: 'destructive', onPress: async () => {
+          const token = await AsyncStorage.getItem('authToken');
+          if (!token) return;
+
+          try {
+            const response = await fetch(`http://localhost:3000/admin/delete-user/${userId}`, {
+              method: 'DELETE',
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (response.ok) {
+              setUsers(users.filter(user => user._id !== userId));
+            } else {
+              console.error('Failed to delete user');
+            }
+          } catch (error) {
+            console.error('Error deleting user:', error);
+          }
         }},
       ]
     );
   };
 
-  const handleUpdateAdminStatus = (userId, newStatus) => {
+  const handleUpdateAdminStatus = async (userId, newStatus) => {
     Alert.alert(
       'Update User Status',
       `Are you sure you want to ${newStatus === 'user' ? 'remove' : 'promote'} admin privileges for this user?`,
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Confirm', style: 'destructive', onPress: () => {
-          // Implement the logic to update the user's status on the backend
-          setUsers(users.map(user => user._id === userId ? { ...user, user_type: newStatus } : user));
+        { text: 'Confirm', style: 'destructive', onPress: async () => {
+          const token = await AsyncStorage.getItem('authToken');
+          if (!token) return;
+
+          const formData = new FormData();
+          formData.append('username', userId);
+          formData.append('new_type', newStatus);
+
+          try {
+            const response = await fetch('http://localhost:3000/admin/change-user-type', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            });
+
+            if (response.ok) {
+              setUsers(users.map(user => user._id === userId ? { ...user, user_type: newStatus } : user));
+            } else {
+              console.error('Failed to update user status');
+            }
+          } catch (error) {
+            console.error('Error updating user status:', error);
+          }
         }},
       ]
     );
@@ -123,7 +160,7 @@ const AdminUsersScreen = () => {
                 {/* <Text style={styles.userId}>{item._id}</Text> */}
                 <Text style={styles.userName}>{item.username}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
-                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item._id, 'user')}>
+                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.username, 'user')}>
                   <Image source={require('./../images/delete.png')} style={styles.actionIcon} />
                 </TouchableOpacity>
               </View>
@@ -142,10 +179,10 @@ const AdminUsersScreen = () => {
                 {/* <Text style={styles.userId}>{item._id}</Text> */}
                 <Text style={styles.userName}>{item.username}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
-                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.user_id, 'admin')}>
+                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.username, 'temp-admin')}>
                   <Image source={require('./../images/accept.png')} style={styles.actionIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.user_id, 'rejected')}>
+                <TouchableOpacity onPress={() => handleUpdateAdminStatus(item.username, 'rejected')}>
                   <Image source={require('./../images/delete.png')} style={styles.actionIcon} />
                 </TouchableOpacity>
               </View>
