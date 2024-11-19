@@ -30,7 +30,16 @@ Run the app:
 npx expo start -a
 ```
 
+# TODOs 
+
+```bash
 adb reverse tcp:3000 tcp:3000
+```
+
+1. Recheck player add/edit
+2. Add page for creating a new team
+3. Add page for marking scores
+4. Integrate with live match score view
 
 ## Development
 
