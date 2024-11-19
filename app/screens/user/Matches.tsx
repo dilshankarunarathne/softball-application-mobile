@@ -47,6 +47,10 @@ const LiveMatchesScreen = () => {
   const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
+  const handleMarkScore = (matchId) => {
+    navigation.navigate('LiveScoreMark', { matchId });
+  };
+
   const renderMatches = (matches) => {
     return matches.map(match => (
       <View key={match._id} style={styles.matchContainer}>
@@ -65,7 +69,7 @@ const LiveMatchesScreen = () => {
         </View>
         {match.status === 'live' && <Image source={{ uri: starUri }} style={styles.starIcon} />}
         {userType === 'temp-admin' && match.status === 'live' && (
-          <Button title="Mark" onPress={() => {/* handle mark action */}} />
+          <Button title="Mark" onPress={() => handleMarkScore(match._id)} />
         )}
       </View>
     ));
