@@ -40,6 +40,7 @@ adb reverse tcp:3000 tcp:3000
 2. Add page for creating a new team
 3. Add page for marking scores
 4. Integrate with live match score view
+5. Integrate forgot password, etc
 
 ## Development
 
