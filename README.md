@@ -30,7 +30,7 @@ Run the app:
 npx expo start -a
 ```
 
-# TODOs 
+## TODOs 
 
 ```bash
 adb reverse tcp:3000 tcp:3000
