@@ -2,12 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Image as RNImage } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LiveMatchesScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState({ live: [], upcoming: [], past: [] });
+  const [userType, setUserType] = useState('');
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const profileResponse = await axios.get('http://127.0.0.1:3000/auth/profile', { headers: { Authorization: `Bearer ${token}` } });
+        if (profileResponse.status === 200) {
+          const { user_type } = profileResponse.data;
+          setUserType(user_type);
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchProfile();
+
     fetch('http://localhost:3000/matches')
       .then(response => response.json())
       .then(data => {
@@ -46,6 +64,9 @@ const LiveMatchesScreen = () => {
           <Text style={styles.teamName}>{match.team2}</Text>
         </View>
         {match.status === 'live' && <Image source={{ uri: starUri }} style={styles.starIcon} />}
+        {userType === 'temp-admin' && match.status === 'live' && (
+          <Button title="Mark" onPress={() => {/* handle mark action */}} />
+        )}
       </View>
     ));
   };
