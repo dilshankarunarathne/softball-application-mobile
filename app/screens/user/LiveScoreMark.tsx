@@ -21,7 +21,7 @@ const LiveScoreMark = ({ route }) => {
         formData.append('bowler_id', currentBall.bowler_id);
         formData.append('balls', JSON.stringify(balls));
 
-        await axios.post('http://127.0.0.1:3000/scores', formData, {
+        await axios.post('http://localhost:3000/score', formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
@@ -29,11 +29,12 @@ const LiveScoreMark = ({ route }) => {
         });
       } catch (error) {
         console.error('Error creating score entity:', error);
+        alert('Failed to create score entity. Please try again later.');
       }
     };
 
     createScoreEntity();
-  }, []);
+  }, [matchId, overNumber, balls, currentBall.bowler_id]);
 
   const handleAddBall = () => {
     setBalls([...balls, currentBall]);
@@ -50,7 +51,7 @@ const LiveScoreMark = ({ route }) => {
       formData.append('bowler_id', currentBall.bowler_id);
       formData.append('balls', JSON.stringify(balls));
 
-      await axios.put(`http://127.0.0.1:3000/scores/${matchId}`, formData, {
+      await axios.put(`http://localhost:3000/score/${matchId}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -58,6 +59,7 @@ const LiveScoreMark = ({ route }) => {
       });
     } catch (error) {
       console.error('Error saving over:', error);
+      alert('Failed to save over. Please try again later.');
     }
   };
 
