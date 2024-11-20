@@ -16,6 +16,8 @@ const LiveScoreMark = ({ route }) => {
   const [batFirstTeam, setBatFirstTeam] = useState('');
   const [ballsPerOver, setBallsPerOver] = useState(6);
   const [scoreEntryExists, setScoreEntryExists] = useState(false);
+  const [team1Name, setTeam1Name] = useState('');
+  const [team2Name, setTeam2Name] = useState('');
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -34,6 +36,26 @@ const LiveScoreMark = ({ route }) => {
         console.error('Error fetching players:', error);
         console.log('Error details:', error.response ? error.response.data : error.message);
         alert('Failed to fetch players. Please try again later.');
+      }
+    };
+
+    const fetchMatchDetails = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        const response = await axios.get(`http://localhost:3000/matches/${matchId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const matchData = response.data;
+
+        console.log('Match details:', matchData);
+
+        setTeam1Name(matchData.team1);
+        setTeam2Name(matchData.team2);
+      } catch (error) {
+        console.error('Error fetching match details:', error);
+        alert('Failed to fetch match details. Please try again later.');
       }
     };
 
@@ -67,6 +89,7 @@ const LiveScoreMark = ({ route }) => {
     };
 
     fetchPlayers();
+    fetchMatchDetails();
     checkScoreEntity();
   }, [matchId]);
 
@@ -174,8 +197,8 @@ const LiveScoreMark = ({ route }) => {
       <Text style={styles.title}>Live Score Marking</Text>
       {scoreEntryExists ? (
         <>
-          <Text>Batting Team: {batFirstTeam}</Text>
-          <Text>Bowling Team: {batFirstTeam === 'Team 1' ? 'Team 2' : 'Team 1'}</Text>
+          <Text>Batting Team: {batFirstTeam === 'Team 1' ? team1Name : team2Name}</Text>
+          <Text>Bowling Team: {batFirstTeam === 'Team 1' ? team2Name : team1Name}</Text>
         </>
       ) : (
         <>
@@ -184,18 +207,18 @@ const LiveScoreMark = ({ route }) => {
             onValueChange={(itemValue) => setCoinTossWinner(itemValue)}
             style={styles.input}
           >
-            <Picker.Item label="Select Coin Toss Winner" value="" />
-            <Picker.Item label="Team 1" value="Team 1" />
-            <Picker.Item label="Team 2" value="Team 2" />
+            <Picker.Item label={`Select Coin Toss Winner (${team1Name} or ${team2Name})`} value="" />
+            <Picker.Item label={team1Name} value="Team 1" />
+            <Picker.Item label={team2Name} value="Team 2" />
           </Picker>
           <Picker
             selectedValue={batFirstTeam}
             onValueChange={(itemValue) => setBatFirstTeam(itemValue)}
             style={styles.input}
           >
-            <Picker.Item label="Select Bat First Team" value="" />
-            <Picker.Item label="Team 1" value="Team 1" />
-            <Picker.Item label="Team 2" value="Team 2" />
+            <Picker.Item label={`Select Bat First Team (${team1Name} or ${team2Name})`} value="" />
+            <Picker.Item label={team1Name} value="Team 1" />
+            <Picker.Item label={team2Name} value="Team 2" />
           </Picker>
           <TextInput
             placeholder="Balls Per Over"
@@ -215,7 +238,7 @@ const LiveScoreMark = ({ route }) => {
         </>
       )}
       <Text>Over Number: {overNumber}</Text>
-      <Text>Total Score: Team 1 - {totalScore.team1_score}/{totalScore.team1_wickets}, Team 2 - {totalScore.team2_score}/{totalScore.team2_wickets}</Text>
+      <Text>Total Score: {team1Name} - {totalScore.team1_score}/{totalScore.team1_wickets}, {team2Name} - {totalScore.team2_score}/{totalScore.team2_wickets}</Text>
 
       <FlatList
         data={balls}
