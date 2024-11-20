@@ -25,7 +25,7 @@ const ManageTeamsScreen = () => {
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch('http://localhost:3000/players/all');
+      const response = await fetch('http://localhost:3000/player/all');
       const data = await response.json();
       setPlayers(data);
     } catch (error) {
