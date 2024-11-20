@@ -37,19 +37,27 @@ const AdminUsersScreen = () => {
         ]);
 
         if (!usersResponse.ok) {
-          console.error('Failed to fetch users:', await usersResponse.text());
+          const errorText = await usersResponse.text();
+          console.error('Failed to fetch users:', errorText);
+          Alert.alert('Error', errorText);
           return;
         }
         if (!tempAdminsResponse.ok) {
-          console.error('Failed to fetch temp admins:', await tempAdminsResponse.text());
+          const errorText = await tempAdminsResponse.text();
+          console.error('Failed to fetch temp admins:', errorText);
+          Alert.alert('Error', errorText);
           return;
         }
         if (!requestsResponse.ok) {
-          console.error('Failed to fetch requests:', await requestsResponse.text());
+          const errorText = await requestsResponse.text();
+          console.error('Failed to fetch requests:', errorText);
+          Alert.alert('Error', errorText);
           return;
         }
         if (!playersResponse.ok) {
-          console.error('Failed to fetch players:', await playersResponse.text());
+          const errorText = await playersResponse.text();
+          console.error('Failed to fetch players:', errorText);
+          Alert.alert('Error', errorText);
           return;
         }
 
@@ -64,6 +72,7 @@ const AdminUsersScreen = () => {
         setPlayers(playersData);
       } catch (error) {
         console.error('Error fetching data:', error);
+        Alert.alert('Error', 'An error occurred while fetching data.');
       }
     };
 
@@ -185,7 +194,9 @@ const AdminUsersScreen = () => {
       });
 
       if (!response.ok) {
-        console.error('Failed to add player:', await response.text());
+        const errorText = await response.text();
+        console.error('Failed to add player:', errorText);
+        Alert.alert('Error', errorText);
         return;
       }
 
@@ -195,6 +206,7 @@ const AdminUsersScreen = () => {
       setNewPlayer({ name: '', team: '', batting_style: '', bowling_style: '', phone_number: '', email: '', date_of_birth: '', first_name: '', last_name: '' });
     } catch (error) {
       console.error('Error adding player:', error);
+      Alert.alert('Error', 'An error occurred while adding the player.');
     }
   };
 
