@@ -86,6 +86,10 @@ const LiveMatchesScreen = () => {
     navigation.navigate('screens/user/LiveScoreMark', { matchId });
   };
 
+  const handleSummary = (matchId) => {
+    navigation.navigate('screens/user/Summary', { matchId });
+  };
+
   const renderMatches = (matches) => {
     return matches.map(match => (
       <View key={match._id} style={styles.matchContainer}>
@@ -105,6 +109,9 @@ const LiveMatchesScreen = () => {
         {match.status === 'live' && <Image source={{ uri: starUri }} style={styles.starIcon} />}
         {userType === 'temp-admin' && match.status === 'live' && (
           <Button title="Mark" onPress={() => handleMarkScore(match._id)} />
+        )}
+        {match.status === 'ended' && (
+          <Button title="Summary" onPress={() => handleSummary(match._id)} />
         )}
       </View>
     ));

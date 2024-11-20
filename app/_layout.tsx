@@ -23,6 +23,7 @@ import UpdatePlayerScreen from './screens/admin/UpdatePlayer';
 import ScheduleMatchScreen from './screens/admin/ScheduleMatch';
 import LiveScoreMarkScreen from './screens/user/LiveScoreMark';
 import CreateNewsScreen from './screens/admin/CreateNews';
+import SummaryScreen from './screens/user/Summary';
 
 type RootStackParamList = {
   'screens/user/UserHome': undefined;
@@ -46,6 +47,7 @@ type RootStackParamList = {
   'screens/admin/ScheduleMatch': undefined;
   'screens/user/LiveScoreMark': { matchId: string };
   'screens/admin/CreateNews': undefined;
+  'screens/user/Summary': { matchId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -74,6 +76,7 @@ export default function RootLayout() {
       <Stack.Screen name="screens/admin/ScheduleMatch" component={ScheduleMatchScreen} />
       <Stack.Screen name="screens/user/LiveScoreMark" component={LiveScoreMarkScreen} />
       <Stack.Screen name="screens/admin/CreateNews" component={CreateNewsScreen} />
+      <Stack.Screen name="screens/user/Summary" component={SummaryScreen} />
     </Stack.Navigator>
   );
 }
