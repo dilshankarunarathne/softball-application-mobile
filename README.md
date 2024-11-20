@@ -41,6 +41,7 @@ adb reverse tcp:3000 tcp:3000
 3. Add page for marking scores
 4. Integrate with live match score view
 5. Integrate forgot password, etc
+6. Switch to ball-by-ball score marking
 
 ## Development
 
