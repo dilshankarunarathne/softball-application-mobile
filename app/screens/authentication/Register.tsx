@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Dimensions } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,6 +10,11 @@ const RegistrationScreen = () => {
   const navigation = useNavigation();
 
   const handleRegistration = async () => {
+    if (password.length < 6) {
+      Alert.alert('Registration Failed', 'Password must be at least 6 characters long.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       Alert.alert('Registration Failed', 'Passwords do not match.');
       return;
@@ -83,6 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
+    width: Dimensions.get('window').width - 40,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
