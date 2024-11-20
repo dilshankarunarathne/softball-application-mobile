@@ -111,7 +111,7 @@ const ManageTeamsScreen = () => {
         },
         body: formData,
       });
-      console.log(response);
+      
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamPlayers([...teamPlayers, player]);
       fetchPlayers(); // Reload players
@@ -132,7 +132,7 @@ const ManageTeamsScreen = () => {
         },
         body: formData,
       });
-      console.log(response);
+      
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamPlayers(teamPlayers.filter(player => player._id !== playerId));
       fetchPlayers(); // Reload players
