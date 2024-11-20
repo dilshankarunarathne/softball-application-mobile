@@ -39,6 +39,22 @@ const LiveScoreMark = ({ route }) => {
       }
     };
 
+    const fetchTeamName = async (teamId) => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        const response = await axios.get(`http://localhost:3000/teams/${teamId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return response.data.name;
+      } catch (error) {
+        console.error('Error fetching team name:', error);
+        alert('Failed to fetch team name. Please try again later.');
+        return '';
+      }
+    };
+
     const fetchMatchDetails = async () => {
       try {
         const token = await AsyncStorage.getItem('authToken');
@@ -51,8 +67,11 @@ const LiveScoreMark = ({ route }) => {
 
         console.log('Match details:', matchData);
 
-        setTeam1Name(matchData.team1);
-        setTeam2Name(matchData.team2);
+        const team1Name = await fetchTeamName(matchData.team1);
+        const team2Name = await fetchTeamName(matchData.team2);
+
+        setTeam1Name(team1Name);
+        setTeam2Name(team2Name);
       } catch (error) {
         console.error('Error fetching match details:', error);
         alert('Failed to fetch match details. Please try again later.');
