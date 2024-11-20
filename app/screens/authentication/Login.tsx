@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // Add state for error message
   const navigation = useNavigation();
 
   const handleLogin = async () => {
@@ -53,7 +54,11 @@ const LoginScreen = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
-      Alert.alert('Login Failed', 'An error occurred. Please try again.');
+      if (error.response && error.response.status === 401) {
+        Alert.alert('Login Error', 'Username & password mismatch'); // Specific message for 401 status
+      } else {
+        Alert.alert('Login Error', 'An error occurred. Please try again.'); // General error message
+      }
     }
   };
 
@@ -74,7 +79,9 @@ const LoginScreen = () => {
         secureTextEntry
       />
       <Text style={styles.forgotPassword}>Forgot password?</Text>
-      <Button title="Login" onPress={handleLogin} style={styles.loginButton} />
+      <View style={styles.loginButtonContainer}>
+        <Button title="Login" onPress={handleLogin} />
+      </View>
       <TouchableOpacity onPress={() => navigation.navigate('screens/authentication/Register')}>
         <Text style={styles.registerText}>Don't have an account? Register</Text>
       </TouchableOpacity>
@@ -116,6 +123,14 @@ const styles = StyleSheet.create({
   registerText: {
     marginTop: 15,
     color: 'gray',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 15,
+  },
+  loginButtonContainer: {
+    width: '100%',
+    marginBottom: 15,
   },
 });
 
