@@ -16,11 +16,14 @@ const LiveScoreMark = ({ route }) => {
     const fetchPlayers = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
+        console.log('Fetching players for match ID:', matchId); // Add this line
+        console.log('Fetching players with token:', token); // Add this line
         const response = await axios.get(`http://localhost:3000/player/match/${matchId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log('Players fetched:', response.data); // Add this line
         setPlayers(response.data);
       } catch (error) {
         console.error('Error fetching players:', error);
