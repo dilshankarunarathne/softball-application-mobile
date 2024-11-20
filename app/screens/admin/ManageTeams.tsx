@@ -99,12 +99,40 @@ const ManageTeamsScreen = () => {
     }
   };
 
-  const handleAddPlayerToTeam = (player) => {
-    setTeamPlayers([...teamPlayers, player]);
+  const handleAddPlayerToTeam = async (player) => {
+    const token = await AsyncStorage.getItem('authToken');
+    try {
+      const response = await fetch(`http://localhost:3000/player/${player._id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ team: selectedTeam._id }),
+      });
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
+      setTeamPlayers([...teamPlayers, player]);
+    } catch (error) {
+      Alert.alert('Error', `Failed to add player to team: ${error.message}`);
+    }
   };
 
-  const handleRemovePlayerFromTeam = (playerId) => {
-    setTeamPlayers(teamPlayers.filter(player => player._id !== playerId));
+  const handleRemovePlayerFromTeam = async (playerId) => {
+    const token = await AsyncStorage.getItem('authToken');
+    try {
+      const response = await fetch(`http://localhost:3000/player/${playerId}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ team: null }),
+      });
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
+      setTeamPlayers(teamPlayers.filter(player => player._id !== playerId));
+    } catch (error) {
+      Alert.alert('Error', `Failed to remove player from team: ${error.message}`);
+    }
   };
 
   return (
