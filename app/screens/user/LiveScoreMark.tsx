@@ -214,6 +214,7 @@ const LiveScoreMark = ({ route }) => {
       setOverNumber(overNumber + 1);
       setBalls([]);
       resetFields(); // Reset fields after successful request
+      await fetchCurrentScore(); // Fetch current score after saving over
     } catch (error) {
       console.error('Error saving over:', error);
       console.log('Error details:', error.response ? error.response.data : error.message);
