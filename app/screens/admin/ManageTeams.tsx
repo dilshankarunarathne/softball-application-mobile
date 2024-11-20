@@ -123,7 +123,7 @@ const ManageTeamsScreen = () => {
   const handleRemovePlayerFromTeam = async (playerId) => {
     const token = await AsyncStorage.getItem('authToken');
     const formData = new FormData();
-    formData.append('team', '');
+    formData.append('team', 'None');
     try {
       const response = await fetch(`http://localhost:3000/player/${playerId}`, {
         method: 'PUT',
