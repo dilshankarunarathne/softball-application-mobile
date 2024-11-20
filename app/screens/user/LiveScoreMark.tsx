@@ -21,6 +21,8 @@ const LiveScoreMark = ({ route }) => {
   const [team1Players, setTeam1Players] = useState([]);
   const [team2Players, setTeam2Players] = useState([]);
   const [sidesSwitched, setSidesSwitched] = useState(false);
+  const [team1OversPlayed, setTeam1OversPlayed] = useState(0);
+  const [team2OversPlayed, setTeam2OversPlayed] = useState(0);
 
   const fetchPlayers = async (team1Id, team2Id) => {
     try {
@@ -80,6 +82,9 @@ const LiveScoreMark = ({ route }) => {
 
       setTeam1Name(team1Name);
       setTeam2Name(team2Name);
+
+      setTeam1OversPlayed(matchData.team1_overs_played);
+      setTeam2OversPlayed(matchData.team2_overs_played);
 
       await fetchPlayers(matchData.team1, matchData.team2);
 
@@ -335,7 +340,7 @@ const LiveScoreMark = ({ route }) => {
         </>
       )}
       <Text>Over Number: {overNumber}</Text>
-      <Text>Total Score: {team1Name} - {totalScore.team1_score}/{totalScore.team1_wickets}, {team2Name} - {totalScore.team2_score}/{totalScore.team2_wickets}</Text>
+      <Text>Total Score: {team1Name} - {totalScore.team1_score}/{totalScore.team1_wickets} ({team1OversPlayed} overs), {team2Name} - {totalScore.team2_score}/{totalScore.team2_wickets} ({team2OversPlayed} overs)</Text>
 
       <FlatList
         data={balls}
