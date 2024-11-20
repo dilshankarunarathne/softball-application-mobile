@@ -9,6 +9,12 @@ const UserHomeScreen = () => {
   const [matches, setMatches] = useState([]);
   const [teams, setTeams] = useState({});
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('authToken');
+    await AsyncStorage.removeItem('user_type');
+    navigation.navigate('screens/authentication/Login');
+  };
+
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
   const team1LogoUri = RNImage.resolveAssetSource(require('./../images/team1logo.png')).uri;
@@ -111,6 +117,9 @@ const UserHomeScreen = () => {
         <View style={styles.headerIcons}>
           <Image source={{ uri: notificationUri }} style={styles.icon} />
           <Image source={{ uri: documentUri }} style={styles.icon} />
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </View>
       {liveMatch && renderMatch(liveMatch)}
@@ -248,6 +257,16 @@ const styles = StyleSheet.create({
   navText: {
     fontSize: 16,
     marginTop: 5,
+  },
+  logoutButton: {
+    backgroundColor: 'blue',
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  logoutButtonText: {
+    color: 'white',
+    fontSize: 14,
   },
 });
 
