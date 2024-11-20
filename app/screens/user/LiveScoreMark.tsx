@@ -16,12 +16,9 @@ const LiveScoreMark = ({ route }) => {
         const token = await AsyncStorage.getItem('token');
         const formData = new FormData();
         formData.append('match_id', matchId);
-        formData.append('over_number', overNumber);
         formData.append('balls_per_over', 6);
-        formData.append('bowler_id', currentBall.bowler_id);
-        formData.append('balls', JSON.stringify(balls));
 
-        await axios.post('http://localhost:3000/score', formData, {
+        await axios.post('http://localhost:3000/score/create', formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
@@ -34,7 +31,7 @@ const LiveScoreMark = ({ route }) => {
     };
 
     createScoreEntity();
-  }, [matchId, overNumber, balls, currentBall.bowler_id]);
+  }, [matchId]);
 
   const handleAddBall = () => {
     setBalls([...balls, currentBall]);
@@ -47,11 +44,10 @@ const LiveScoreMark = ({ route }) => {
       const formData = new FormData();
       formData.append('match_id', matchId);
       formData.append('over_number', overNumber);
-      formData.append('balls_per_over', 6);
       formData.append('bowler_id', currentBall.bowler_id);
-      formData.append('balls', JSON.stringify(balls));
+      formData.append('ball', JSON.stringify(currentBall));
 
-      await axios.put(`http://localhost:3000/score/${matchId}`, formData, {
+      await axios.post('http://localhost:3000/score/add-ball', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
