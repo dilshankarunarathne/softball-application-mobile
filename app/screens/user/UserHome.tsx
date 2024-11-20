@@ -8,6 +8,7 @@ const UserHomeScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState([]);
   const [teams, setTeams] = useState({});
+  const [userType, setUserType] = useState('');
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('authToken');
@@ -57,6 +58,15 @@ const UserHomeScreen = () => {
     };
 
     fetchTeams();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      const type = await AsyncStorage.getItem('user_type');
+      setUserType(type);
+    };
+
+    fetchUserType();
   }, []);
 
   const handleAdminRequest = async () => {
@@ -123,10 +133,12 @@ const UserHomeScreen = () => {
         </View>
       </View>
       {liveMatch && renderMatch(liveMatch)}
-      <View style={styles.adminRequest}>
-        <Text style={styles.adminRequestText}>Are you a cricket match organizer?</Text>
-        <Button title="Become a temporary admin" style={styles.adminButton} onPress={handleAdminRequest} />
-      </View>
+      {userType !== 'temp-admin' && (
+        <View style={styles.adminRequest}>
+          <Text style={styles.adminRequestText}>Are you a cricket match organizer?</Text>
+          <Button title="Become a temporary admin" style={styles.adminButton} onPress={handleAdminRequest} />
+        </View>
+      )}
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
           <Image source={{ uri: homeUri }} style={styles.navIcon} />
