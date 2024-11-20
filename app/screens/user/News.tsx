@@ -20,7 +20,7 @@ const NewsScreen = () => {
         });
         const newsData = response.data.map(item => ({
           ...item,
-          image: `http://localhost:3000${item.image}`
+          image: item.image ? `http://localhost:3000${item.image}` : null
         }));
         setNews(newsData);
       } catch (error) {
@@ -44,7 +44,7 @@ const NewsScreen = () => {
       <ScrollView>
         {news.map((item) => (
           <View key={item._id} style={styles.newsItem}>
-            <Image source={{ uri: item.image }} style={styles.newsImage} />
+            {item.image && <Image source={{ uri: item.image }} style={styles.newsImage} />}
             <Text style={styles.newsTitle}>{item.description}</Text>
             <Text style={styles.newsDate}>{new Date(item.created_time).toLocaleString()}</Text>
             <Button title="See more" style={styles.seeMoreButton} />
