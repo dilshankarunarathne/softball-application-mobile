@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const fetchTeamName = async (teamId) => {
+  try {
+    const response = await fetch(`http://localhost:3000/teams/${teamId}`);
+    const data = await response.json();
+    return data.name;
+  } catch (error) {
+    console.error('Failed to fetch team name:', error);
+    return 'Unknown Team';
+  }
+};
 
 const AdminHomeScreen = () => {
   const navigation = useNavigation();
@@ -8,16 +20,33 @@ const AdminHomeScreen = () => {
   const currentDate = new Date().toLocaleDateString();
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const token = await AsyncStorage.getItem('token');
+      const userType = await AsyncStorage.getItem('user_type');
+      if (!token || !userType) {
+        Alert.alert('Authentication Error', 'Please log in again.');
+        navigation.navigate('screens/authentication/Login');
+      }
+    };
+
     const fetchMatches = async () => {
       try {
         const response = await fetch('http://localhost:3000/matches');
         const data = await response.json();
-        setMatches(data);
+        const matchDetails = await Promise.all(
+          data.map(async (match) => {
+            const team1Name = await fetchTeamName(match.team1);
+            const team2Name = await fetchTeamName(match.team2);
+            return { ...match, team1Name, team2Name };
+          })
+        );
+        setMatches(matchDetails);
       } catch (error) {
         Alert.alert('Error', 'Failed to fetch matches');
       }
     };
 
+    checkAuth();
     fetchMatches();
   }, []);
 
@@ -36,14 +65,12 @@ const AdminHomeScreen = () => {
       </View>
       <View style={styles.matchTable}>
         <View style={styles.tableHeader}>
-          <Text style={styles.tableHeaderText}>Match ID</Text>
           <Text style={styles.tableHeaderText}>Match</Text>
           <Text style={styles.tableHeaderText}>Action</Text>
         </View>
         {matches.map(match => (
           <View key={match._id} style={styles.tableRow}>
-            <Text style={styles.tableCell}>{match._id}</Text>
-            <Text style={styles.tableCell}>{`${match.team1} vs ${match.team2}`}</Text>
+            <Text style={styles.tableCell}>{`${match.team1Name} vs ${match.team2Name}`}</Text>
             <Text style={styles.tableCell}>Update</Text>
           </View>
         ))}

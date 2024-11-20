@@ -18,6 +18,9 @@ const AdminUsersScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = await AsyncStorage.getItem('authToken');
+
+      console.log('Token:', token);
+
       if (!token) return;
 
       try {

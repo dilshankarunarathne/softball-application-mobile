@@ -30,6 +30,12 @@ const LoginScreen = () => {
           await AsyncStorage.setItem('userId', _id);
           await AsyncStorage.setItem('user_type', user_type); // Ensure user_type is saved with the correct key
 
+          console.log('Stored user profile:', profileResponse.data);
+          const storedToken = await AsyncStorage.getItem('token');
+          const storedUserType = await AsyncStorage.getItem('user_type');
+          console.log('Stored token:', storedToken);
+          console.log('Stored user type:', storedUserType);
+
           // Navigate based on user type
           if (user_type === 'admin') {
             navigation.navigate('screens/admin/AdminHome');
