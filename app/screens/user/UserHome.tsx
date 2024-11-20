@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const UserHomeScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState([]);
+  const [teams, setTeams] = useState({});
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
   const documentUri = RNImage.resolveAssetSource(require('./../images/document.png')).uri;
@@ -32,6 +33,24 @@ const UserHomeScreen = () => {
     };
 
     fetchMatches();
+  }, []);
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/teams');
+        const data = await response.json();
+        const teamsMap = data.reduce((acc, team) => {
+          acc[team._id] = team.name;
+          return acc;
+        }, {});
+        setTeams(teamsMap);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to fetch teams');
+      }
+    };
+
+    fetchTeams();
   }, []);
 
   const handleAdminRequest = async () => {
@@ -67,7 +86,7 @@ const UserHomeScreen = () => {
       <View style={styles.matchDetails}>
         <View style={styles.teamInfo}>
           <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{match.team1}</Text>
+          <Text style={styles.teamName}>{teams[match.team1]}</Text>
           <Text style={styles.score}>{`${match.team1_score}/${match.team1_wickets} (${match.team1_overs_played} overs)`}</Text>
         </View>
         <View style={styles.vsContainer}>
@@ -75,7 +94,7 @@ const UserHomeScreen = () => {
         </View>
         <View style={styles.teamInfo}>
           <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{match.team2}</Text>
+          <Text style={styles.teamName}>{teams[match.team2]}</Text>
           <Text style={styles.score}>{`${match.team2_score}/${match.team2_wickets} (${match.team2_overs_played} overs)`}</Text>
         </View>
       </View>
