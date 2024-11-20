@@ -19,7 +19,8 @@ const AdminUsersScreen = () => {
     const fetchData = async () => {
       const token = await AsyncStorage.getItem('authToken');
 
-      console.log('Token:', token);
+      console.log('Retrieved Token:', await AsyncStorage.getItem('authToken'));
+      console.log('Retrieved user type:', await AsyncStorage.getItem('user_type'));
 
       if (!token) return;
 
@@ -36,6 +37,7 @@ const AdminUsersScreen = () => {
         }
 
         const userData = await userResponse.json();
+        console.log('User Data -- :', userData);
         if (userData.user_type !== 'admin') {
           Alert.alert('Error', 'Only admins can view this data.');
           return;

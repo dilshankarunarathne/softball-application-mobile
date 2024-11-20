@@ -18,8 +18,11 @@ const LoginScreen = () => {
 
       if (response.status === 200) {
         const { token } = response.data;
+        
         await AsyncStorage.setItem('token', token); // Ensure token is saved with the correct key
 
+        console.log('Stored token at login --- :', token);
+        
         // Fetch user profile
         const profileResponse = await axios.get('http://127.0.0.1:3000/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
