@@ -21,6 +21,23 @@ const AdminUsersScreen = () => {
       if (!token) return;
 
       try {
+        const userResponse = await fetch('http://localhost:3000/auth/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!userResponse.ok) {
+          const errorText = await userResponse.text();
+          console.error('Failed to fetch user profile:', errorText);
+          Alert.alert('Error', errorText);
+          return;
+        }
+
+        const userData = await userResponse.json();
+        if (userData.user_type !== 'admin') {
+          Alert.alert('Error', 'Only admins can view this data.');
+          return;
+        }
+
         const [usersResponse, tempAdminsResponse, requestsResponse, playersResponse] = await Promise.all([
           fetch('http://localhost:3000/admin/view-all-users', {
             headers: { Authorization: `Bearer ${token}` },
