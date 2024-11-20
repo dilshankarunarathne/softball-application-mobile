@@ -9,7 +9,7 @@ const LiveScoreMark = ({ route }) => {
   const { matchId } = route.params;
   const [overNumber, setOverNumber] = useState(1);
   const [balls, setBalls] = useState([]);
-  const [currentBall, setCurrentBall] = useState({ runs: 0, result: '', runs_to: '', bowler_id: '' });
+  const [currentBall, setCurrentBall] = useState({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const LiveScoreMark = ({ route }) => {
 
   const handleAddBall = () => {
     setBalls([...balls, currentBall]);
-    setCurrentBall({ runs: 0, result: '', runs_to: '', bowler_id: '' });
+    setCurrentBall({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   };
 
   const handleSaveOver = async () => {
@@ -103,13 +103,6 @@ const LiveScoreMark = ({ route }) => {
         )}
       />
 
-      <TextInput
-        placeholder="Runs"
-        value={currentBall.runs.toString()}
-        onChangeText={(text) => setCurrentBall({ ...currentBall, runs: parseInt(text) })}
-        keyboardType="numeric"
-        style={styles.input}
-      />
       <Picker
         selectedValue={currentBall.result}
         onValueChange={(itemValue) => setCurrentBall({ ...currentBall, result: itemValue })}
@@ -120,16 +113,43 @@ const LiveScoreMark = ({ route }) => {
         <Picker.Item label="Wicket" value="wicket" />
         <Picker.Item label="None" value="none" />
       </Picker>
-      <Picker
-        selectedValue={currentBall.runs_to}
-        onValueChange={(itemValue) => setCurrentBall({ ...currentBall, runs_to: itemValue })}
-        style={styles.input}
-      >
-        <Picker.Item label="Select Batsman" value="" />
-        {players.map((player) => (
-          <Picker.Item key={player._id} label={player.name} value={player._id} />
-        ))}
-      </Picker>
+
+      {currentBall.result === 'runs' && (
+        <TextInput
+          placeholder="Runs"
+          value={currentBall.runs.toString()}
+          onChangeText={(text) => setCurrentBall({ ...currentBall, runs: parseInt(text) })}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+      )}
+
+      {currentBall.result === 'runs' && (
+        <Picker
+          selectedValue={currentBall.runs_to}
+          onValueChange={(itemValue) => setCurrentBall({ ...currentBall, runs_to: itemValue })}
+          style={styles.input}
+        >
+          <Picker.Item label="Select Batsman" value="" />
+          {players.map((player) => (
+            <Picker.Item key={player._id} label={player.name} value={player._id} />
+          ))}
+        </Picker>
+      )}
+
+      {currentBall.result === 'wicket' && (
+        <Picker
+          selectedValue={currentBall.wicket}
+          onValueChange={(itemValue) => setCurrentBall({ ...currentBall, wicket: itemValue })}
+          style={styles.input}
+        >
+          <Picker.Item label="Select Batsman Out" value="" />
+          {players.map((player) => (
+            <Picker.Item key={player._id} label={player.name} value={player._id} />
+          ))}
+        </Picker>
+      )}
+
       <Picker
         selectedValue={currentBall.bowler_id}
         onValueChange={(itemValue) => setCurrentBall({ ...currentBall, bowler_id: itemValue })}
