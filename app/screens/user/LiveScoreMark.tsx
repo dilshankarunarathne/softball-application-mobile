@@ -277,6 +277,7 @@ const LiveScoreMark = ({ route }) => {
         <Picker.Item label="Select Result" value="" />
         <Picker.Item label="Runs" value="runs" />
         <Picker.Item label="Wicket" value="wicket" />
+        <Picker.Item label="Extra Run" value="Extra Run" />
         <Picker.Item label="None" value="none" />
       </Picker>
 
