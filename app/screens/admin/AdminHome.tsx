@@ -21,7 +21,7 @@ const AdminHomeScreen = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem('authToken');
       const userType = await AsyncStorage.getItem('user_type');
       if (!token || !userType) {
         Alert.alert('Authentication Error', 'Please log in again.');
