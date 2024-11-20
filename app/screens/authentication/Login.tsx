@@ -19,7 +19,7 @@ const LoginScreen = () => {
       if (response.status === 200) {
         const { token } = response.data;
         
-        await AsyncStorage.setItem('token', token); // Ensure token is saved with the correct key
+        await AsyncStorage.setItem('authToken', token); // Ensure token is saved with the correct key
 
         console.log('Stored token at login --- :', token);
         
@@ -34,7 +34,7 @@ const LoginScreen = () => {
           await AsyncStorage.setItem('user_type', user_type); // Ensure user_type is saved with the correct key
 
           console.log('Stored user profile:', profileResponse.data);
-          const storedToken = await AsyncStorage.getItem('token');
+          const storedToken = await AsyncStorage.getItem('authToken');
           const storedUserType = await AsyncStorage.getItem('user_type');
           console.log('Stored token:', storedToken);
           console.log('Stored user type:', storedUserType);

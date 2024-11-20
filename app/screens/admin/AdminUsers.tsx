@@ -17,7 +17,7 @@ const AdminUsersScreen = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = await AsyncStorage.getItem('authToken');
+      const token = await AsyncStorage.getItem('token');
 
       console.log('Retrieved Token:', await AsyncStorage.getItem('authToken'));
       console.log('Retrieved user type:', await AsyncStorage.getItem('user_type'));
@@ -112,7 +112,7 @@ const AdminUsersScreen = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', style: 'destructive', onPress: async () => {
-          const token = await AsyncStorage.getItem('authToken');
+          const token = await AsyncStorage.getItem('token');
           if (!token) return;
 
           try {
@@ -141,7 +141,7 @@ const AdminUsersScreen = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Confirm', style: 'destructive', onPress: async () => {
-          const token = await AsyncStorage.getItem('authToken');
+          const token = await AsyncStorage.getItem('token');
           if (!token) return;
 
           const formData = new FormData();
@@ -177,7 +177,7 @@ const AdminUsersScreen = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', style: 'destructive', onPress: async () => {
-          const token = await AsyncStorage.getItem('authToken');
+          const token = await AsyncStorage.getItem('token');
           if (!token) return;
 
           try {
@@ -200,7 +200,7 @@ const AdminUsersScreen = () => {
   };
 
   const handleAddPlayer = async () => {
-    const token = await AsyncStorage.getItem('authToken');
+    const token = await AsyncStorage.getItem('token');
     if (!token) return;
 
     const formData = new FormData();
@@ -233,7 +233,7 @@ const AdminUsersScreen = () => {
   };
 
   const handleEditPlayer = async () => {
-    const token = await AsyncStorage.getItem('authToken');
+    const token = await AsyncStorage.getItem('token');
     if (!token) return;
 
     const formData = new FormData();
