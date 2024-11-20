@@ -23,6 +23,7 @@ const LiveScoreMark = ({ route }) => {
   const [sidesSwitched, setSidesSwitched] = useState(false);
   const [team1OversPlayed, setTeam1OversPlayed] = useState(0);
   const [team2OversPlayed, setTeam2OversPlayed] = useState(0);
+  const [wicketOutBatsmen, setWicketOutBatsmen] = useState([]);
 
   const fetchPlayers = async (team1Id, team2Id) => {
     try {
@@ -133,9 +134,25 @@ const LiveScoreMark = ({ route }) => {
     }
   };
 
+  const fetchWicketOutBatsmen = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await axios.get(`http://localhost:3000/score/wicket-out-batsmans/${matchId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setWicketOutBatsmen(response.data);
+    } catch (error) {
+      console.error('Error fetching wicket out batsmen:', error);
+      alert('Failed to fetch wicket out batsmen. Please try again later.');
+    }
+  };
+
   useEffect(() => {
     fetchMatchDetails();
     checkScoreEntity();
+    fetchWicketOutBatsmen();
   }, [matchId]);
 
   const createScoreEntity = async () => {
@@ -289,6 +306,10 @@ const LiveScoreMark = ({ route }) => {
     return batFirstTeam === 'Team 1' ? team2Players : team1Players;
   };
 
+  const getAvailableBatsmen = () => {
+    return getBattingTeamPlayers().filter(player => !wicketOutBatsmen.includes(player._id));
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Live Score Marking</Text>
@@ -388,7 +409,7 @@ const LiveScoreMark = ({ route }) => {
           style={styles.input}
         >
           <Picker.Item label="Select Batsman" value="" />
-          {getBattingTeamPlayers().map((player) => (
+          {getAvailableBatsmen().map((player) => (
             <Picker.Item key={player._id} label={player.name} value={player._id} />
           ))}
         </Picker>
@@ -401,7 +422,7 @@ const LiveScoreMark = ({ route }) => {
           style={styles.input}
         >
           <Picker.Item label="Select Batsman Out" value="" />
-          {getBattingTeamPlayers().map((player) => (
+          {getAvailableBatsmen().map((player) => (
             <Picker.Item key={player._id} label={player.name} value={player._id} />
           ))}
         </Picker>
