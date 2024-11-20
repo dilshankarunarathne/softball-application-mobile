@@ -12,6 +12,10 @@ const LiveScoreMark = ({ route }) => {
   const [currentBall, setCurrentBall] = useState({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   const [players, setPlayers] = useState([]);
   const [totalScore, setTotalScore] = useState({ team1_score: 0, team2_score: 0, team1_wickets: 0, team2_wickets: 0 });
+  const [coinTossWinner, setCoinTossWinner] = useState('');
+  const [batFirstTeam, setBatFirstTeam] = useState('');
+  const [ballsPerOver, setBallsPerOver] = useState(6);
+  const [scoreEntryExists, setScoreEntryExists] = useState(false);
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -33,32 +37,7 @@ const LiveScoreMark = ({ route }) => {
       }
     };
 
-    const createScoreEntity = async () => {
-      try {
-        const token = await AsyncStorage.getItem('authToken');
-        const formData = new FormData();
-        formData.append('match_id', matchId);
-        formData.append('balls_per_over', 6);
-
-        console.log('Creating score entity for match ID:', matchId);
-        const response = await axios.post('http://localhost:3000/score/create', formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log('Score entity created:', response.data);
-      } catch (error) {
-        if (error.response && error.response.status === 400 && error.response.data === 'Match-scoring entity already created') {
-          console.log('Match-scoring entity already exists');
-        } else {
-          console.error('Error creating score entity:', error);
-          alert('Failed to create score entity. Please try again later.');
-        }
-      }
-    };
-
-    const fetchCurrentScore = async () => {
+    const checkScoreEntity = async () => {
       try {
         const token = await AsyncStorage.getItem('authToken');
         const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
@@ -74,16 +53,72 @@ const LiveScoreMark = ({ route }) => {
           team2_wickets: scoreData.team2_wickets,
         });
         setOverNumber(scoreData.overs.length + 1);
+        setCoinTossWinner(scoreData.coin_toss_winner);
+        setBatFirstTeam(scoreData.bat_first_team);
+        setScoreEntryExists(true);
       } catch (error) {
-        console.error('Error fetching current score:', error);
-        alert('Failed to fetch current score. Please try again later.');
+        if (error.response && error.response.status === 404) {
+          console.log('No existing score entity found, prompting user to enter details.');
+        } else {
+          console.error('Error checking score entity:', error);
+          alert('Failed to check score entity. Please try again later.');
+        }
       }
     };
 
     fetchPlayers();
-    createScoreEntity();
-    fetchCurrentScore();
+    checkScoreEntity();
   }, [matchId]);
+
+  const createScoreEntity = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const formData = new FormData();
+      formData.append('match_id', matchId);
+      formData.append('balls_per_over', ballsPerOver);
+      formData.append('coin_toss_winner', coinTossWinner);
+      formData.append('bat_first_team', batFirstTeam);
+
+      console.log('Creating score entity for match ID:', matchId);
+      const response = await axios.post('http://localhost:3000/score/create', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Score entity created:', response.data);
+      setScoreEntryExists(true);
+      fetchCurrentScore();
+    } catch (error) {
+      console.error('Error creating score entity:', error);
+      alert('Failed to create score entity. Please try again later.');
+    }
+  };
+
+  const fetchCurrentScore = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const scoreData = response.data;
+      setTotalScore({
+        team1_score: scoreData.team1_score,
+        team2_score: scoreData.team2_score,
+        team1_wickets: scoreData.team1_wickets,
+        team2_wickets: scoreData.team2_wickets,
+      });
+      setOverNumber(scoreData.overs.length + 1);
+      setCoinTossWinner(scoreData.coin_toss_winner);
+      setBatFirstTeam(scoreData.bat_first_team);
+      setScoreEntryExists(true);
+    } catch (error) {
+      console.error('Error fetching current score:', error);
+      alert('Failed to fetch current score. Please try again later.');
+    }
+  };
 
   const handleAddBall = () => {
     if (!currentBall.bowler_id) {
@@ -137,6 +172,48 @@ const LiveScoreMark = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Live Score Marking</Text>
+      {scoreEntryExists ? (
+        <>
+          <Text>Batting Team: {batFirstTeam}</Text>
+          <Text>Bowling Team: {batFirstTeam === 'Team 1' ? 'Team 2' : 'Team 1'}</Text>
+        </>
+      ) : (
+        <>
+          <Picker
+            selectedValue={coinTossWinner}
+            onValueChange={(itemValue) => setCoinTossWinner(itemValue)}
+            style={styles.input}
+          >
+            <Picker.Item label="Select Coin Toss Winner" value="" />
+            <Picker.Item label="Team 1" value="Team 1" />
+            <Picker.Item label="Team 2" value="Team 2" />
+          </Picker>
+          <Picker
+            selectedValue={batFirstTeam}
+            onValueChange={(itemValue) => setBatFirstTeam(itemValue)}
+            style={styles.input}
+          >
+            <Picker.Item label="Select Bat First Team" value="" />
+            <Picker.Item label="Team 1" value="Team 1" />
+            <Picker.Item label="Team 2" value="Team 2" />
+          </Picker>
+          <TextInput
+            placeholder="Balls Per Over"
+            value={ballsPerOver.toString()}
+            onChangeText={(text) => {
+              const balls = parseInt(text);
+              if (!isNaN(balls)) {
+                setBallsPerOver(balls);
+              } else {
+                setBallsPerOver(6);
+              }
+            }}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+          <Button title="Create Score Entity" onPress={createScoreEntity} />
+        </>
+      )}
       <Text>Over Number: {overNumber}</Text>
       <Text>Total Score: Team 1 - {totalScore.team1_score}/{totalScore.team1_wickets}, Team 2 - {totalScore.team2_score}/{totalScore.team2_wickets}</Text>
 
