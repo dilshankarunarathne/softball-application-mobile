@@ -18,96 +18,105 @@ const LiveScoreMark = ({ route }) => {
   const [scoreEntryExists, setScoreEntryExists] = useState(false);
   const [team1Name, setTeam1Name] = useState('');
   const [team2Name, setTeam2Name] = useState('');
+  const [team1Players, setTeam1Players] = useState([]);
+  const [team2Players, setTeam2Players] = useState([]);
+
+  const fetchPlayers = async (team1Id, team2Id) => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      console.log('Fetching players for match ID:', matchId);
+      console.log('Fetching players with token:', token);
+      const response = await axios.get(`http://localhost:3000/player/match/${matchId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const team1Players = response.data.filter(player => player.team === team1Id);
+      const team2Players = response.data.filter(player => player.team === team2Id);
+
+      setTeam1Players(team1Players);
+      setTeam2Players(team2Players);
+      setPlayers(response.data);
+      console.log('Team 1 Players:', team1Players);
+      console.log('Team 2 Players:', team2Players);
+    } catch (error) {
+      console.error('Error fetching players:', error);
+      console.log('Error details:', error.response ? error.response.data : error.message);
+      alert('Failed to fetch players. Please try again later.');
+    }
+  };
+
+  const fetchTeamName = async (teamId) => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await axios.get(`http://localhost:3000/teams/${teamId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.name;
+    } catch (error) {
+      console.error('Error fetching team name:', error);
+      alert('Failed to fetch team name. Please try again later.');
+      return '';
+    }
+  };
+
+  const fetchMatchDetails = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await axios.get(`http://localhost:3000/matches/${matchId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const matchData = response.data;
+
+      console.log('Match details:', matchData);
+
+      const team1Name = await fetchTeamName(matchData.team1);
+      const team2Name = await fetchTeamName(matchData.team2);
+
+      setTeam1Name(team1Name);
+      setTeam2Name(team2Name);
+
+      await fetchPlayers(matchData.team1, matchData.team2);
+    } catch (error) {
+      console.error('Error fetching match details:', error);
+      alert('Failed to fetch match details. Please try again later.');
+    }
+  };
+
+  const checkScoreEntity = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const scoreData = response.data;
+      setTotalScore({
+        team1_score: scoreData.team1_score,
+        team2_score: scoreData.team2_score,
+        team1_wickets: scoreData.team1_wickets,
+        team2_wickets: scoreData.team2_wickets,
+      });
+      setOverNumber(scoreData.overs.length + 1);
+      setCoinTossWinner(scoreData.coin_toss_winner);
+      setBatFirstTeam(scoreData.bat_first_team);
+      setScoreEntryExists(true);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log('No existing score entity found, prompting user to enter details.');
+      } else {
+        console.error('Error checking score entity:', error);
+        alert('Failed to check score entity. Please try again later.');
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchPlayers = async () => {
-      try {
-        const token = await AsyncStorage.getItem('authToken');
-        console.log('Fetching players for match ID:', matchId);
-        console.log('Fetching players with token:', token);
-        const response = await axios.get(`http://localhost:3000/player/match/${matchId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        
-        setPlayers(response.data);
-      } catch (error) {
-        console.error('Error fetching players:', error);
-        console.log('Error details:', error.response ? error.response.data : error.message);
-        alert('Failed to fetch players. Please try again later.');
-      }
-    };
-
-    const fetchTeamName = async (teamId) => {
-      try {
-        const token = await AsyncStorage.getItem('authToken');
-        const response = await axios.get(`http://localhost:3000/teams/${teamId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return response.data.name;
-      } catch (error) {
-        console.error('Error fetching team name:', error);
-        alert('Failed to fetch team name. Please try again later.');
-        return '';
-      }
-    };
-
-    const fetchMatchDetails = async () => {
-      try {
-        const token = await AsyncStorage.getItem('authToken');
-        const response = await axios.get(`http://localhost:3000/matches/${matchId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const matchData = response.data;
-
-        console.log('Match details:', matchData);
-
-        const team1Name = await fetchTeamName(matchData.team1);
-        const team2Name = await fetchTeamName(matchData.team2);
-
-        setTeam1Name(team1Name);
-        setTeam2Name(team2Name);
-      } catch (error) {
-        console.error('Error fetching match details:', error);
-        alert('Failed to fetch match details. Please try again later.');
-      }
-    };
-
-    const checkScoreEntity = async () => {
-      try {
-        const token = await AsyncStorage.getItem('authToken');
-        const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const scoreData = response.data;
-        setTotalScore({
-          team1_score: scoreData.team1_score,
-          team2_score: scoreData.team2_score,
-          team1_wickets: scoreData.team1_wickets,
-          team2_wickets: scoreData.team2_wickets,
-        });
-        setOverNumber(scoreData.overs.length + 1);
-        setCoinTossWinner(scoreData.coin_toss_winner);
-        setBatFirstTeam(scoreData.bat_first_team);
-        setScoreEntryExists(true);
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          console.log('No existing score entity found, prompting user to enter details.');
-        } else {
-          console.error('Error checking score entity:', error);
-          alert('Failed to check score entity. Please try again later.');
-        }
-      }
-    };
-
-    fetchPlayers();
     fetchMatchDetails();
     checkScoreEntity();
   }, [matchId]);
@@ -131,6 +140,7 @@ const LiveScoreMark = ({ route }) => {
       console.log('Score entity created:', response.data);
       setScoreEntryExists(true);
       fetchCurrentScore();
+      await fetchMatchDetails(); // Ensure players are loaded after creating score entity
     } catch (error) {
       console.error('Error creating score entity:', error);
       alert('Failed to create score entity. Please try again later.');
@@ -209,6 +219,14 @@ const LiveScoreMark = ({ route }) => {
       console.log('Error details:', error.response ? error.response.data : error.message);
       alert('Failed to save over. Please try again later.');
     }
+  };
+
+  const getBattingTeamPlayers = () => {
+    return batFirstTeam === 'Team 1' ? team1Players : team2Players;
+  };
+
+  const getBowlingTeamPlayers = () => {
+    return batFirstTeam === 'Team 1' ? team2Players : team1Players;
   };
 
   return (
@@ -305,7 +323,7 @@ const LiveScoreMark = ({ route }) => {
           style={styles.input}
         >
           <Picker.Item label="Select Batsman" value="" />
-          {players.map((player) => (
+          {getBattingTeamPlayers().map((player) => (
             <Picker.Item key={player._id} label={player.name} value={player._id} />
           ))}
         </Picker>
@@ -318,7 +336,7 @@ const LiveScoreMark = ({ route }) => {
           style={styles.input}
         >
           <Picker.Item label="Select Batsman Out" value="" />
-          {players.map((player) => (
+          {getBattingTeamPlayers().map((player) => (
             <Picker.Item key={player._id} label={player.name} value={player._id} />
           ))}
         </Picker>
@@ -330,7 +348,7 @@ const LiveScoreMark = ({ route }) => {
         style={styles.input}
       >
         <Picker.Item label="Select Bowler" value="" />
-        {players.map((player) => (
+        {getBowlingTeamPlayers().map((player) => (
           <Picker.Item key={player._id} label={player.name} value={player._id} />
         ))}
       </Picker>
