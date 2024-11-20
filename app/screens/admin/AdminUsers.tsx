@@ -238,6 +238,8 @@ const AdminUsersScreen = () => {
 
     const formData = new FormData();
     Object.keys(newPlayer).forEach(key => formData.append(key, newPlayer[key]));
+    
+    console.log('formData:', formData);
 
     try {
       const response = await fetch('http://localhost:3000/player', {
@@ -247,6 +249,8 @@ const AdminUsersScreen = () => {
         },
         body: formData,
       });
+
+      console.log('Response:', response);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -484,7 +488,13 @@ const AdminUsersScreen = () => {
             <TextInput
               style={styles.input}
               placeholder="Date of Birth"
-              value={new Date(newPlayer.date_of_birth) || new Date()}
+              value={newPlayer.date_of_birth}
+              editable={false}
+            />
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
               mode="date"
               display="default"
               onChange={handleDateChange}
