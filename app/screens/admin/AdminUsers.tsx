@@ -22,7 +22,7 @@ const AdminUsersScreen = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem('authToken');
 
       console.log('Retrieved Token:', await AsyncStorage.getItem('authToken'));
       console.log('Retrieved user type:', await AsyncStorage.getItem('user_type'));
