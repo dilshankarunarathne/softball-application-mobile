@@ -82,6 +82,17 @@ const LiveScoreMark = ({ route }) => {
       setTeam2Name(team2Name);
 
       await fetchPlayers(matchData.team1, matchData.team2);
+
+      const halftimeResponse = await axios.post('http://localhost:3000/matches/halftime', { match_id: matchId }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const { batting_team, halftime } = halftimeResponse.data;
+      setBatFirstTeam(batting_team === matchData.team1 ? 'Team 1' : 'Team 2');
+      setSidesSwitched(halftime === 'Yes');
     } catch (error) {
       console.error('Error fetching match details:', error);
       alert('Failed to fetch match details. Please try again later.');
@@ -226,25 +237,23 @@ const LiveScoreMark = ({ route }) => {
   const switchSides = async () => {
     try {
       const token = await AsyncStorage.getItem('authToken');
-      const newBatFirstTeam = batFirstTeam === 'Team 1' ? 'Team 2' : 'Team 1';
+      const formData = new FormData();
+      formData.append('match_id', matchId);
 
-      // Update match entity
-      await axios.patch(`http://localhost:3000/matches/${matchId}`, { bat_first_team: newBatFirstTeam }, {
+      const response = await axios.post('http://localhost:3000/matches/switch', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       });
 
-      // Update score entity
-      await axios.patch(`http://localhost:3000/score/current/${matchId}`, { bat_first_team: newBatFirstTeam }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setBatFirstTeam(newBatFirstTeam);
-      setSidesSwitched(true);
-      console.log('Sides switched successfully.');
+      if (response.data === 'Teams switched successfully') {
+        setSidesSwitched(true);
+        console.log('Sides switched successfully.');
+      } else {
+        console.log('Failed to switch sides:', response.data);
+        alert('Failed to switch sides. Please try again later.');
+      }
     } catch (error) {
       console.error('Error switching sides:', error);
       alert('Failed to switch sides. Please try again later.');
