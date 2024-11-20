@@ -17,35 +17,38 @@ const ManageTeamsScreen = () => {
   const fetchTeams = async () => {
     try {
       const response = await fetch('http://localhost:3000/teams');
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       const data = await response.json();
       setTeams(data);
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch teams');
+      Alert.alert('Error', `Failed to fetch teams: ${error.message}`);
     }
   };
 
   const fetchPlayers = async () => {
     try {
       const response = await fetch('http://localhost:3000/player/all');
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       const data = await response.json();
       setPlayers(data);
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch players');
+      Alert.alert('Error', `Failed to fetch players: ${error.message}`);
     }
   };
 
   const handleDeleteTeam = async (teamId) => {
     const token = await AsyncStorage.getItem('authToken');
     try {
-      await fetch(`http://localhost:3000/teams/${teamId}`, {
+      const response = await fetch(`http://localhost:3000/teams/${teamId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       fetchTeams();
     } catch (error) {
-      Alert.alert('Error', 'Failed to delete team');
+      Alert.alert('Error', `Failed to delete team: ${error.message}`);
     }
   };
 
@@ -58,7 +61,7 @@ const ManageTeamsScreen = () => {
   const handleSaveTeam = async () => {
     const token = await AsyncStorage.getItem('authToken');
     try {
-      await fetch(`http://localhost:3000/teams/${selectedTeam._id}`, {
+      const response = await fetch(`http://localhost:3000/teams/${selectedTeam._id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -66,19 +69,20 @@ const ManageTeamsScreen = () => {
         },
         body: JSON.stringify({ name: teamName, players: teamPlayers }),
       });
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setSelectedTeam(null);
       setTeamName('');
       setTeamPlayers([]);
       fetchTeams();
     } catch (error) {
-      Alert.alert('Error', 'Failed to update team');
+      Alert.alert('Error', `Failed to update team: ${error.message}`);
     }
   };
 
   const handleCreateTeam = async () => {
     const token = await AsyncStorage.getItem('authToken');
     try {
-      await fetch('http://localhost:3000/teams', {
+      const response = await fetch('http://localhost:3000/teams', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,11 +90,12 @@ const ManageTeamsScreen = () => {
         },
         body: JSON.stringify({ name: teamName, players: teamPlayers }),
       });
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamName('');
       setTeamPlayers([]);
       fetchTeams();
     } catch (error) {
-      Alert.alert('Error', 'Failed to create team');
+      Alert.alert('Error', `Failed to create team: ${error.message}`);
     }
   };
 
@@ -103,65 +108,79 @@ const ManageTeamsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Manage Teams</Text>
-      <View style={styles.table}>
-        <View style={styles.tableHeader}>
-          <Text style={styles.tableHeaderText}>Team Name</Text>
-          <Text style={styles.tableHeaderText}>Actions</Text>
-        </View>
-        {teams.map((team) => (
-          <View key={team._id} style={styles.tableRow}>
-            <Text style={styles.tableCell}>{team.name}</Text>
-            <View style={styles.actions}>
-              <Button title="Edit" onPress={() => handleEditTeam(team)} />
-              <Button title="Delete" onPress={() => handleDeleteTeam(team._id)} />
+    <FlatList
+      style={styles.scrollContainer}
+      data={teams}
+      keyExtractor={(item) => item._id}
+      ListHeaderComponent={
+        <>
+          <Text style={styles.header}>Manage Teams</Text>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderText}>Team Name</Text>
+              <Text style={styles.tableHeaderText}>Actions</Text>
             </View>
           </View>
-        ))}
-      </View>
-      {selectedTeam && (
-        <View style={styles.editContainer}>
-          <TextInput
-            style={styles.input}
-            value={teamName}
-            onChangeText={setTeamName}
-            placeholder="Team Name"
-          />
-          <FlatList
-            data={players}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.playerRow}>
-                <Text>{item.name}</Text>
-                <Button
-                  title={teamPlayers.some(player => player._id === item._id) ? "Remove" : "Add"}
-                  onPress={() =>
-                    teamPlayers.some(player => player._id === item._id)
-                      ? handleRemovePlayerFromTeam(item._id)
-                      : handleAddPlayerToTeam(item)
-                  }
-                />
-              </View>
-            )}
-          />
-          <Button title="Save" onPress={handleSaveTeam} />
+        </>
+      }
+      renderItem={({ item: team }) => (
+        <View key={team._id} style={styles.tableRow}>
+          <Text style={styles.tableCell}>{team.name}</Text>
+          <View style={styles.actions}>
+            <Button title="Edit" onPress={() => handleEditTeam(team)} />
+            <Button title="Delete" onPress={() => handleDeleteTeam(team._id)} />
+          </View>
         </View>
       )}
-      <View style={styles.createContainer}>
-        <TextInput
-          style={styles.input}
-          value={teamName}
-          onChangeText={setTeamName}
-          placeholder="New Team Name"
-        />
-        <Button title="Create Team" onPress={handleCreateTeam} />
-      </View>
-    </View>
+      ListFooterComponent={
+        <>
+          {selectedTeam && (
+            <View style={styles.editContainer}>
+              <TextInput
+                style={styles.input}
+                value={teamName}
+                onChangeText={setTeamName}
+                placeholder="Team Name"
+              />
+              <FlatList
+                data={players}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <View style={styles.playerRow}>
+                    <Text>{item.name}</Text>
+                    <Button
+                      title={teamPlayers.some(player => player._id === item._id) ? "Remove" : "Add"}
+                      onPress={() =>
+                        teamPlayers.some(player => player._id === item._id)
+                          ? handleRemovePlayerFromTeam(item._id)
+                          : handleAddPlayerToTeam(item)
+                      }
+                    />
+                  </View>
+                )}
+              />
+              <Button title="Save" onPress={handleSaveTeam} />
+            </View>
+          )}
+          <View style={styles.createContainer}>
+            <TextInput
+              style={styles.input}
+              value={teamName}
+              onChangeText={setTeamName}
+              placeholder="New Team Name"
+            />
+            <Button title="Create Team" onPress={handleCreateTeam} />
+          </View>
+        </>
+      }
+    />
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 20,
