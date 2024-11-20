@@ -149,11 +149,11 @@ const ManageTeamsScreen = () => {
                   <View style={styles.playerRow}>
                     <Text>{item.name}</Text>
                     <Button
-                      title={teamPlayers.some(player => player._id === item._id) ? "Remove" : "Add"}
+                      title={item.team !== selectedTeam._id ? "Add" : "Remove"}
                       onPress={() =>
-                        teamPlayers.some(player => player._id === item._id)
-                          ? handleRemovePlayerFromTeam(item._id)
-                          : handleAddPlayerToTeam(item)
+                        item.team !== selectedTeam._id
+                          ? handleAddPlayerToTeam(item)
+                          : handleRemovePlayerFromTeam(item._id)
                       }
                     />
                   </View>
