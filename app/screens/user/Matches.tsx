@@ -14,13 +14,32 @@ const LiveMatchesScreen = () => {
     const fetchProfile = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const profileResponse = await axios.get('http://127.0.0.1:3000/auth/profile', { headers: { Authorization: `Bearer ${token}` } });
-        if (profileResponse.status === 200) {
-          const { user_type } = profileResponse.data;
-          setUserType(user_type);
+        const storedUserType = await AsyncStorage.getItem('user_type');
+
+        console.log('Stored user type:', storedUserType);
+        console.log('Token:', token);
+
+        if (storedUserType) {
+          setUserType(storedUserType);
+        } else {
+          const profileResponse = await axios.get('http://127.0.0.1:3000/auth/profile', { headers: { Authorization: `Bearer ${token}` } });
+          if (profileResponse.status === 200) {
+            const { user_type } = profileResponse.data;
+            setUserType(user_type);
+            await AsyncStorage.setItem('user_type', user_type);
+          }
         }
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        if (error.response && error.response.status === 403) {
+          console.error('Unauthorized access - 403 Forbidden');
+          // Handle unauthorized access, e.g., redirect to login screen
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'screens/authentication/Login' }],
+          });
+        } else {
+          console.error('Error fetching profile:', error);
+        }
       }
     };
 
@@ -48,7 +67,7 @@ const LiveMatchesScreen = () => {
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
   const handleMarkScore = (matchId) => {
-    navigation.navigate('LiveScoreMark', { matchId });
+    navigation.navigate('screens/user/LiveScoreMark', { matchId });
   };
 
   const renderMatches = (matches) => {

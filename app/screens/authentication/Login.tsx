@@ -18,7 +18,7 @@ const LoginScreen = () => {
 
       if (response.status === 200) {
         const { token } = response.data;
-        await AsyncStorage.setItem('authToken', token);
+        await AsyncStorage.setItem('token', token); // Ensure token is saved with the correct key
 
         // Fetch user profile
         const profileResponse = await axios.get('http://127.0.0.1:3000/auth/profile', {
@@ -28,7 +28,7 @@ const LoginScreen = () => {
         if (profileResponse.status === 200) {
           const { _id, user_type } = profileResponse.data;
           await AsyncStorage.setItem('userId', _id);
-          await AsyncStorage.setItem('userType', user_type);
+          await AsyncStorage.setItem('user_type', user_type); // Ensure user_type is saved with the correct key
 
           // Navigate based on user type
           if (user_type === 'admin') {

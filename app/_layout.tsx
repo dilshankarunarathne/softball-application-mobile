@@ -21,6 +21,7 @@ import AdminUsersScreen from './screens/admin/AdminUsers';
 import UpdateMatchScreen from './screens/admin/UpdateMatch';
 import UpdatePlayerScreen from './screens/admin/UpdatePlayer';
 import ScheduleMatchScreen from './screens/admin/ScheduleMatch';
+import LiveScoreMarkScreen from './screens/user/LiveScoreMark';
 
 type RootStackParamList = {
   'screens/user/UserHome': undefined;
@@ -39,9 +40,10 @@ type RootStackParamList = {
   'screens/admin/AdminMatches': undefined;
   'screens/admin/AdminRankings': undefined;
   'screens/admin/AdminUsers': undefined;
-  'screens/admin/UpdateMatch': { route: RouteProp<RootStackParamList, 'screens/admin/UpdateMatch'> };
+  'screens/admin/UpdateMatch': { route: RouteProp<RootStackParamList, 'screens/admin/UpdateMatch'>; matchId: string };
   'screens/admin/UpdatePlayer': undefined;
   'screens/admin/ScheduleMatch': undefined;
+  'screens/user/LiveScoreMark': { matchId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -68,6 +70,7 @@ export default function RootLayout() {
       <Stack.Screen name="screens/admin/UpdateMatch" component={UpdateMatchScreen} />
       <Stack.Screen name="screens/admin/UpdatePlayer" component={UpdatePlayerScreen} />
       <Stack.Screen name="screens/admin/ScheduleMatch" component={ScheduleMatchScreen} />
+      <Stack.Screen name="screens/user/LiveScoreMark" component={LiveScoreMarkScreen} />
     </Stack.Navigator>
   );
 }
