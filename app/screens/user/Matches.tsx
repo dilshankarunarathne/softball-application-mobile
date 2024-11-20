@@ -9,6 +9,7 @@ const LiveMatchesScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState({ live: [], upcoming: [], past: [] });
   const [userType, setUserType] = useState('');
+  const [teams, setTeams] = useState({});
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -54,6 +55,21 @@ const LiveMatchesScreen = () => {
         setMatches({ live, upcoming, past });
       })
       .catch(error => console.error('Error fetching matches:', error));
+
+    const fetchTeams = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/teams');
+        const teamsData = response.data.reduce((acc, team) => {
+          acc[team._id] = team.name;
+          return acc;
+        }, {});
+        setTeams(teamsData);
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+
+    fetchTeams();
   }, []);
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
@@ -77,14 +93,14 @@ const LiveMatchesScreen = () => {
         <Text style={styles.matchDate}>{new Date(match.date).toLocaleDateString()}</Text>
         <View style={styles.teamInfo}>
           <Image source={{ uri: team1LogoUri }} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{match.team1}</Text>
+          <Text style={styles.teamName}>{teams[match.team1]}</Text>
         </View>
         <View style={styles.vsContainer}>
           <Text style={styles.vsText}>VS</Text>
         </View>
         <View style={styles.teamInfo}>
           <Image source={{ uri: team2LogoUri }} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{match.team2}</Text>
+          <Text style={styles.teamName}>{teams[match.team2]}</Text>
         </View>
         {match.status === 'live' && <Image source={{ uri: starUri }} style={styles.starIcon} />}
         {userType === 'temp-admin' && match.status === 'live' && (
