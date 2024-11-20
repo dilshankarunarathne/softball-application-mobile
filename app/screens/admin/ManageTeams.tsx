@@ -114,6 +114,7 @@ const ManageTeamsScreen = () => {
       console.log(response);
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamPlayers([...teamPlayers, player]);
+      fetchPlayers(); // Reload players
     } catch (error) {
       Alert.alert('Error', `Failed to add player to team: ${error.message}`);
     }
@@ -134,6 +135,7 @@ const ManageTeamsScreen = () => {
       console.log(response);
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamPlayers(teamPlayers.filter(player => player._id !== playerId));
+      fetchPlayers(); // Reload players
     } catch (error) {
       Alert.alert('Error', `Failed to remove player from team: ${error.message}`);
     }
