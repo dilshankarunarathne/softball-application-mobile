@@ -11,6 +11,7 @@ const LiveScoreMark = ({ route }) => {
   const [balls, setBalls] = useState([]);
   const [currentBall, setCurrentBall] = useState({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   const [players, setPlayers] = useState([]);
+  const [totalScore, setTotalScore] = useState({ team1_score: 0, team2_score: 0, team1_wickets: 0, team2_wickets: 0 });
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -57,8 +58,31 @@ const LiveScoreMark = ({ route }) => {
       }
     };
 
+    const fetchCurrentScore = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const scoreData = response.data;
+        setTotalScore({
+          team1_score: scoreData.team1_score,
+          team2_score: scoreData.team2_score,
+          team1_wickets: scoreData.team1_wickets,
+          team2_wickets: scoreData.team2_wickets,
+        });
+        setOverNumber(scoreData.overs.length + 1);
+      } catch (error) {
+        console.error('Error fetching current score:', error);
+        alert('Failed to fetch current score. Please try again later.');
+      }
+    };
+
     fetchPlayers();
     createScoreEntity();
+    fetchCurrentScore();
   }, [matchId]);
 
   const handleAddBall = () => {
@@ -68,6 +92,12 @@ const LiveScoreMark = ({ route }) => {
     }
     console.log('Adding ball:', currentBall);
     setBalls([...balls, currentBall]);
+    setCurrentBall({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
+  };
+
+  const resetFields = () => {
+    setOverNumber(1);
+    setBalls([]);
     setCurrentBall({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   };
 
@@ -96,6 +126,7 @@ const LiveScoreMark = ({ route }) => {
 
       setOverNumber(overNumber + 1);
       setBalls([]);
+      resetFields(); // Reset fields after successful request
     } catch (error) {
       console.error('Error saving over:', error);
       console.log('Error details:', error.response ? error.response.data : error.message);
@@ -107,6 +138,7 @@ const LiveScoreMark = ({ route }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Live Score Marking</Text>
       <Text>Over Number: {overNumber}</Text>
+      <Text>Total Score: Team 1 - {totalScore.team1_score}/{totalScore.team1_wickets}, Team 2 - {totalScore.team2_score}/{totalScore.team2_wickets}</Text>
 
       <FlatList
         data={balls}
