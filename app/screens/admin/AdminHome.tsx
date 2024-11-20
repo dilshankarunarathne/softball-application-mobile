@@ -17,6 +17,13 @@ const fetchTeamName = async (teamId) => {
 const AdminHomeScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState([]);
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('authToken');
+    await AsyncStorage.removeItem('user_type');
+    navigation.navigate('screens/authentication/Login');
+  };
+
   const currentDate = new Date().toLocaleDateString();
 
   useEffect(() => {
@@ -57,6 +64,9 @@ const AdminHomeScreen = () => {
         <View style={styles.headerIcons}>
           <Image source={require('./../images/notification.png')} style={styles.icon} />
           <Image source={require('./../images/document.png')} style={styles.icon} />
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.dateContainer}>
@@ -127,6 +137,16 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginLeft: 10,
+  },
+  logoutButton: {
+    backgroundColor: 'blue',
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  logoutButtonText: {
+    color: 'white',
+    fontSize: 14,
   },
   dateContainer: {
     flexDirection: 'row',
