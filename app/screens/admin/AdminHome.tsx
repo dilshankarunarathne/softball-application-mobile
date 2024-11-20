@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -75,6 +75,7 @@ const AdminHomeScreen = () => {
           </View>
         ))}
       </View>
+      <Button title="Create News" onPress={() => navigation.navigate('screens/admin/CreateNews')} />
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
           <Image source={require('./../images/home.png')} style={styles.navIcon} />
