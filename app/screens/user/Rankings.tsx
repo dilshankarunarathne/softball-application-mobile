@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Image as RNImage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RankingsScreen = () => {
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState('Teams');
   const [teamRankingData, setTeamRankingData] = useState([]);
   const [playerRankingData, setPlayerRankingData] = useState([]);
+  const [fallenBatsmen, setFallenBatsmen] = useState([]);
 
   useEffect(() => {
     const fetchTeamRankings = async () => {
@@ -29,8 +31,20 @@ const RankingsScreen = () => {
       }
     };
 
+    const loadFallenBatsmen = async () => {
+      try {
+        const storedFallenBatsmen = await AsyncStorage.getItem('fallenBatsmen');
+        if (storedFallenBatsmen) {
+          setFallenBatsmen(JSON.parse(storedFallenBatsmen));
+        }
+      } catch (error) {
+        console.error('Error loading fallen batsmen:', error);
+      }
+    };
+
     fetchTeamRankings();
     fetchPlayerRankings();
+    loadFallenBatsmen();
   }, []);
 
   const notificationUri = RNImage.resolveAssetSource(require('./../images/notification.png')).uri;
@@ -41,6 +55,18 @@ const RankingsScreen = () => {
   const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
   const rankingData = selectedTab === 'Teams' ? teamRankingData : playerRankingData;
+
+  const handleWicketFall = async (batsman) => {
+    const updatedFallenBatsmen = [...fallenBatsmen, batsman];
+    setFallenBatsmen(updatedFallenBatsmen);
+    try {
+      await AsyncStorage.setItem('fallenBatsmen', JSON.stringify(updatedFallenBatsmen));
+    } catch (error) {
+      console.error('Error saving fallen batsmen:', error);
+    }
+  };
+
+  const availableBatsmen = playerRankingData.filter(player => !fallenBatsmen.includes(player.name));
 
   return (
     <View style={styles.container}>
