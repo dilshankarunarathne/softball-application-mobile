@@ -238,8 +238,6 @@ const AdminUsersScreen = () => {
 
     const formData = new FormData();
     Object.keys(newPlayer).forEach(key => formData.append(key, newPlayer[key]));
-    
-    console.log('formData:', formData);
 
     try {
       const response = await fetch('http://localhost:3000/player', {
@@ -250,8 +248,6 @@ const AdminUsersScreen = () => {
         body: formData,
       });
 
-      console.log('Response:', response);
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Failed to add player:', errorText);
@@ -259,8 +255,8 @@ const AdminUsersScreen = () => {
         return;
       }
 
-      const addedPlayer = await response.json();
-      setPlayers([...players, addedPlayer]);
+      console.log('Player added successfully: Response:', response);
+
       setIsModalVisible(false);
       setNewPlayer({ name: '', team: '', batting_style: '', bowling_style: '', phone_number: '', email: '', date_of_birth: '', first_name: '', last_name: '' });
     } catch (error) {
