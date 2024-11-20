@@ -68,7 +68,7 @@ const RegistrationScreen = () => {
       />
       <Text style={styles.passwordRequirement}>*Must be at least 8 characters</Text>
       <Button title="Sign up" onPress={handleRegistration} style={styles.signUpButton} />
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate('screens/authentication/Login')}>
         <Text style={styles.loginText}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
