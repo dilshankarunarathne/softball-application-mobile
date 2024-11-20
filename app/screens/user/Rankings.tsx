@@ -14,7 +14,7 @@ const RankingsScreen = () => {
     const fetchTeamRankings = async () => {
       try {
         const response = await axios.get('http://localhost:3000/teams');
-        setTeamRankingData(response.data);
+        setTeamRankingData(response.data.sort((a, b) => b.points - a.points));
       } catch (error) {
         console.error('Error fetching team rankings:', error);
       }
@@ -23,7 +23,7 @@ const RankingsScreen = () => {
     const fetchPlayerRankings = async () => {
       try {
         const response = await axios.get('http://localhost:3000/player/all');
-        setPlayerRankingData(response.data);
+        setPlayerRankingData(response.data.sort((a, b) => b.points - a.points));
       } catch (error) {
         console.error('Error fetching player rankings:', error);
       }
@@ -65,7 +65,6 @@ const RankingsScreen = () => {
           <Text style={styles.tableHeader}>Name</Text>
           <Text style={styles.tableHeader}>Matches</Text>
           <Text style={styles.tableHeader}>Pts</Text>
-          <Text style={styles.tableHeader}>Rating</Text>
         </View>
         {rankingData.map((item, index) => (
           <View key={index} style={styles.tableRow}>
@@ -73,7 +72,6 @@ const RankingsScreen = () => {
             <Text style={styles.tableCell}>{item.name}</Text>
             <Text style={styles.tableCell}>{item.matches || item.matches_played}</Text>
             <Text style={styles.tableCell}>{item.points}</Text>
-            <Text style={styles.tableCell}>{item.rating}</Text>
           </View>
         ))}
       </View>
