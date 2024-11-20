@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Modal, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AdminUsersScreen = () => {
   const [activeTab, setActiveTab] = useState('All Users');
@@ -14,6 +16,9 @@ const AdminUsersScreen = () => {
   const [newPlayer, setNewPlayer] = useState({
     name: '', team: '', batting_style: '', bowling_style: '', phone_number: '', email: '', date_of_birth: '', first_name: '', last_name: ''
   });
+  const [teams, setTeams] = useState([]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,6 +104,34 @@ const AdminUsersScreen = () => {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('http://localhost:3000/teams', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Failed to fetch teams:', errorText);
+          Alert.alert('Error', errorText);
+          return;
+        }
+
+        const teamsData = await response.json();
+        setTeams(teamsData);
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+        Alert.alert('Error', 'An error occurred while fetching teams.');
+      }
+    };
+
+    fetchTeams();
   }, []);
 
   const handleTabPress = (tabName) => {
@@ -280,6 +313,17 @@ const AdminUsersScreen = () => {
     setIsModalVisible(true);
   };
 
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+    setNewPlayer({ ...newPlayer, date_of_birth: currentDate.toISOString().split('T')[0] });
+  };
+
+  const openDatePicker = () => {
+    setShowDatePicker(true);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -401,12 +445,15 @@ const AdminUsersScreen = () => {
             value={newPlayer.name}
             onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
           />
-          <TextInput
+          <Picker
+            selectedValue={newPlayer.team}
+            onValueChange={(itemValue) => setNewPlayer({ ...newPlayer, team: itemValue })}
             style={styles.input}
-            placeholder="Team"
-            value={newPlayer.team}
-            onChangeText={(text) => setNewPlayer({ ...newPlayer, team: text })}
-          />
+          >
+            {teams.map((team) => (
+              <Picker.Item key={team._id} label={team.name} value={team._id} />
+            ))}
+          </Picker>
           <TextInput
             style={styles.input}
             placeholder="Batting Style"
@@ -433,13 +480,16 @@ const AdminUsersScreen = () => {
             onChangeText={(text) => setNewPlayer({ ...newPlayer, email: text })}
             keyboardType="email-address"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Date of Birth"
-            value={newPlayer.date_of_birth}
-            onChangeText={(text) => setNewPlayer({ ...newPlayer, date_of_birth: text })}
-            keyboardType="default"
-          />
+          <TouchableOpacity onPress={openDatePicker}>
+            <TextInput
+              style={styles.input}
+              placeholder="Date of Birth"
+              value={new Date(newPlayer.date_of_birth) || new Date()}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
           <TextInput
             style={styles.input}
             placeholder="First Name"
