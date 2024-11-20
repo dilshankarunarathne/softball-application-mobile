@@ -422,7 +422,7 @@ const AdminUsersScreen = () => {
             renderItem={({ item }) => (
               <View style={styles.userItem}>
                 <Text style={styles.userName}>{item.name}</Text>
-                <Text style={styles.userEmail}>{item.email}</Text>
+                <Text style={styles.userEmail}>{teams.find(team => team._id === item.team)?.name || 'N/A'}</Text>
                 <TouchableOpacity onPress={() => openEditModal(item)}>
                   <Image source={require('./../images/edit.png')} style={styles.actionIcon} />
                 </TouchableOpacity>

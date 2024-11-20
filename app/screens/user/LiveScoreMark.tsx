@@ -16,7 +16,7 @@ const LiveScoreMark = ({ route }) => {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem('authToken');
         console.log('Fetching players for match ID:', matchId);
         console.log('Fetching players with token:', token);
         const response = await axios.get(`http://localhost:3000/player/match/${matchId}`, {
@@ -35,7 +35,7 @@ const LiveScoreMark = ({ route }) => {
 
     const createScoreEntity = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem('authToken');
         const formData = new FormData();
         formData.append('match_id', matchId);
         formData.append('balls_per_over', 6);
@@ -60,7 +60,7 @@ const LiveScoreMark = ({ route }) => {
 
     const fetchCurrentScore = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem('authToken');
         const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ const LiveScoreMark = ({ route }) => {
     }
 
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem('authToken');
       const formData = new FormData();
       formData.append('match_id', matchId);
       formData.append('over_number', overNumber);
