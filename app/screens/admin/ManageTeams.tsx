@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Button, TextInput, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ManageTeamsScreen = () => {
@@ -7,6 +7,7 @@ const ManageTeamsScreen = () => {
   const [players, setPlayers] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teamName, setTeamName] = useState('');
+  const [teamPlayers, setTeamPlayers] = useState([]);
 
   useEffect(() => {
     fetchTeams();
@@ -51,6 +52,7 @@ const ManageTeamsScreen = () => {
   const handleEditTeam = async (team) => {
     setSelectedTeam(team);
     setTeamName(team.name);
+    setTeamPlayers(team.players || []);
   };
 
   const handleSaveTeam = async () => {
@@ -62,10 +64,11 @@ const ManageTeamsScreen = () => {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: teamName }),
+        body: JSON.stringify({ name: teamName, players: teamPlayers }),
       });
       setSelectedTeam(null);
       setTeamName('');
+      setTeamPlayers([]);
       fetchTeams();
     } catch (error) {
       Alert.alert('Error', 'Failed to update team');
@@ -81,13 +84,22 @@ const ManageTeamsScreen = () => {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: teamName }),
+        body: JSON.stringify({ name: teamName, players: teamPlayers }),
       });
       setTeamName('');
+      setTeamPlayers([]);
       fetchTeams();
     } catch (error) {
       Alert.alert('Error', 'Failed to create team');
     }
+  };
+
+  const handleAddPlayerToTeam = (player) => {
+    setTeamPlayers([...teamPlayers, player]);
+  };
+
+  const handleRemovePlayerFromTeam = (playerId) => {
+    setTeamPlayers(teamPlayers.filter(player => player._id !== playerId));
   };
 
   return (
@@ -115,6 +127,23 @@ const ManageTeamsScreen = () => {
             value={teamName}
             onChangeText={setTeamName}
             placeholder="Team Name"
+          />
+          <FlatList
+            data={players}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <View style={styles.playerRow}>
+                <Text>{item.name}</Text>
+                <Button
+                  title={teamPlayers.some(player => player._id === item._id) ? "Remove" : "Add"}
+                  onPress={() =>
+                    teamPlayers.some(player => player._id === item._id)
+                      ? handleRemovePlayerFromTeam(item._id)
+                      : handleAddPlayerToTeam(item)
+                  }
+                />
+              </View>
+            )}
           />
           <Button title="Save" onPress={handleSaveTeam} />
         </View>
@@ -182,6 +211,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+  },
+  playerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
   },
 });
 
