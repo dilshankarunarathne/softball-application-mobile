@@ -20,6 +20,7 @@ const LiveScoreMark = ({ route }) => {
   const [team2Name, setTeam2Name] = useState('');
   const [team1Players, setTeam1Players] = useState([]);
   const [team2Players, setTeam2Players] = useState([]);
+  const [sidesSwitched, setSidesSwitched] = useState(false);
 
   const fetchPlayers = async (team1Id, team2Id) => {
     try {
@@ -222,6 +223,50 @@ const LiveScoreMark = ({ route }) => {
     }
   };
 
+  const switchSides = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const newBatFirstTeam = batFirstTeam === 'Team 1' ? 'Team 2' : 'Team 1';
+
+      // Update match entity
+      await axios.patch(`http://localhost:3000/matches/${matchId}`, { bat_first_team: newBatFirstTeam }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update score entity
+      await axios.patch(`http://localhost:3000/score/current/${matchId}`, { bat_first_team: newBatFirstTeam }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBatFirstTeam(newBatFirstTeam);
+      setSidesSwitched(true);
+      console.log('Sides switched successfully.');
+    } catch (error) {
+      console.error('Error switching sides:', error);
+      alert('Failed to switch sides. Please try again later.');
+    }
+  };
+
+  const finishMatch = async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await axios.patch(`http://localhost:3000/matches/${matchId}`, { status: 'ended' }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Match finished:', response.data);
+      alert('Match has been finished.');
+    } catch (error) {
+      console.error('Error finishing match:', error);
+      alert('Failed to finish match. Please try again later.');
+    }
+  };
+
   const getBattingTeamPlayers = () => {
     return batFirstTeam === 'Team 1' ? team1Players : team2Players;
   };
@@ -237,6 +282,11 @@ const LiveScoreMark = ({ route }) => {
         <>
           <Text>Batting Team: {batFirstTeam === 'Team 1' ? team1Name : team2Name}</Text>
           <Text>Bowling Team: {batFirstTeam === 'Team 1' ? team2Name : team1Name}</Text>
+          {!sidesSwitched ? (
+            <Button title="Switch Sides" onPress={switchSides} />
+          ) : (
+            <Button title="Finish Match" onPress={finishMatch} />
+          )}
         </>
       ) : (
         <>
