@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 const AdminMatchesScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState({ live: [], upcoming: [], past: [] });
+  const [teams, setTeams] = useState({});
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -20,7 +21,22 @@ const AdminMatchesScreen = () => {
       }
     };
 
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/teams');
+        const data = await response.json();
+        const teamsMap = data.reduce((acc, team) => {
+          acc[team._id] = team.name;
+          return acc;
+        }, {});
+        setTeams(teamsMap);
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+
     fetchMatches();
+    fetchTeams();
   }, []);
 
   const renderMatchItem = ({ item }) => (
@@ -30,12 +46,12 @@ const AdminMatchesScreen = () => {
       <View style={styles.teamContainer}>
         <View style={styles.teamInfo}>
           <Image source={require('./../images/team1logo.png')} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{item.team1}</Text>
+          <Text style={styles.teamName}>{teams[item.team1]}</Text>
         </View>
         <Text style={styles.vsText}>VS</Text>
         <View style={styles.teamInfo}>
           <Image source={require('./../images/team2logo.png')} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{item.team2}</Text>
+          <Text style={styles.teamName}>{teams[item.team2]}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.updateButton} onPress={() => navigation.navigate('screens/admin/UpdateMatch', { matchId: item._id })}>
