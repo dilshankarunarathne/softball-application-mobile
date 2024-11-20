@@ -16,14 +16,14 @@ const LiveScoreMark = ({ route }) => {
     const fetchPlayers = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        console.log('Fetching players for match ID:', matchId); // Add this line
-        console.log('Fetching players with token:', token); // Add this line
+        console.log('Fetching players for match ID:', matchId);
+        console.log('Fetching players with token:', token);
         const response = await axios.get(`http://localhost:3000/player/match/${matchId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log('Players fetched:', response.data); // Add this line
+        
         setPlayers(response.data);
       } catch (error) {
         console.error('Error fetching players:', error);
@@ -39,12 +39,14 @@ const LiveScoreMark = ({ route }) => {
         formData.append('match_id', matchId);
         formData.append('balls_per_over', 6);
 
-        await axios.post('http://localhost:3000/score/create', formData, {
+        console.log('Creating score entity for match ID:', matchId);
+        const response = await axios.post('http://localhost:3000/score/create', formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log('Score entity created:', response.data);
       } catch (error) {
         if (error.response && error.response.status === 400 && error.response.data === 'Match-scoring entity already created') {
           console.log('Match-scoring entity already exists');
@@ -60,30 +62,43 @@ const LiveScoreMark = ({ route }) => {
   }, [matchId]);
 
   const handleAddBall = () => {
+    if (!currentBall.bowler_id) {
+      alert('Please select a bowler.');
+      return;
+    }
+    console.log('Adding ball:', currentBall);
     setBalls([...balls, currentBall]);
     setCurrentBall({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   };
 
   const handleSaveOver = async () => {
+    if (!balls.every(ball => ball.bowler_id)) {
+      alert('Please select a bowler for each ball.');
+      return;
+    }
+
     try {
       const token = await AsyncStorage.getItem('token');
       const formData = new FormData();
       formData.append('match_id', matchId);
       formData.append('over_number', overNumber);
-      formData.append('bowler_id', currentBall.bowler_id);
+      formData.append('bowler_id', balls[0].bowler_id); // Use the bowler_id from the first ball
       formData.append('balls', JSON.stringify(balls));
 
-      await axios.post('http://localhost:3000/score/add-over', formData, {
+      console.log('Saving over:', { matchId, overNumber, bowler_id: balls[0].bowler_id, balls });
+      const response = await axios.post('http://localhost:3000/score/add-over', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
+      console.log('Over saved:', response.data);
 
       setOverNumber(overNumber + 1);
       setBalls([]);
     } catch (error) {
       console.error('Error saving over:', error);
+      console.log('Error details:', error.response ? error.response.data : error.message);
       alert('Failed to save over. Please try again later.');
     }
   };
@@ -118,7 +133,14 @@ const LiveScoreMark = ({ route }) => {
         <TextInput
           placeholder="Runs"
           value={currentBall.runs.toString()}
-          onChangeText={(text) => setCurrentBall({ ...currentBall, runs: parseInt(text) })}
+          onChangeText={(text) => {
+            const runs = parseInt(text);
+            if (!isNaN(runs)) {
+              setCurrentBall({ ...currentBall, runs });
+            } else {
+              setCurrentBall({ ...currentBall, runs: 0 });
+            }
+          }}
           keyboardType="numeric"
           style={styles.input}
         />
