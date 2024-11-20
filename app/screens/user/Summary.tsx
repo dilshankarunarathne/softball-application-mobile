@@ -24,7 +24,12 @@ const SummaryScreen = ({ route }) => {
         const response = await axios.get(`http://localhost:3000/scores?matchId=${matchId}`);
         setScores(response.data);
       } catch (error) {
-        console.error('Error fetching scores:', error);
+        if (error.response && error.response.status === 404) {
+          console.warn('Scores not found for this match.');
+          setScores([]);
+        } else {
+          console.error('Error fetching scores:', error);
+        }
       }
     };
 
