@@ -101,15 +101,17 @@ const ManageTeamsScreen = () => {
 
   const handleAddPlayerToTeam = async (player) => {
     const token = await AsyncStorage.getItem('authToken');
+    const formData = new FormData();
+    formData.append('team', selectedTeam._id);
     try {
       const response = await fetch(`http://localhost:3000/player/${player._id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ team: selectedTeam._id }),
+        body: formData,
       });
+      console.log(response);
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamPlayers([...teamPlayers, player]);
     } catch (error) {
@@ -119,15 +121,17 @@ const ManageTeamsScreen = () => {
 
   const handleRemovePlayerFromTeam = async (playerId) => {
     const token = await AsyncStorage.getItem('authToken');
+    const formData = new FormData();
+    formData.append('team', '');
     try {
       const response = await fetch(`http://localhost:3000/player/${playerId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ team: null }),
+        body: formData,
       });
+      console.log(response);
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
       setTeamPlayers(teamPlayers.filter(player => player._id !== playerId));
     } catch (error) {
