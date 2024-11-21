@@ -91,7 +91,7 @@ const AdminMatchesScreen = () => {
             <Text style={styles.sectionTitle}>{title}</Text>
           </View>
         )}
-        keyExtractor={(item) => item._id.toString()} // Ensure unique key
+        keyExtractor={(item) => item._id.toString()} 
       />
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
