@@ -181,15 +181,15 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
         <TextInput
           style={styles.teamInput}
           placeholder="Team 1 Name"
-          value={team1Name}
-          onChangeText={setTeam1Name}
+          value={team1FullName}
+          editable={false}
         />
         <Text style={styles.vsText}>VS</Text>
         <TextInput
           style={styles.teamInput}
           placeholder="Team 2 Name"
-          value={team2Name}
-          onChangeText={setTeam2Name}
+          value={team2FullName}
+          editable={false}
         />
       </View>
       <TextInput
