@@ -255,6 +255,7 @@ const LiveScoreMark = ({ route, navigation }) => {
       setBalls([]);
       resetFields(); // Reset fields after successful request
       await fetchCurrentScore(); // Fetch current score after saving over
+      await fetchMatchDetails(); // Fetch match details to ensure sides remain switched
     } catch (error) {
       console.error('Error saving over:', error);
       console.log('Error details:', error.response ? error.response.data : error.message);
@@ -333,9 +334,7 @@ const LiveScoreMark = ({ route, navigation }) => {
           <Text>Bowling Team: {batFirstTeam === 'Team 1' ? team2Name : team1Name}</Text>
           {!sidesSwitched ? (
             <Button title="Switch Sides" onPress={switchSides} />
-          ) : (
-            <Button title="Finish Match" onPress={finishMatch} />
-          )}
+          ) : null}
         </>
       ) : (
         <>
