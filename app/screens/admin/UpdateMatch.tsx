@@ -31,6 +31,8 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
   const [team2OversPlayed, setTeam2OversPlayed] = useState('');
   const [winner, setWinner] = useState('');
   const [status, setStatus] = useState('');
+  const [team1FullName, setTeam1FullName] = useState('');
+  const [team2FullName, setTeam2FullName] = useState('');
 
   useEffect(() => {
     const fetchMatchDetails = async () => {
@@ -78,6 +80,45 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
 
     fetchMatchDetails();
   }, [matchId]);
+
+  useEffect(() => {
+    const fetchTeamNames = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        if (!token) {
+          Alert.alert('Error', 'No auth token found');
+          return;
+        }
+
+        const response1 = await fetch(`http://localhost:3000/teams/${team1Name}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const response2 = await fetch(`http://localhost:3000/teams/${team2Name}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response1.ok || !response2.ok) {
+          throw new Error('Failed to fetch team names');
+        }
+
+        const data1 = await response1.json();
+        const data2 = await response2.json();
+        setTeam1FullName(data1.name);
+        setTeam2FullName(data2.name);
+      } catch (error) {
+        console.error('Error fetching team names:', error);
+        Alert.alert('Error', 'Failed to fetch team names');
+      }
+    };
+
+    if (team1Name && team2Name) {
+      fetchTeamNames();
+    }
+  }, [team1Name, team2Name]);
 
   const handleUpdateMatch = async () => {
     try {
@@ -231,13 +272,13 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
             status={tossWinner === team1Name ? 'checked' : 'unchecked'}
             onPress={() => setTossWinner(team1Name)}
           />
-          <Text>{team1Name}</Text>
+          <Text>{team1FullName}</Text>
           <RadioButton
             value="Team 2"
             status={tossWinner === team2Name ? 'checked' : 'unchecked'}
             onPress={() => setTossWinner(team2Name)}
           />
-          <Text>{team2Name}</Text>
+          <Text>{team2FullName}</Text>
         </View>
       </View>
       <View style={styles.batFirstContainer}>
@@ -248,13 +289,13 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
             status={batFirst === team1Name ? 'checked' : 'unchecked'}
             onPress={() => setBatFirst(team1Name)}
           />
-          <Text>{team1Name}</Text>
+          <Text>{team1FullName}</Text>
           <RadioButton
             value="Team 2"
             status={batFirst === team2Name ? 'checked' : 'unchecked'}
             onPress={() => setBatFirst(team2Name)}
           />
-          <Text>{team2Name}</Text>
+          <Text>{team2FullName}</Text>
         </View>
       </View>
       <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
