@@ -81,7 +81,7 @@ const UserHomeScreen = () => {
         }
       };
 
-      console.log('fetching matches...');
+      // console.log('fetching matches...');
       fetchMatches();
     }, 10000);
 
