@@ -63,19 +63,15 @@ const NotificationsScreen = () => {
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
           <Image source={{ uri: homeUri }} style={styles.navIcon} />
-          <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
           <Image source={{ uri: matchesUri }} style={styles.navIcon} />
-          <Text style={styles.navText}>Matches</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
           <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
-          <Text style={styles.navText}>Rankings</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
           <Image source={{ uri: accountUri }} style={styles.navIcon} />
-          <Text style={styles.navText}>Account</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -122,17 +118,16 @@ const styles = StyleSheet.create({
   navigation: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#e0e0e0',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   navIcon: {
     width: 24,
     height: 24,
-  },
-  navText: {
-    fontSize: 16,
-    marginTop: 5,
+    alignSelf: 'center',
   },
 });
 
