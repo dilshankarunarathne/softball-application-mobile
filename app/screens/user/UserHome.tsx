@@ -144,8 +144,12 @@ const UserHomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
-          <Image source={{ uri: documentUri }} style={[styles.icon, styles.iconButton]} />
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+            <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+            <Image source={{ uri: documentUri }} style={[styles.icon, styles.iconButton]} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
@@ -175,14 +179,14 @@ const UserHomeScreen = () => {
           <Image source={{ uri: accountUri }} style={styles.navIcon} />
           <Text style={styles.navText}>Account</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
           <Image source={{ uri: newsUri }} style={styles.navIcon} />
           <Text style={styles.navText}>News</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
           <Image source={{ uri: notificationUri }} style={styles.navIcon} />
           <Text style={styles.navText}>Notifications</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );
