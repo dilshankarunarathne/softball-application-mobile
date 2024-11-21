@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const AdminRankingsScreen = () => {
   const [activeTab, setActiveTab] = useState('Teams');
+  const navigation = useNavigation();
 
   const handleTabPress = (tabName) => {
     setActiveTab(tabName);
@@ -51,7 +53,18 @@ const AdminRankingsScreen = () => {
       )}
 
       <View style={styles.navigation}>
-        {/* ... navigation bar */}
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -121,13 +134,16 @@ const styles = StyleSheet.create({
   navigation: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#e0e0e0',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   navIcon: {
     width: 24,
     height: 24,
+    alignSelf: 'center',
   },
   navText: {
     fontSize: 16,

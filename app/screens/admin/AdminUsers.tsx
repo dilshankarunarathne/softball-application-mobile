@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Modal
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useNavigation } from '@react-navigation/native';
 
 const AdminUsersScreen = () => {
+  const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState('All Users');
   const [users, setUsers] = useState([]);
   const [tempAdmins, setTempAdmins] = useState([]);
