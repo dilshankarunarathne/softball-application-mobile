@@ -144,8 +144,8 @@ const UserHomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={{ uri: notificationUri }} style={styles.icon} />
-          <Image source={{ uri: documentUri }} style={styles.icon} />
+          <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
+          <Image source={{ uri: documentUri }} style={[styles.icon, styles.iconButton]} />
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
@@ -213,6 +213,11 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginLeft: 10,
+  },
+  iconButton: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    padding: 5,
   },
   matchContainer: {
     paddingHorizontal: 20,
