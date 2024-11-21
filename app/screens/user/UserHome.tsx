@@ -69,6 +69,25 @@ const UserHomeScreen = () => {
     fetchUserType();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const fetchMatches = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/matches');
+          const data = await response.json();
+          setMatches(data);
+        } catch (error) {
+          Alert.alert('Error', 'Failed to fetch matches');
+        }
+      };
+
+      console.log('fetching matches...');
+      fetchMatches();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleAdminRequest = async () => {
     try {
       const token = await AsyncStorage.getItem('authToken');
