@@ -102,9 +102,6 @@ const AdminMatchesScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
           <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
-          <Image source={require('./../images/users.png')} style={styles.navIcon} />
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
           <Image source={require('./../images/admin.png')} style={styles.navIcon} />
         </TouchableOpacity>
