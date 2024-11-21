@@ -71,10 +71,10 @@ const AdminMatchesScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')} style={styles.iconButton}>
             <Image source={require('./../images/notification.png')} style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')} style={styles.iconButton}>
             <Image source={require('./../images/document.png')} style={styles.icon} />
           </TouchableOpacity>
         </View>
@@ -212,6 +212,12 @@ const styles = StyleSheet.create({
   scheduleMatchButton: {
     padding: 10,
     alignItems: 'center',
+  },
+  iconButton: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    padding: 5,
+    marginHorizontal: 5,
   },
 });
 

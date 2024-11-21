@@ -314,10 +314,10 @@ const LiveScoreMark = ({ route, navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Live Score Marking</Text>
       <View style={styles.headerIcons}>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')} style={styles.iconButton}>
           <Image source={require('./../images/notification.png')} style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')} style={styles.iconButton}>
           <Image source={require('./../images/document.png')} style={styles.icon} />
         </TouchableOpacity>
       </View>
@@ -458,9 +458,6 @@ const LiveScoreMark = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
           <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
-          <Image source={require('./../images/users.png')} style={styles.navIcon} />
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
           <Image source={require('./../images/admin.png')} style={styles.navIcon} />
         </TouchableOpacity>
@@ -501,6 +498,12 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginHorizontal: 10,
+  },
+  iconButton: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    padding: 5,
+    marginHorizontal: 5,
   },
   navigation: {
     flexDirection: 'row',

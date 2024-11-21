@@ -151,10 +151,10 @@ const ManageTeamsScreen = ({ navigation }) => {
           <>
             <Text style={styles.header}>Manage Teams</Text>
             <View style={styles.headerIcons}>
-              <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+              <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')} style={styles.iconButton}>
                 <Image source={require('./../images/notification.png')} style={styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+              <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')} style={styles.iconButton}>
                 <Image source={require('./../images/document.png')} style={styles.icon} />
               </TouchableOpacity>
             </View>
@@ -226,9 +226,6 @@ const ManageTeamsScreen = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
           <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
-          <Image source={require('./../images/users.png')} style={styles.navIcon} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
           <Image source={require('./../images/admin.png')} style={styles.navIcon} />
@@ -322,6 +319,12 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     alignSelf: 'center',
+  },
+  iconButton: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    padding: 5,
+    marginHorizontal: 5,
   },
 });
 

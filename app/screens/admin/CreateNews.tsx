@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Image, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Image, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -71,8 +71,39 @@ const CreateNews = ({ navigation }) => {
       <Button title="Pick an image from camera roll" onPress={pickImage} />
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginTop: 10 }} />}
       <Button title="Submit" onPress={handleSubmit} />
+      <View style={styles.navigation}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  navigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#e0e0e0',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    alignSelf: 'center',
+  },
+});
 
 export default CreateNews;

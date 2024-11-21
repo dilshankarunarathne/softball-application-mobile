@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const EditPlayerScreen = ({ route }) => {
+const EditPlayerScreen = ({ route, navigation }) => {
   const { playerId } = route.params;
 
   const [player, setPlayer] = useState({
@@ -54,6 +54,21 @@ const EditPlayerScreen = ({ route }) => {
       {/* ... other input fields for date of birth, email, phone number, team, batting style, bowling style */}
 
       <Button title="Save Changes" onPress={handleUpdatePlayer} />
+
+      <View style={styles.navigation}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -71,17 +86,29 @@ const styles = StyleSheet.create({
     input: {
       height: 40,
       borderColor: 'gray',
-      borderWidth:   
-   1,
+      borderWidth: 1,
       borderRadius: 5,
       padding: 10,
-      marginBottom:   
-   15,
+      marginBottom: 15,
     },
     saveButton: {
       backgroundColor: 'blue',
       padding: 10,
       borderRadius: 5,
+    },
+    navigation: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingVertical: 10,
+      backgroundColor: '#e0e0e0',
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+    },
+    navIcon: {
+      width: 24,
+      height: 24,
+      alignSelf: 'center',
     },
 });
 
