@@ -33,6 +33,27 @@ const ScheduleMatchScreen = () => {
     fetchTeams();
   }, []);
 
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setScheduledDate(selectedDate);
+    }
+  };
+
+  const handleStartTimeChange = (event, selectedTime) => {
+    setShowStartTimePicker(false);
+    if (selectedTime) {
+      setStartTime(selectedTime);
+    }
+  };
+
+  const handleEndTimeChange = (event, selectedTime) => {
+    setShowEndTimePicker(false);
+    if (selectedTime) {
+      setEndTime(selectedTime);
+    }
+  };
+
   const handleScheduleMatch = async () => {
     const token = await AsyncStorage.getItem('authToken');
     try {
@@ -69,7 +90,7 @@ const ScheduleMatchScreen = () => {
           style={styles.inputField}
         >
           {teams.map((team) => (
-            <Picker.Item key={team.id} label={team.name} value={team.name} />
+            <Picker.Item key={team._id} label={team.name} value={team._id} />
           ))}
         </Picker>
         <Text style={styles.label}>Select an opponent</Text>
@@ -79,7 +100,7 @@ const ScheduleMatchScreen = () => {
           style={styles.inputField}
         >
           {teams.map((team) => (
-            <Picker.Item key={team.id} label={team.name} value={team.name} />
+            <Picker.Item key={team._id} label={team.name} value={team._id} />
           ))}
         </Picker>
       </View>
