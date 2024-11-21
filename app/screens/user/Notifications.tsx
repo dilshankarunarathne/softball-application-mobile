@@ -45,6 +45,14 @@ const NotificationsScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Notifications</Text>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+            <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+            <Image source={{ uri: newsUri }} style={[styles.icon, styles.iconButton]} />
+          </TouchableOpacity>
+        </View>
       </View>
       {notifications.map(notification => (
         <View key={notification._id} style={styles.notificationContainer}>
@@ -69,14 +77,6 @@ const NotificationsScreen = () => {
           <Image source={{ uri: accountUri }} style={styles.navIcon} />
           <Text style={styles.navText}>Account</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
-          <Image source={{ uri: newsUri }} style={styles.navIcon} />
-          <Text style={styles.navText}>News</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
-          <Image source={{ uri: notificationUri }} style={styles.navIcon} />
-          <Text style={styles.navText}>Notifications</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -96,6 +96,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+  },
+  iconButton: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    padding: 5,
   },
   notificationContainer: {
     paddingHorizontal: 20,
