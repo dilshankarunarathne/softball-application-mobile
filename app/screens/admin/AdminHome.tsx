@@ -89,8 +89,12 @@ const AdminHomeScreen = () => {
           </View>
         ))}
       </View>
-      <Button title="Create News" onPress={() => navigation.navigate('screens/admin/CreateNews')} />
-      <Button title="Manage Teams" onPress={() => navigation.navigate('screens/admin/ManageTeams')} />
+      <View style={styles.buttonContainer}>
+        <Button title="Create News" onPress={() => navigation.navigate('screens/admin/CreateNews')} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Manage Teams" onPress={() => navigation.navigate('screens/admin/ManageTeams')} />
+      </View>
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
           <Image source={require('./../images/home.png')} style={styles.navIcon} />
@@ -204,6 +208,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginHorizontal: 5,
+  },
+  buttonContainer: {
+    marginVertical: 5,
+    paddingHorizontal: 20,
   },
 });
 
