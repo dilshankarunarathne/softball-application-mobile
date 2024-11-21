@@ -140,28 +140,30 @@ const UserHomeScreen = () => {
   const liveMatch = matches.find(match => match.status === 'live');
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>SLSCMA</Text>
-        <View style={styles.headerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
-            <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
-            <Image source={{ uri: documentUri }} style={[styles.icon, styles.iconButton]} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>SLSCMA</Text>
+          <View style={styles.headerIcons}>
+            <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+              <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+              <Image source={{ uri: documentUri }} style={[styles.icon, styles.iconButton]} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+              <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      {liveMatch && renderMatch(liveMatch)}
-      {userType !== 'temp-admin' && (
-        <View style={styles.adminRequest}>
-          <Text style={styles.adminRequestText}>Are you a cricket match organizer?</Text>
-          <Button title="Become a temporary admin" style={styles.adminButton} onPress={handleAdminRequest} />
-        </View>
-      )}
+        {liveMatch && renderMatch(liveMatch)}
+        {userType !== 'temp-admin' && (
+          <View style={styles.adminRequest}>
+            <Text style={styles.adminRequestText}>Are you a cricket match organizer?</Text>
+            <Button title="Become a temporary admin" style={styles.adminButton} onPress={handleAdminRequest} />
+          </View>
+        )}
+      </ScrollView>
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
           <Image source={{ uri: homeUri }} style={styles.navIcon} />
@@ -176,7 +178,7 @@ const UserHomeScreen = () => {
           <Image source={{ uri: accountUri }} style={styles.navIcon} />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
