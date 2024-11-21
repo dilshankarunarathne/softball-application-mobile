@@ -21,7 +21,7 @@ const CreateNews = ({ navigation }) => {
   };
 
   const handleSubmit = async () => {
-    const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('authToken');
     if (!token) {
       Alert.alert('Authentication Error', 'Please log in again.');
       navigation.navigate('screens/authentication/Login');
@@ -60,17 +60,19 @@ const CreateNews = ({ navigation }) => {
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, marginBottom: 10 }}>Create News</Text>
-      <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        style={{ borderWidth: 1, borderColor: 'gray', marginBottom: 10, padding: 5 }}
-      />
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginTop: 10 }} />}
-      <Button title="Submit" onPress={handleSubmit} />
+    <View style={{ flex: 1 }}>
+      <View style={{ padding: 20, flex: 1 }}>
+        <Text style={{ fontSize: 18, marginBottom: 10 }}>Create News</Text>
+        <TextInput
+          placeholder="Description"
+          value={description}
+          onChangeText={setDescription}
+          style={{ borderWidth: 1, borderColor: 'gray', marginBottom: 10, padding: 5 }}
+        />
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginTop: 10 }} />}
+        <Button title="Submit" onPress={handleSubmit} />
+      </View>
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
           <Image source={require('./../images/home.png')} style={styles.navIcon} />
