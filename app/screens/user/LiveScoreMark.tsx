@@ -454,6 +454,7 @@ const LiveScoreMark = ({ route, navigation }) => {
       </Picker>
       <View style={styles.actionButtonsContainer}>
         <Button title="Add Ball" onPress={handleAddBall} style={styles.actionButton} />
+        <View style={styles.buttonSpacer} />
         <Button title="Save Over" onPress={handleSaveOver} style={styles.actionButton} />
       </View>
       <View style={styles.navigation}>
@@ -517,8 +518,11 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   actionButton: {
-    marginVertical: 20,
+    marginVertical: 10,
     padding: 10,
+  },
+  buttonSpacer: {
+    height: 10,
   },
   navigation: {
     flexDirection: 'row',
