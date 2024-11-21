@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, SectionList, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, SectionList, TouchableOpacity, Button, TextInput, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AdminMatchesScreen = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState({ live: [], upcoming: [], past: [] });
   const [teams, setTeams] = useState({});
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    team1: '',
+    team2: '',
+    date: new Date(),
+    start_time: new Date(),
+    end_time: new Date(),
+    location: ''
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -38,6 +53,43 @@ const AdminMatchesScreen = () => {
     fetchMatches();
     fetchTeams();
   }, []);
+
+  const handleInputChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    const token = await AsyncStorage.getItem('authToken');
+    const form = new FormData();
+    Object.keys(formData).forEach(key => {
+      form.append(key, formData[key].toString());
+    });
+
+    console.log('formdata: ', formData);
+
+    try {
+      const response = await fetch('http://localhost:3000/matches', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: form
+      });
+
+      console.log('response: ', response);
+
+      if (response.ok) {
+        alert('Match created successfully');
+        setShowForm(false);
+        // Refresh matches
+        fetchMatches();
+      } else {
+        alert('Error creating match');
+      }
+    } catch (error) {
+      console.error('Error creating match:', error);
+    }
+  };
 
   const renderMatchItem = ({ item }) => (
     <View style={styles.matchItem}>
@@ -79,6 +131,76 @@ const AdminMatchesScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Button title="Create New Match" onPress={() => setShowForm(true)} />
+      {showForm && (
+        <ScrollView style={styles.form}>
+          <Picker
+            selectedValue={formData.team1}
+            onValueChange={(itemValue) => handleInputChange('team1', itemValue)}
+          >
+            {Object.keys(teams).map(teamId => (
+              <Picker.Item key={teamId} label={teams[teamId]} value={teamId} />
+            ))}
+          </Picker>
+          <Picker
+            selectedValue={formData.team2}
+            onValueChange={(itemValue) => handleInputChange('team2', itemValue)}
+          >
+            {Object.keys(teams).map(teamId => (
+              <Picker.Item key={teamId} label={teams[teamId]} value={teamId} />
+            ))}
+          </Picker>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Text style={styles.dateText}>{formData.date.toDateString()}</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={formData.date}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowDatePicker(false);
+                handleInputChange('date', selectedDate || formData.date);
+              }}
+            />
+          )}
+          <TouchableOpacity onPress={() => setShowStartTimePicker(true)}>
+            <Text style={styles.dateText}>{formData.start_time.toLocaleTimeString()}</Text>
+          </TouchableOpacity>
+          {showStartTimePicker && (
+            <DateTimePicker
+              value={formData.start_time}
+              mode="time"
+              display="default"
+              onChange={(event, selectedTime) => {
+                setShowStartTimePicker(false);
+                handleInputChange('start_time', selectedTime || formData.start_time);
+              }}
+            />
+          )}
+          <TouchableOpacity onPress={() => setShowEndTimePicker(true)}>
+            <Text style={styles.dateText}>{formData.end_time.toLocaleTimeString()}</Text>
+          </TouchableOpacity>
+          {showEndTimePicker && (
+            <DateTimePicker
+              value={formData.end_time}
+              mode="time"
+              display="default"
+              onChange={(event, selectedTime) => {
+                setShowEndTimePicker(false);
+                handleInputChange('end_time', selectedTime || formData.end_time);
+              }}
+            />
+          )}
+          <TextInput
+            placeholder="Location"
+            value={formData.location}
+            onChangeText={(text) => handleInputChange('location', text)}
+            style={styles.input}
+          />
+          <Button title="Submit" onPress={handleSubmit} />
+        </ScrollView>
+      )}
       <SectionList
         sections={sections}
         renderItem={renderMatchItem}
@@ -87,7 +209,7 @@ const AdminMatchesScreen = () => {
             <Text style={styles.sectionTitle}>{title}</Text>
           </View>
         )}
-        keyExtractor={(item) => item._id.toString()} // Ensure unique key
+        keyExtractor={(item) => item._id.toString()}
       />
       <View style={styles.scheduleMatchButton}>
         <Button title="Schedule a Match" onPress={() => navigation.navigate('screens/admin/ScheduleMatch')} />
@@ -217,6 +339,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginHorizontal: 5,
+  },
+  form: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    margin: 20,
+    marginBottom: 150, 
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+  },
+  dateText: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginVertical: 5,
+    textAlign: 'center',
   },
 });
 
