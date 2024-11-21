@@ -4,6 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FormData from 'form-data';
 import { Picker } from '@react-native-picker/picker';
+import { Image as RNImage } from 'react-native';
 
 const LiveScoreMark = ({ route, navigation }) => {
   const { matchId } = route.params;
@@ -24,6 +25,11 @@ const LiveScoreMark = ({ route, navigation }) => {
   const [team1OversPlayed, setTeam1OversPlayed] = useState(0);
   const [team2OversPlayed, setTeam2OversPlayed] = useState(0);
   const [wicketOutBatsmen, setWicketOutBatsmen] = useState([]);
+
+  const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
+  const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
+  const rankingsUri = RNImage.resolveAssetSource(require('./../images/rankings.png')).uri;
+  const accountUri = RNImage.resolveAssetSource(require('./../images/account.png')).uri;
 
   const fetchPlayers = async (team1Id, team2Id) => {
     try {
@@ -313,14 +319,14 @@ const LiveScoreMark = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Live Score Marking</Text>
-      <View style={styles.headerIcons}>
+      {/* <View style={styles.headerIcons}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')} style={styles.iconButton}>
           <Image source={require('./../images/notification.png')} style={styles.icon} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')} style={styles.iconButton}>
           <Image source={require('./../images/document.png')} style={styles.icon} />
         </TouchableOpacity>
-      </View>
+      </View> */}
       {scoreEntryExists ? (
         <>
           <Text>Batting Team: {batFirstTeam === 'Team 1' ? team1Name : team2Name}</Text>
@@ -446,20 +452,22 @@ const LiveScoreMark = ({ route, navigation }) => {
           <Picker.Item key={player._id} label={player.name} value={player._id} />
         ))}
       </Picker>
-      <Button title="Add Ball" onPress={handleAddBall} />
-      <Button title="Save Over" onPress={handleSaveOver} />
+      <View style={styles.actionButtonsContainer}>
+        <Button title="Add Ball" onPress={handleAddBall} style={styles.actionButton} />
+        <Button title="Save Over" onPress={handleSaveOver} style={styles.actionButton} />
+      </View>
       <View style={styles.navigation}>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
-          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
+          <Image source={{ uri: homeUri }} style={styles.navIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
-          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Matches')}>
+          <Image source={{ uri: matchesUri }} style={styles.navIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
-          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Rankings')}>
+          <Image source={{ uri: rankingsUri }} style={styles.navIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
-          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={{ uri: accountUri }} style={styles.navIcon} />
         </TouchableOpacity>
       </View>
     </View>
@@ -505,6 +513,13 @@ const styles = StyleSheet.create({
     padding: 5,
     marginHorizontal: 5,
   },
+  actionButtonsContainer: {
+    marginBottom: 50,
+  },
+  actionButton: {
+    marginVertical: 20,
+    padding: 10,
+  },
   navigation: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -518,6 +533,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     alignSelf: 'center',
+  },
+  navText: {
+    fontSize: 16,
+    marginTop: 5,
   },
 });
 
