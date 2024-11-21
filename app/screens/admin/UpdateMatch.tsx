@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RouteParams = {
@@ -13,6 +13,7 @@ type RouteParams = {
 const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) => {
   const { route } = props;
   const { matchId } = route.params;
+  const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true);
   const [team1Name, setTeam1Name] = useState('');
@@ -178,19 +179,9 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Update Match</Text>
       <View style={styles.teamContainer}>
-        <TextInput
-          style={styles.teamInput}
-          placeholder="Team 1 Name"
-          value={team1FullName}
-          editable={false}
-        />
+        <Text style={styles.teamName}>{team1FullName}</Text>
         <Text style={styles.vsText}>VS</Text>
-        <TextInput
-          style={styles.teamInput}
-          placeholder="Team 2 Name"
-          value={team2FullName}
-          editable={false}
-        />
+        <Text style={styles.teamName}>{team2FullName}</Text>
       </View>
       <TextInput
         style={styles.input}
@@ -299,6 +290,20 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
         </View>
       </View>
       <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
+      <View style={styles.navigation}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -355,6 +360,27 @@ const styles = StyleSheet.create({
       backgroundColor: 'blue',
       padding: 10,
       borderRadius: 5,
+    },
+    teamName: {
+      flex: 1,
+      textAlign: 'center',
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: 'black',
+    },
+    navigation: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingVertical: 10,
+      backgroundColor: '#e0e0e0',
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+    },
+    navIcon: {
+      width: 24,
+      height: 24,
+      alignSelf: 'center',
     },
 });
 
