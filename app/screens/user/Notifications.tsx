@@ -42,24 +42,26 @@ const NotificationsScreen = () => {
 //   TODO: mark as read
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Notifications</Text>
-        <View style={styles.headerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
-            <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
-            <Image source={{ uri: newsUri }} style={[styles.icon, styles.iconButton]} />
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Notifications</Text>
+          <View style={styles.headerIcons}>
+            <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+              <Image source={{ uri: notificationUri }} style={[styles.icon, styles.iconButton]} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+              <Image source={{ uri: newsUri }} style={[styles.icon, styles.iconButton]} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      {notifications.map(notification => (
-        <View key={notification._id} style={styles.notificationContainer}>
-          <Text style={styles.message}>{notification.message}</Text>
-          <Text style={styles.time}>{new Date(notification.time_created).toLocaleString()}</Text>
-        </View>
-      ))}
+        {notifications.map(notification => (
+          <View key={notification._id} style={styles.notificationContainer}>
+            <Text style={styles.message}>{notification.message}</Text>
+            <Text style={styles.time}>{new Date(notification.time_created).toLocaleString()}</Text>
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UserHome')}>
           <Image source={{ uri: homeUri }} style={styles.navIcon} />
@@ -74,7 +76,7 @@ const NotificationsScreen = () => {
           <Image source={{ uri: accountUri }} style={styles.navIcon} />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
