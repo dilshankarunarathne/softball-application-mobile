@@ -182,8 +182,10 @@ const styles = StyleSheet.create({
   },
   updateButton: {
     backgroundColor: 'blue',
-    padding: 5,
+    padding: 10,
     borderRadius: 5,
+    alignSelf: 'center',
+    width: '50%',
   },
   updateButtonText: {
     color: 'white',
