@@ -71,8 +71,12 @@ const AdminMatchesScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SLSCMA</Text>
         <View style={styles.headerIcons}>
-          <Image source={require('./../images/notification.png')} style={styles.icon} />
-          <Image source={require('./../images/document.png')} style={styles.icon} />
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+            <Image source={require('./../images/notification.png')} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+            <Image source={require('./../images/document.png')} style={styles.icon} />
+          </TouchableOpacity>
         </View>
       </View>
       <SectionList
@@ -91,23 +95,18 @@ const AdminMatchesScreen = () => {
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
           <Image source={require('./../images/home.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
           <Image source={require('./../images/matches.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>Matches</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
           <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>Rankings</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
           <Image source={require('./../images/users.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>Users</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
           <Image source={require('./../images/admin.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>Admin</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -195,13 +194,16 @@ const styles = StyleSheet.create({
   navigation: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#e0e0e0',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   navIcon: {
     width: 24,
     height: 24,
+    alignSelf: 'center',
   },
   navText: {
     fontSize: 16,

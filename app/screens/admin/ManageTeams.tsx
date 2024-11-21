@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Button, TextInput, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Button, TextInput, FlatList, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ManageTeamsScreen = () => {
+const ManageTeamsScreen = ({ navigation }) => {
   const [teams, setTeams] = useState([]);
   const [players, setPlayers] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -142,72 +142,99 @@ const ManageTeamsScreen = () => {
   };
 
   return (
-    <FlatList
-      style={styles.scrollContainer}
-      data={teams}
-      keyExtractor={(item) => item._id}
-      ListHeaderComponent={
-        <>
-          <Text style={styles.header}>Manage Teams</Text>
-          <View style={styles.table}>
-            <View style={styles.tableHeader}>
-              <Text style={styles.tableHeaderText}>Team Name</Text>
-              <Text style={styles.tableHeaderText}>Actions</Text>
+    <>
+      <FlatList
+        style={styles.scrollContainer}
+        data={teams}
+        keyExtractor={(item) => item._id}
+        ListHeaderComponent={
+          <>
+            <Text style={styles.header}>Manage Teams</Text>
+            <View style={styles.headerIcons}>
+              <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+                <Image source={require('./../images/notification.png')} style={styles.icon} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+                <Image source={require('./../images/document.png')} style={styles.icon} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.table}>
+              <View style={styles.tableHeader}>
+                <Text style={styles.tableHeaderText}>Team Name</Text>
+                <Text style={styles.tableHeaderText}>Actions</Text>
+              </View>
+            </View>
+          </>
+        }
+        renderItem={({ item: team }) => (
+          <View key={team._id} style={styles.tableRow}>
+            <Text style={styles.tableCell}>{team.name}</Text>
+            <View style={styles.actions}>
+              <Button title="Edit" onPress={() => handleEditTeam(team)} />
+              <Button title="Delete" onPress={() => handleDeleteTeam(team._id)} />
             </View>
           </View>
-        </>
-      }
-      renderItem={({ item: team }) => (
-        <View key={team._id} style={styles.tableRow}>
-          <Text style={styles.tableCell}>{team.name}</Text>
-          <View style={styles.actions}>
-            <Button title="Edit" onPress={() => handleEditTeam(team)} />
-            <Button title="Delete" onPress={() => handleDeleteTeam(team._id)} />
-          </View>
-        </View>
-      )}
-      ListFooterComponent={
-        <>
-          {selectedTeam && (
-            <View style={styles.editContainer}>
+        )}
+        ListFooterComponent={
+          <>
+            {selectedTeam && (
+              <View style={styles.editContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={teamName}
+                  onChangeText={setTeamName}
+                  placeholder="Team Name"
+                />
+                <FlatList
+                  data={players}
+                  keyExtractor={(item) => item._id}
+                  renderItem={({ item }) => (
+                    <View style={styles.playerRow}>
+                      <Text>{item.name}</Text>
+                      <Button
+                        title={item.team !== selectedTeam._id ? "Add" : "Remove"}
+                        onPress={() =>
+                          item.team !== selectedTeam._id
+                            ? handleAddPlayerToTeam(item)
+                            : handleRemovePlayerFromTeam(item._id)
+                        }
+                      />
+                    </View>
+                  )}
+                />
+                <Button title="Save" onPress={handleSaveTeam} />
+              </View>
+            )}
+            <View style={styles.createContainer}>
               <TextInput
                 style={styles.input}
                 value={teamName}
                 onChangeText={setTeamName}
-                placeholder="Team Name"
+                placeholder="New Team Name"
               />
-              <FlatList
-                data={players}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                  <View style={styles.playerRow}>
-                    <Text>{item.name}</Text>
-                    <Button
-                      title={item.team !== selectedTeam._id ? "Add" : "Remove"}
-                      onPress={() =>
-                        item.team !== selectedTeam._id
-                          ? handleAddPlayerToTeam(item)
-                          : handleRemovePlayerFromTeam(item._id)
-                      }
-                    />
-                  </View>
-                )}
-              />
-              <Button title="Save" onPress={handleSaveTeam} />
+              <Button title="Create Team" onPress={handleCreateTeam} />
             </View>
-          )}
-          <View style={styles.createContainer}>
-            <TextInput
-              style={styles.input}
-              value={teamName}
-              onChangeText={setTeamName}
-              placeholder="New Team Name"
-            />
-            <Button title="Create Team" onPress={handleCreateTeam} />
-          </View>
-        </>
-      }
-    />
+          </>
+        }
+      />
+      <View style={styles.navigation}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={require('./../images/users.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
@@ -223,6 +250,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10,
   },
   table: {
     borderWidth: 1,
@@ -271,6 +308,20 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
+  },
+  navigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#e0e0e0',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    alignSelf: 'center',
   },
 });
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FormData from 'form-data';
 import { Picker } from '@react-native-picker/picker';
 
-const LiveScoreMark = ({ route }) => {
+const LiveScoreMark = ({ route, navigation }) => {
   const { matchId } = route.params;
   const [overNumber, setOverNumber] = useState(1);
   const [balls, setBalls] = useState([]);
@@ -313,6 +313,14 @@ const LiveScoreMark = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Live Score Marking</Text>
+      <View style={styles.headerIcons}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/Notifications')}>
+          <Image source={require('./../images/notification.png')} style={styles.icon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/News')}>
+          <Image source={require('./../images/document.png')} style={styles.icon} />
+        </TouchableOpacity>
+      </View>
       {scoreEntryExists ? (
         <>
           <Text>Batting Team: {batFirstTeam === 'Team 1' ? team1Name : team2Name}</Text>
@@ -440,6 +448,23 @@ const LiveScoreMark = ({ route }) => {
       </Picker>
       <Button title="Add Ball" onPress={handleAddBall} />
       <Button title="Save Over" onPress={handleSaveOver} />
+      <View style={styles.navigation}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+          <Image source={require('./../images/home.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/user/UpdateAccount')}>
+          <Image source={require('./../images/users.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -466,6 +491,30 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10,
+  },
+  navigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#e0e0e0',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    alignSelf: 'center',
   },
 });
 
