@@ -219,6 +219,9 @@ const LiveScoreMark = ({ route, navigation }) => {
     }
     console.log('Adding ball:', currentBall);
     setBalls([...balls, currentBall]);
+    if (currentBall.result === 'wicket') {
+      setWicketOutBatsmen([...wicketOutBatsmen, currentBall.wicket]);
+    }
     setCurrentBall({ runs: 0, result: '', runs_to: '', bowler_id: '', wicket: '' });
   };
 
