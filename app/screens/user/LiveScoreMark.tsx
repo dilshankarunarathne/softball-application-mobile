@@ -27,6 +27,7 @@ const LiveScoreMark = ({ route, navigation }) => {
   const [wicketOutBatsmen, setWicketOutBatsmen] = useState([]);
   const [team1Id, setTeam1Id] = useState('');
   const [team2Id, setTeam2Id] = useState('');
+  const [battingTeam, setBattingTeam] = useState('');
 
   const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
@@ -107,8 +108,9 @@ const LiveScoreMark = ({ route, navigation }) => {
       });
 
       const { batting_team, halftime } = halftimeResponse.data;
-      setBatFirstTeam(batting_team);
       setSidesSwitched(halftime === 'Yes');
+      setBatFirstTeam(matchData.bat_first_team);
+      setBattingTeam(halftime === 'Yes' ? (matchData.bat_first_team === matchData.team1 ? matchData.team2 : matchData.team1) : matchData.bat_first_team);
     } catch (error) {
       console.error('Error fetching match details:', error);
       alert('Failed to fetch match details. Please try again later.');
@@ -337,11 +339,11 @@ const LiveScoreMark = ({ route, navigation }) => {
   };
 
   const getBattingTeamPlayers = () => {
-    return batFirstTeam === 'Team 1' ? team1Players : team2Players;
+    return battingTeam === team1Id ? team1Players : team2Players;
   };
 
   const getBowlingTeamPlayers = () => {
-    return batFirstTeam === 'Team 1' ? team2Players : team1Players;
+    return battingTeam === team1Id ? team2Players : team1Players;
   };
 
   const getAvailableBatsmen = () => {
