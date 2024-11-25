@@ -307,8 +307,6 @@ const LiveScoreMark = ({ route, navigation }) => {
 
       console.log('match id: ' + matchId);
 
-      // const winning_team_id = 
-
       const res = await axios.put(`http://localhost:3000/matches/${matchId}`, { 
         status: 'ended', 
         winner: winningTeamId 
@@ -327,6 +325,7 @@ const LiveScoreMark = ({ route, navigation }) => {
 
       console.log('Match finished:', response.data);
       alert('Match has been finished.');
+      navigation.navigate('screens/user/Matches'); // Navigate back to matches screen
     } catch (error) {
       console.error('Error finishing match:', error);
       alert('Failed to finish match. Please try again later.');
