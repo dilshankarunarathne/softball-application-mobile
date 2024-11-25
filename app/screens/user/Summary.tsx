@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SummaryScreen = ({ route }) => {
   const { matchId } = route.params;
@@ -21,8 +22,14 @@ const SummaryScreen = ({ route }) => {
 
     const fetchScores = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/scores?matchId=${matchId}`);
+        const token = await AsyncStorage.getItem('authToken');
+        const response = await axios.get(`http://localhost:3000/score/current/${matchId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setScores(response.data);
+        console.log(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {
           console.warn('Scores not found for this match.');
@@ -65,11 +72,38 @@ const SummaryScreen = ({ route }) => {
       <Text style={styles.subtitle}>Status: {matchDetails.status}</Text>
 
       <Text style={styles.title}>Scores</Text>
-      {scores.map(score => (
-        <View key={score._id} style={styles.scoreRow}>
-          <Text style={styles.scoreText}>Player: {score.player}</Text>
-          <Text style={styles.scoreText}>Runs: {score.runs}</Text>
-          <Text style={styles.scoreText}>Wickets: {score.wickets}</Text>
+      <View style={styles.table}>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Team</Text>
+          <Text style={styles.tableHeader}>Score</Text>
+          <Text style={styles.tableHeader}>Wickets</Text>
+          <Text style={styles.tableHeader}>Overs</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableCell}>{teamNames.team1}</Text>
+          <Text style={styles.tableCell}>{scores.team1_score}</Text>
+          <Text style={styles.tableCell}>{scores.team1_wickets}</Text>
+          <Text style={styles.tableCell}>{scores.team1_overs}</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableCell}>{teamNames.team2}</Text>
+          <Text style={styles.tableCell}>{scores.team2_score}</Text>
+          <Text style={styles.tableCell}>{scores.team2_wickets}</Text>
+          <Text style={styles.tableCell}>{scores.team2_overs}</Text>
+        </View>
+      </View>
+
+      <Text style={styles.title}>Overs</Text>
+      {scores.overs && scores.overs.map(over => (
+        <View key={over._id} style={styles.overRow}>
+          <Text style={styles.overText}>Over: {over.over_number}</Text>
+          {over.balls.map(ball => (
+            <View key={ball._id} style={styles.ballRow}>
+              <Text style={styles.ballText}>Player: {ball.batsman_id}</Text>
+              <Text style={styles.ballText}>Runs: {ball.runs}</Text>
+              <Text style={styles.ballText}>Wickets: {ball.wicket ? 1 : 0}</Text>
+            </View>
+          ))}
         </View>
       ))}
     </ScrollView>
@@ -91,12 +125,34 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5,
   },
-  scoreRow: {
+  table: {
+    marginBottom: 20,
+  },
+  tableRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
   },
-  scoreText: {
+  tableHeader: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  tableCell: {
+    fontSize: 16,
+  },
+  overRow: {
+    marginBottom: 10,
+  },
+  overText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  ballRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  ballText: {
     fontSize: 16,
   },
 });
