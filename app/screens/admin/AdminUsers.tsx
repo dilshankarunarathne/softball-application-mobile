@@ -110,7 +110,7 @@ const AdminUsersScreen = () => {
 
   useEffect(() => {
     const fetchTeams = async () => {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem('authToken'); // Corrected token key
       if (!token) return;
 
       try {
@@ -271,6 +271,8 @@ const AdminUsersScreen = () => {
     const token = await AsyncStorage.getItem('token');
     if (!token) return;
 
+    console.log('edit player called... ');
+
     const formData = new FormData();
     Object.keys(newPlayer).forEach(key => formData.append(key, newPlayer[key]));
 
@@ -282,6 +284,8 @@ const AdminUsersScreen = () => {
         },
         body: formData,
       });
+
+      console.log('edit player response: ', response);
 
       if (response.ok) {
         const updatedPlayer = await response.json();
