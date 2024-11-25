@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Image as RNImage } from 'react-native';
 import axios from 'axios';
@@ -7,13 +7,37 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyAccountScreen = () => {
   const navigation = useNavigation();
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [email, setEmail] = useState('abc@gmail.com');
-  const [phoneNumber, setPhoneNumber] = useState('0712345678');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        if (token) {
+          const response = await axios.get('http://localhost:3000/auth/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          const user = response.data;
+          setFirstName(user.firstName || '');
+          setLastName(user.lastName || '');
+          setEmail(user.email || '');
+          setPhoneNumber(user.phoneNumber || '');
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleUpdateProfile = async () => {
     try {
