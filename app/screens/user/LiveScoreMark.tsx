@@ -25,6 +25,8 @@ const LiveScoreMark = ({ route, navigation }) => {
   const [team1OversPlayed, setTeam1OversPlayed] = useState(0);
   const [team2OversPlayed, setTeam2OversPlayed] = useState(0);
   const [wicketOutBatsmen, setWicketOutBatsmen] = useState([]);
+  const [team1Id, setTeam1Id] = useState('');
+  const [team2Id, setTeam2Id] = useState('');
 
   const homeUri = RNImage.resolveAssetSource(require('./../images/home.png')).uri;
   const matchesUri = RNImage.resolveAssetSource(require('./../images/matches.png')).uri;
@@ -89,6 +91,8 @@ const LiveScoreMark = ({ route, navigation }) => {
 
       setTeam1Name(team1Name);
       setTeam2Name(team2Name);
+      setTeam1Id(matchData.team1);
+      setTeam2Id(matchData.team2);
 
       setTeam1OversPlayed(matchData.team1_overs_played);
       setTeam2OversPlayed(matchData.team2_overs_played);
@@ -103,7 +107,7 @@ const LiveScoreMark = ({ route, navigation }) => {
       });
 
       const { batting_team, halftime } = halftimeResponse.data;
-      setBatFirstTeam(batting_team === matchData.team1 ? 'Team 1' : 'Team 2');
+      setBatFirstTeam(batting_team);
       setSidesSwitched(halftime === 'Yes');
     } catch (error) {
       console.error('Error fetching match details:', error);
@@ -373,8 +377,8 @@ const LiveScoreMark = ({ route, navigation }) => {
             style={styles.input}
           >
             <Picker.Item label={`Select Coin Toss Winner (${team1Name} or ${team2Name})`} value="" />
-            <Picker.Item label={team1Name} value="Team 1" />
-            <Picker.Item label={team2Name} value="Team 2" />
+            <Picker.Item label={team1Name} value={team1Id} />
+            <Picker.Item label={team2Name} value={team2Id} />
           </Picker>
           <Picker
             selectedValue={batFirstTeam}
@@ -382,8 +386,8 @@ const LiveScoreMark = ({ route, navigation }) => {
             style={styles.input}
           >
             <Picker.Item label={`Select Bat First Team (${team1Name} or ${team2Name})`} value="" />
-            <Picker.Item label={team1Name} value="Team 1" />
-            <Picker.Item label={team2Name} value="Team 2" />
+            <Picker.Item label={team1Name} value={team1Id} />
+            <Picker.Item label={team2Name} value={team2Id} />
           </Picker>
           <TextInput
             placeholder="Balls Per Over"
