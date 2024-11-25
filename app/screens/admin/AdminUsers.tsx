@@ -268,14 +268,17 @@ const AdminUsersScreen = () => {
   };
 
   const handleEditPlayer = async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (!token) return;
-
+    const token = await AsyncStorage.getItem('authToken'); // Corrected token key
+    if (!token) {
+      console.log('No token found');
+      return;
+    }
+  
     console.log('edit player called... ');
-
+  
     const formData = new FormData();
     Object.keys(newPlayer).forEach(key => formData.append(key, newPlayer[key]));
-
+  
     try {
       const response = await fetch(`http://localhost:3000/player/${currentPlayerId}`, {
         method: 'PUT',
@@ -284,9 +287,9 @@ const AdminUsersScreen = () => {
         },
         body: formData,
       });
-
+  
       console.log('edit player response: ', response);
-
+  
       if (response.ok) {
         const updatedPlayer = await response.json();
         setPlayers(players.map(player => player._id === currentPlayerId ? updatedPlayer : player));
@@ -301,6 +304,7 @@ const AdminUsersScreen = () => {
       console.error('Error updating player:', error);
     }
   };
+  
 
   const openEditModal = (player) => {
     setNewPlayer({
