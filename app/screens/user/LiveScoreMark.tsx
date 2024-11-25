@@ -307,9 +307,11 @@ const LiveScoreMark = ({ route, navigation }) => {
 
       console.log('match id: ' + matchId);
 
+      // const winning_team_id = 
+
       const res = await axios.put(`http://localhost:3000/matches/${matchId}`, { 
         status: 'ended', 
-        winning_team: winningTeamId 
+        winner: winningTeamId 
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
