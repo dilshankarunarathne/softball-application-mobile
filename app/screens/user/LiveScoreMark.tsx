@@ -295,11 +295,24 @@ const LiveScoreMark = ({ route, navigation }) => {
   const finishMatch = async () => {
     try {
       const token = await AsyncStorage.getItem('authToken');
-      const response = await axios.patch(`http://localhost:3000/matches/${matchId}`, { status: 'ended' }, {
+      const winningTeam = totalScore.team1_score > totalScore.team2_score ? 'Team 1' : 'Team 2';
+      const winningTeamId = totalScore.team1_score > totalScore.team2_score ? matchData.team1 : matchData.team2;
+
+      const response = await axios.patch(`http://localhost:3000/matches/${matchId}`, { 
+        status: 'ended', 
+        winning_team: winningTeamId 
+      }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      await axios.patch(`http://localhost:3000/teams/${winningTeamId}/add-point`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       console.log('Match finished:', response.data);
       alert('Match has been finished.');
     } catch (error) {
@@ -337,7 +350,9 @@ const LiveScoreMark = ({ route, navigation }) => {
           <Text>Bowling Team: {batFirstTeam === 'Team 1' ? team2Name : team1Name}</Text>
           {!sidesSwitched ? (
             <Button title="Switch Sides" onPress={switchSides} />
-          ) : null}
+          ) : (
+            <Button title="Finish Match" onPress={finishMatch} />
+          )}
         </>
       ) : (
         <>
