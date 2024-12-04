@@ -57,21 +57,23 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
         const data = await response.json();
         setTeam1Name(data.team1);
         setTeam2Name(data.team2);
-        setMatchDate(data.date);
+        setMatchDate(data.date.split('T')[0]); // Extract date part
         setMatchTime(data.start_time);
         setEndTime(data.end_time);
         setGroundName(data.location);
         setTossWinner(data.toss_winner);
         setBatFirst(data.bat_first);
-        setTeam1Score(data.team1_score);
-        setTeam2Score(data.team2_score);
-        setTeam1Wickets(data.team1_wickets);
-        setTeam2Wickets(data.team2_wickets);
-        setTeam1OversPlayed(data.team1_overs_played);
-        setTeam2OversPlayed(data.team2_overs_played);
+        setTeam1Score(data.team1_score.toString());
+        setTeam2Score(data.team2_score.toString());
+        setTeam1Wickets(data.team1_wickets.toString());
+        setTeam2Wickets(data.team2_wickets.toString());
+        setTeam1OversPlayed(data.team1_overs_played.toString());
+        setTeam2OversPlayed(data.team2_overs_played.toString());
         setWinner(data.winner);
         setStatus(data.status);
         setLoading(false);
+
+        console.log("match details: ", data);
       } catch (error) {
         console.error('Error fetching match details:', error);
         Alert.alert('Error', 'Failed to fetch match details');
