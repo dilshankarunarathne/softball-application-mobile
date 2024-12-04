@@ -92,6 +92,7 @@ const AdminMatchesScreen = () => {
           </View>
         )}
         keyExtractor={(item) => item._id.toString()} 
+        contentContainerStyle={{ paddingBottom: 100 }} // Add padding to the bottom
       />
       <View style={styles.navigation}>
         <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
