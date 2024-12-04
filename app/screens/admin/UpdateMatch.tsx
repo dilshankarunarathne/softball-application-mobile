@@ -289,20 +289,22 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
           <Text>{team2FullName}</Text>
         </View>
       </View>
-      <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
-      <View style={styles.navigation}>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
-          <Image source={require('./../images/home.png')} style={styles.navIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
-          <Image source={require('./../images/matches.png')} style={styles.navIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
-          <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
-          <Image source={require('./../images/admin.png')} style={styles.navIcon} />
-        </TouchableOpacity>
+      <View style={styles.fixedFooter}>
+        <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
+        <View style={styles.navigation}>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
+            <Image source={require('./../images/home.png')} style={styles.navIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminMatches')}>
+            <Image source={require('./../images/matches.png')} style={styles.navIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminRankings')}>
+            <Image source={require('./../images/rankings.png')} style={styles.navIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminUsers')}>
+            <Image source={require('./../images/admin.png')} style={styles.navIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -381,6 +383,11 @@ const styles = StyleSheet.create({
       width: 24,
       height: 24,
       alignSelf: 'center',
+    },
+    fixedFooter: {
+      height: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
 });
 
