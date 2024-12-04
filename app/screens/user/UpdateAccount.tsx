@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Image as RNImage } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -42,6 +42,7 @@ const MyAccountScreen = () => {
   const handleUpdateProfile = async () => {
     try {
       const token = await AsyncStorage.getItem('authToken');
+      console.log("Update account request ----------- ", token);
       await axios.put('http://localhost:3000/auth/profile', {
         firstName,
         lastName,
@@ -53,8 +54,10 @@ const MyAccountScreen = () => {
         }
       });
       console.log('Profile updated successfully');
+      Alert.alert('Success', 'Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
+      Alert.alert('Error', 'Failed to update profile');
     }
   };
 
