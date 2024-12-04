@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
     },
     fixedFooter: {
-      height: 100,
+      height: 60,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#e0e0e0',
