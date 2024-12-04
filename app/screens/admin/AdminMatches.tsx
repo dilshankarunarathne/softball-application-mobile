@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, SectionList, TouchableOpacity, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const AdminMatchesScreen = () => {
   const navigation = useNavigation();
@@ -10,8 +11,8 @@ const AdminMatchesScreen = () => {
 
   const fetchMatches = async () => {
     try {
-      const response = await fetch('http://localhost:3000/matches');
-      const data = await response.json();
+      const response = await axios.get('http://localhost:3000/matches');
+      const data = response.data;
       const live = data.filter(match => match.status === 'live');
       const upcoming = data.filter(match => match.status === 'pending');
       const past = data.filter(match => match.status === 'ended');
@@ -23,8 +24,8 @@ const AdminMatchesScreen = () => {
 
   const fetchTeams = async () => {
     try {
-      const response = await fetch('http://localhost:3000/teams');
-      const data = await response.json();
+      const response = await axios.get('http://localhost:3000/teams');
+      const data = response.data;
       const teamsMap = data.reduce((acc, team) => {
         acc[team._id] = team.name;
         return acc;
@@ -43,17 +44,16 @@ const AdminMatchesScreen = () => {
   const deleteMatch = async (matchId) => {
     try {
       const token = await AsyncStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:3000/matches/${matchId}`, {
-        method: 'DELETE',
+      const response = await axios.delete(`http://localhost:3000/matches/${matchId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         fetchMatches(); // Refresh matches after deletion
       } else {
-        console.error('Error deleting match:', await response.text());
+        console.error('Error deleting match:', response.data);
       }
     } catch (error) {
       console.error('Error deleting match:', error);
