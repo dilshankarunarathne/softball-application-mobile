@@ -147,7 +147,7 @@ const AdminUsersScreen = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', style: 'destructive', onPress: async () => {
-          const token = await AsyncStorage.getItem('token');
+          const token = await AsyncStorage.getItem('authToken');
           if (!token) return;
 
           try {
@@ -176,7 +176,8 @@ const AdminUsersScreen = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Confirm', style: 'destructive', onPress: async () => {
-          const token = await AsyncStorage.getItem('token');
+          console.log("Confirm pressed!----------------");
+          const token = await AsyncStorage.getItem('authToken');
           if (!token) return;
 
           const formData = new FormData();
@@ -191,6 +192,8 @@ const AdminUsersScreen = () => {
               },
               body: formData,
             });
+
+            console.log("-------- temp admin request handler --------------\n", response);
 
             if (response.ok) {
               setUsers(users.map(user => user._id === userId ? { ...user, user_type: newStatus } : user));
@@ -212,7 +215,7 @@ const AdminUsersScreen = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', style: 'destructive', onPress: async () => {
-          const token = await AsyncStorage.getItem('token');
+          const token = await AsyncStorage.getItem('authToken');
           if (!token) return;
 
           try {
@@ -235,7 +238,7 @@ const AdminUsersScreen = () => {
   };
 
   const handleAddPlayer = async () => {
-    const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('authToken');
     if (!token) return;
 
     const formData = new FormData();
