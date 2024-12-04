@@ -238,6 +238,7 @@ const ManageTeamsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
+    paddingBottom: 60, // Add padding to avoid overlap with bottom navigation
   },
   container: {
     flex: 1,
@@ -314,6 +315,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
+    zIndex: 1, // Ensure the navigation bar is above other content
   },
   navIcon: {
     width: 24,
