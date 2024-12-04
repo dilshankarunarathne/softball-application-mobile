@@ -369,7 +369,7 @@ const AdminUsersScreen = () => {
       {activeTab === 'All Users' && (
         <View style={styles.userList}>
           <FlatList
-            data={users.filter(user => user.user_type === 'user')}
+            data={users}
             renderItem={({ item }) => (
               <View style={styles.userItem}>
                 {/* <Text style={styles.userId}>{item._id}</Text> */}
