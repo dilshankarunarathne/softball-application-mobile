@@ -40,6 +40,26 @@ const AdminMatchesScreen = () => {
     fetchTeams();
   }, []);
 
+  const deleteMatch = async (matchId) => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:3000/matches/${matchId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        fetchMatches(); // Refresh matches after deletion
+      } else {
+        console.error('Error deleting match:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error deleting match:', error);
+    }
+  };
+
   const renderMatchItem = ({ item }) => (
     <View style={styles.matchItem}>
       <Text style={styles.tournamentName}>{item.tournamentName}</Text>
@@ -57,6 +77,9 @@ const AdminMatchesScreen = () => {
       </View>
       <TouchableOpacity style={styles.updateButton} onPress={() => navigation.navigate('screens/admin/UpdateMatch', { matchId: item._id })}>
         <Text style={styles.updateButtonText}>Update</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.deleteButton} onPress={() => deleteMatch(item._id)}>
+        <Text style={styles.deleteButtonText}>Delete</Text>
       </TouchableOpacity>
     </View>
   );
@@ -191,6 +214,18 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     color: 'white',
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'center',
+    width: '50%',
+    marginTop: 10,
+  },
+  deleteButtonText: {
+    color: 'white',
+    textAlign: 'center',
   },
   navigation: {
     flexDirection: 'row',
