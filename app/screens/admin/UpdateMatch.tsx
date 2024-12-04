@@ -176,121 +176,123 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Update Match</Text>
-      <View style={styles.teamContainer}>
-        <Text style={styles.teamName}>{team1FullName}</Text>
-        <Text style={styles.vsText}>VS</Text>
-        <Text style={styles.teamName}>{team2FullName}</Text>
-      </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Match Date"
-        value={matchDate}
-        onChangeText={setMatchDate}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Match Time"
-        value={matchTime}
-        onChangeText={setMatchTime}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="End Time"
-        value={endTime}
-        onChangeText={setEndTime}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Ground Name"
-        value={groundName}
-        onChangeText={setGroundName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Team 1 Score"
-        value={team1Score}
-        onChangeText={setTeam1Score}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Team 2 Score"
-        value={team2Score}
-        onChangeText={setTeam2Score}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Team 1 Wickets"
-        value={team1Wickets}
-        onChangeText={setTeam1Wickets}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Team 2 Wickets"
-        value={team2Wickets}
-        onChangeText={setTeam2Wickets}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Team 1 Overs Played"
-        value={team1OversPlayed}
-        onChangeText={setTeam1OversPlayed}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Team 2 Overs Played"
-        value={team2OversPlayed}
-        onChangeText={setTeam2OversPlayed}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Winner"
-        value={winner}
-        onChangeText={setWinner}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Status"
-        value={status}
-        onChangeText={setStatus}
-      />
-      <View style={styles.tossContainer}>
-        <Text style={styles.tossTitle}>Coin Toss Winner:</Text>
-        <View style={styles.radioGroup}>
-          <RadioButton
-            value="Team 1"
-            status={tossWinner === team1Name ? 'checked' : 'unchecked'}
-            onPress={() => setTossWinner(team1Name)}
-          />
-          <Text>{team1FullName}</Text>
-          <RadioButton
-            value="Team 2"
-            status={tossWinner === team2Name ? 'checked' : 'unchecked'}
-            onPress={() => setTossWinner(team2Name)}
-          />
-          <Text>{team2FullName}</Text>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>Update Match</Text>
+        <View style={styles.teamContainer}>
+          <Text style={styles.teamName}>{team1FullName}</Text>
+          <Text style={styles.vsText}>VS</Text>
+          <Text style={styles.teamName}>{team2FullName}</Text>
         </View>
-      </View>
-      <View style={styles.batFirstContainer}>
-        <Text style={styles.batFirstTitle}>Bat First:</Text>
-        <View style={styles.radioGroup}>
-          <RadioButton
-            value="Team 1"
-            status={batFirst === team1Name ? 'checked' : 'unchecked'}
-            onPress={() => setBatFirst(team1Name)}
-          />
-          <Text>{team1FullName}</Text>
-          <RadioButton
-            value="Team 2"
-            status={batFirst === team2Name ? 'checked' : 'unchecked'}
-            onPress={() => setBatFirst(team2Name)}
-          />
-          <Text>{team2FullName}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Match Date"
+          value={matchDate}
+          onChangeText={setMatchDate}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Match Time"
+          value={matchTime}
+          onChangeText={setMatchTime}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="End Time"
+          value={endTime}
+          onChangeText={setEndTime}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Ground Name"
+          value={groundName}
+          onChangeText={setGroundName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Team 1 Score"
+          value={team1Score}
+          onChangeText={setTeam1Score}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Team 2 Score"
+          value={team2Score}
+          onChangeText={setTeam2Score}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Team 1 Wickets"
+          value={team1Wickets}
+          onChangeText={setTeam1Wickets}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Team 2 Wickets"
+          value={team2Wickets}
+          onChangeText={setTeam2Wickets}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Team 1 Overs Played"
+          value={team1OversPlayed}
+          onChangeText={setTeam1OversPlayed}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Team 2 Overs Played"
+          value={team2OversPlayed}
+          onChangeText={setTeam2OversPlayed}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Winner"
+          value={winner}
+          onChangeText={setWinner}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Status"
+          value={status}
+          onChangeText={setStatus}
+        />
+        <View style={styles.tossContainer}>
+          <Text style={styles.tossTitle}>Coin Toss Winner:</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              value="Team 1"
+              status={tossWinner === team1Name ? 'checked' : 'unchecked'}
+              onPress={() => setTossWinner(team1Name)}
+            />
+            <Text>{team1FullName}</Text>
+            <RadioButton
+              value="Team 2"
+              status={tossWinner === team2Name ? 'checked' : 'unchecked'}
+              onPress={() => setTossWinner(team2Name)}
+            />
+            <Text>{team2FullName}</Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.fixedFooter}>
+        <View style={styles.batFirstContainer}>
+          <Text style={styles.batFirstTitle}>Bat First:</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              value="Team 1"
+              status={batFirst === team1Name ? 'checked' : 'unchecked'}
+              onPress={() => setBatFirst(team1Name)}
+            />
+            <Text>{team1FullName}</Text>
+            <RadioButton
+              value="Team 2"
+              status={batFirst === team2Name ? 'checked' : 'unchecked'}
+              onPress={() => setBatFirst(team2Name)}
+            />
+            <Text>{team2FullName}</Text>
+          </View>
+        </View>
         <Button title="Update Match" onPress={handleUpdateMatch} style={styles.updateButton} />
+      </ScrollView>
+      <View style={styles.fixedFooter}>
         <View style={styles.navigation}>
           <TouchableOpacity onPress={() => navigation.navigate('screens/admin/AdminHome')}>
             <Image source={require('./../images/home.png')} style={styles.navIcon} />
@@ -306,13 +308,16 @@ const UpdateMatchScreen = (props: { route: RouteProp<RouteParams, 'params'> }) =
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    scrollContent: {
+      flexGrow: 1,
       padding: 20,
     },
     title: {
@@ -362,6 +367,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'blue',
       padding: 10,
       borderRadius: 5,
+      marginBottom: 20,
     },
     teamName: {
       flex: 1,
@@ -388,6 +394,7 @@ const styles = StyleSheet.create({
       height: 100,
       justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: '#e0e0e0',
     },
 });
 
