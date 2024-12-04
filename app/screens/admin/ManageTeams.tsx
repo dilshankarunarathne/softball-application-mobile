@@ -145,6 +145,7 @@ const ManageTeamsScreen = ({ navigation }) => {
     <>
       <FlatList
         style={styles.scrollContainer}
+        contentContainerStyle={{ paddingBottom: 100 }} // Add padding to ensure content is not hidden
         data={teams}
         keyExtractor={(item) => item._id}
         ListHeaderComponent={
