@@ -110,7 +110,7 @@ const LiveMatchesScreen = () => {
         {userType === 'temp-admin' && match.status === 'live' && (
           <Button title="Mark" onPress={() => handleMarkScore(match._id)} />
         )}
-        {match.status === 'ended' && (
+        {(match.status === 'live' || match.status === 'ended') && (
           <Button title="Summary" onPress={() => handleSummary(match._id)} />
         )}
       </View>
